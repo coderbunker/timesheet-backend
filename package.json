@@ -1,0 +1,22 @@
+{
+  "name": "timesheet-backend",
+  "version": "1.0.0",
+  "description": "First version of the timesheet backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coderbunker/timesheet-backend.git"
+  },
+  "author": "Ricky Ng-Adam <ricky@coderbunker.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coderbunker/timesheet-backend/issues"
+  },
+  "homepage": "https://github.com/coderbunker/timesheet-backend#readme",
+  "dependencies": {
+    "postgraphql": "^3.5.0"
+  }
+}
