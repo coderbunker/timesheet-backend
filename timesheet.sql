@@ -5,7 +5,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE SCHEMA IF NOT EXISTS timedata;
 CREATE SCHEMA IF NOT EXISTS dw;
 
-CREATE VIEW  dw.entries AS
+CREATE OR REPLACE VIEW dw.entries AS
   SELECT
     uuid_generate_v1() AS uuid,
     start AS start,
@@ -13,4 +13,8 @@ CREATE VIEW  dw.entries AS
     resource as person_name,
     project_name as project_name
   FROM timedata.entries;
+  ;
+
+CREATE OR REPLACE VIEW dw.projects AS
+  SELECT DISTINCT(project_name) FROM timedata.entries
   ;
