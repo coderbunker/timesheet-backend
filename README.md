@@ -17,11 +17,12 @@ brew install postgresql
 pg_ctl -D /usr/local/var/postgres start
 ``` 
 
-## To extract Data fro google
+## To extract Data from Google
 
 Create a private key “Client_Secret.json” following the procedure in  GoogleAPI.txt
-
+```
 python spreadsheet.py 
+``` 
 
 ## Database setup
 
