@@ -1,8 +1,9 @@
 BEGIN;
-create temporary table temp_json (values text) on commit drop;
-copy temp_json from '/Users/rngadam/coderbunker/src/timesheet-backend/timesheet.json';
 
-DROP TABLE IF EXISTS timedata.entries;
+create temporary table temp_json (values text) on commit drop;
+\copy temp_json from 'timesheet.json';
+
+DROP TABLE IF EXISTS timedata.entries CASCADE;
 
 CREATE TABLE timedata.entries AS
   select values->>'date' as entry_date,
@@ -16,3 +17,5 @@ CREATE TABLE timedata.entries AS
          ) a;
 
 COMMIT;
+
+

@@ -1,6 +1,7 @@
-# timesheet-backend
+﻿# timesheet-backend
 
 Timesheet Datawarehouse backend
+
 
 ## How this repo was initialized
 
@@ -14,13 +15,20 @@ npm install --save postgraphql
 ```
 brew install postgresql
 pg_ctl -D /usr/local/var/postgres start
-```
+``` 
+
+## To extract Data fro google
+
+Create a private key “Client_Secret.json” following the procedure in  GoogleAPI.txt
+
+python spreadsheet.py 
 
 ## Database setup
 
 ```
 createdb timesheet
-psql timesheet -f timesheet.sql
+psql timesheet -f import.sql  → imports timesheet.json in the DB
+psql timesheet -f timesheet.sql → creates views
 ```
 ## Running
 

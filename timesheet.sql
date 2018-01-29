@@ -17,4 +17,4 @@ CREATE OR REPLACE VIEW dw.entries AS
 
 CREATE OR REPLACE VIEW dw.projects AS
   SELECT DISTINCT(project_name) FROM timedata.entries
-  ;
+;
