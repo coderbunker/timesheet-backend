@@ -3,7 +3,9 @@ BEGIN;
 create temporary table temp_json (values text) on commit drop;
 \copy temp_json from 'timesheet.json';
 
+CREATE SCHEMA IF NOT EXISTS timedata;
 DROP TABLE IF EXISTS timedata.entries CASCADE;
+
 
 CREATE TABLE timedata.entries AS
   select values->>'date' as entry_date,
