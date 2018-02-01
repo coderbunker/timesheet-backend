@@ -1,5 +1,6 @@
 # FROM https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
 import json
+import csv
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
  
@@ -33,7 +34,22 @@ for i in data:
 json_dumps=json.dumps(data).decode("utf-8-sig") #The decode("utf-8-sig"))is to remove the BOM that will create an Error in Postgresql
 
 
-f=open('/home/chuck/timesheet/timesheet.json','w')  
-f.write(json_dumps)
-f.close()
+#f=open('/home/chuck/timesheet/timesheet.json','w')  
+#f.write(json_dumps)
+
+f=open("test.csv", "wb+")
+f = csv.writer(f)
+f.writerow(["project_name","resource","activity","taskname","date", "stop", "hours", "start"])
+for x in data:
+    f.writerow(["Internal Project",
+		x["resource"].encode("utf-8"),
+		x["activity"].encode("utf-8"),
+		x["taskname"].encode("utf-8"),
+		x["date"],
+                x["stop"],
+                x["hours"],
+		x["start"]]
+)
+
+
 
