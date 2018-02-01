@@ -18,12 +18,19 @@ sheet = client.open("Coderbunker Internal Projects Timesheet").sheet1
 # Extract and print all of the values
 
 
-list_of_hashes = sheet.get_all_records()
-json_dumps=json.dumps(list_of_hashes).decode("utf-8-sig") #The decode("utf-8-sig"))is to remove the BOM that will create an Error in Postgresql
+list_of_hashed = sheet.get_all_records()
 
 ##** THE JSON STILL CANNOT BE LOADED IN POSTGRESQL BECAUSE OF A "" FORMAT ERROR
 
-#json_dumps=json_dumps.replace('\"', '\\"')
+data=[]
+for i in list_of_hashed: 
+	if i['hours'] <>'':
+		data.append(i)
+		
+for i in data:
+	print i
+
+json_dumps=json.dumps(data).decode("utf-8-sig") #The decode("utf-8-sig"))is to remove the BOM that will create an Error in Postgresql
 
 
 f=open('/home/chuck/timesheet/timesheet.json','w')  
