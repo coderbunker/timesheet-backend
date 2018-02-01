@@ -26,7 +26,7 @@ json_dumps=json.dumps(list_of_hashes).decode("utf-8-sig") #The decode("utf-8-sig
 #json_dumps=json_dumps.replace('\"', '\\"')
 
 
-f=open('/home/chuck/timesheet/timesheet_error.json','w')  
+f=open('/home/chuck/timesheet/timesheet.json','w')  
 f.write(json_dumps)
 f.close()
 
