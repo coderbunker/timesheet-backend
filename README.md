@@ -40,7 +40,7 @@ psql timesheet -f timesheet.sql → creates views
 
 ### Start postgraphil server 
 
-    postgraphil-c mbenthaier:localhost:5432/timesheet -s timedata
+    postgraphil -c $USER:localhost:5432/timesheet -s timedata
 
 ## Manually test the servers
 
