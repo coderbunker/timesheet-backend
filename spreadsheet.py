@@ -25,19 +25,18 @@ list_of_hashed = sheet.get_all_records()
 
 data=[]
 for i in list_of_hashed: 
-	if i['hours'] <>'':
+	if i['hours'] != '':
 		data.append(i)
 		
 for i in data:
-	print i
+	print(i)
 
-json_dumps=json.dumps(data).decode("utf-8-sig") #The decode("utf-8-sig"))is to remove the BOM that will create an Error in Postgresql
-
+json_dumps=json.dumps(data) #The decode("utf-8-sig"))is to remove the BOM that will create an Error in Postgresql
 
 #f=open('/home/chuck/timesheet/timesheet.json','w')  
 #f.write(json_dumps)
 
-f=open("test.csv", "wb+")
+f=open("test.csv", "w+")
 f = csv.writer(f)
 f.writerow(["project_name","resource","activity","taskname","date", "stop", "hours", "start"])
 for x in data:
