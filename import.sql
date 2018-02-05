@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS timedata.entries CASCADE;
 
 
 CREATE TABLE timedata.entries (
+	entry_id serial primary key,
 	project_name varchar,
 	resource varchar,
         activity varchar,
@@ -19,7 +20,7 @@ CREATE TABLE timedata.entries (
 	hours_worked time
 );
 
-COPY timedata.entries FROM '/home/chuck/timesheet/test.csv' WITH CSV HEADER DELIMITER AS ',';
+COPY timedata.entries (project_name, resource, activity, taskname, entry_date, stop, start,hours_worked) FROM '/home/chuck/timesheet/test.csv' WITH CSV HEADER DELIMITER AS ',';
 
 CREATE OR REPLACE view timedata.entries_v AS
   SELECT 
