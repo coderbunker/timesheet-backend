@@ -7,7 +7,7 @@ Timesheet Datawarehouse backend
 
 ```
 npm init
-npm install --save postgraphql
+npm install --save postgraphile
 ```
 
 ## Environment initialized
@@ -33,8 +33,23 @@ psql timesheet -f timesheet.sql → creates views
 ```
 ## Running
 
-Running the API from the command-line (replace rngadam-mac.local by your hostname):
 
-```
-./node_modules/.bin/postgraphql --disable-default-mutations --dynamic-json --schema dw --watch -c postgres://localhost/timesheet --cors --host rngadam-mac.local
-```
+### Start the database server
+
+    pg_ctl -D sqldatabase/ start
+
+### Start postgraphil server 
+
+    postgraphil-c mbenthaier:localhost:5432/timesheet -s timedata
+
+## Manually test the servers
+
+### Manually query the database
+
+    psql timesheet $USER
+    select * from timedata.entries;
+
+### Manually query postgraphile server
+
+    alias ql='curl -X POST -H "Content-Type: application/graphql" -d'
+    ql '{ allEntries { edges { node { projectName, resource } }}}' http://localhost:5000/graphql

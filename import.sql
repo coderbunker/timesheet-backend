@@ -20,7 +20,10 @@ CREATE TABLE timedata.entries (
 	hours_worked time
 );
 
-COPY timedata.entries (project_name, resource, activity, taskname, entry_date, stop, start,hours_worked) FROM '/home/chuck/timesheet/test.csv' WITH CSV HEADER DELIMITER AS ',';
+
+CREATE FUNCTION timedata.all_entries(l integer) returns setof timedata.entries as $$ select * from timedata.entries $$ language sql; 
+
+\COPY timedata.entries (project_name, resource, activity, taskname, entry_date, stop, start,hours_worked) FROM 'test.csv' WITH CSV HEADER DELIMITER AS ',';
 
 CREATE OR REPLACE view timedata.entries_v AS
   SELECT 

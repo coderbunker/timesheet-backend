@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/coderbunker/timesheet-backend#readme",
   "dependencies": {
-    "postgraphql": "^3.5.0"
+    "postgraphile": "^4.0.0-alpha2.30"
   }
 }
