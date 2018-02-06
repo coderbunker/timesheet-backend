@@ -1,0 +1,351 @@
+project_name,resource,activity,taskname,date,stop,hours,start
+Internal Project,b'Ricky',"b""Review of Alex's code""",b'Inventory',2017-08-24,10:00,0:30:00,9:30
+Internal Project,b'Alex Miller',"b'Moved Inventory App to the new repo. Fixed warnings, added styles, updated README'",b'Inventory',2017-08-24,16:00,2:00:00,14:00
+Internal Project,b'Hassan',"b'Replaced old QR codes on equipment and on the online inventory, worked on documentation'",b'Inventory',2017-08-25,11:30,2:30:00,9:00
+Internal Project,b'Alex Miller',"b'Updated inventory json file, adjusted app for new uuid'",b'Inventory',2017-08-25,18:00,0:30:00,17:30
+Internal Project,b'Alex Miller',b'Working on inventory server',b'Inventory',2017-08-29,18:00,8:00:00,10:00
+Internal Project,b'Alex Miller',b'More work on inventory server',b'Inventory',2017-08-29,23:00,1:30:00,21:30
+Internal Project,b'Alex Miller',b'Keep working on inventory server',b'Inventory',2017-08-30,15:00,2:00:00,13:00
+Internal Project,b'Alex Miller',b'Refactored the code and added styles',b'Inventory',2017-08-30,23:30,3:30:00,20:00
+Internal Project,b'Echo',b'Monthly Report',b'Administration',2017-09-01,11:30,1:00:00,10:30
+Internal Project,b'Echo',b'Tidy timesheet and pay Freelancer salary',b'Administration',2017-09-01,16:00,3:00:00,13:00
+Internal Project,b'Pony',b'update black borad and Rsvp upcoming events',b'Marketing',2017-09-01,12:00,2:00:00,10:00
+Internal Project,b'Pony',b'Collect data of Freecodecamp and talk with people f2f',b'Marketing',2017-09-01,18:00,5:30:00,12:30
+Internal Project,b'Pony',b'plan how to get successful event of tomorrow',b'Marketing',2017-09-01,20:30,2:30:00,18:00
+Internal Project,b'Mingyang',b'FCC colearning event preparation',b'Event',2017-09-01,21:30,2:00:00,19:30
+Internal Project,b'Mingyang',b'Host the FCC event',b'Event',2017-09-02,18:00,4:00:00,14:00
+Internal Project,b'Pony',b'Talk with people who come here and order food',b'Inventory',2017-09-02,12:00,3:00:00,9:00
+Internal Project,b'Pony',b'Making bread ',b'Inventory',2017-09-02,14:00,2:00:00,12:00
+Internal Project,b'Pony',b'',b'Inventory',2017-09-04,18:00,8:30:00,9:30
+Internal Project,b'Pony',b'',b'Inventory',2017-09-05,19:00,9:30:00,9:30
+Internal Project,b'Mingyang',b'Colearning advertising',b'Event',2017-09-05,16:00,0:30:00,15:30
+Internal Project,b'Mingyang',b'Colearning updating',b'Event',2017-09-05,18:30,2:30:00,16:00
+Internal Project,b'Mingyang',b'Colearning updating',b'Event',2017-09-06,16:45,0:30:00,16:15
+Internal Project,b'Mingyang',b'Colearning updating',b'Event',2017-09-06,19:15,0:30:00,18:45
+Internal Project,b'Pony',"b'Publish some Fcc event on other platform, make link to qrcode, make a content with qr, and send email'",b'Marketing',2017-09-06,14:30,2:00:00,12:30
+Internal Project,b'Pony',"b'Making an advertising list, prepare 3 different advertising contents, send to wechat. '",b'Marketing',2017-09-06,19:00,2:00:00,17:00
+Internal Project,b'Mingyang',b'Colearning updating',b'Event',2017-09-07,12:00,0:30:00,11:30
+Internal Project,b'Mingyang',b'Colearning updating',b'Event',2017-09-07,19:00,4:00:00,15:00
+Internal Project,b'Pony',"b""Deal the information in Coderbunker's phone and RSVP the upcoming events""",b'Marketing',2017-09-07,13:00,2:00:00,11:00
+Internal Project,b'Pony',"b'Create the check sheet of three events, check who paid the money, check the list from wechat group and Meetup, plan the upcoming events.'",b'Administration',2017-09-08,13:30,3:00:00,10:30
+Internal Project,b'Pony',b'Write an article on zhihu online branding',b'Marketing',2017-09-08,18:00,4:30:00,13:30
+Internal Project,b'Pony',b'Host Deeplearning event.',b'Event',2017-09-09,13:00,3:30:00,9:30
+Internal Project,b'Pony',b'Co-learning discpline  update blackboard',b'Marketing',2017-09-11,16:00,1:00:00,15:00
+Internal Project,b'Mingyang',b'FCC colearning notes',b'Event',2017-09-11,15:30,2:00:00,13:30
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-11,18:00,2:30:00,15:30
+Internal Project,b'Pony',b'New farmat of the article publishing the article',b'Inventory',2017-09-12,20:00,4:00:00,16:00
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-12,18:30,4:00:00,14:30
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-13,17:00,3:30:00,13:30
+Internal Project,b'Mingyang',b'Help with marketing information',b'Marketing',2017-09-13,18:00,1:00:00,17:00
+Internal Project,b'Pony',"b'Advertising to many websites, to wechat groups, a meeting with Fred'",b'Marketing',2017-09-13,18:00,4:00:00,14:00
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-13,20:30,1:30:00,19:00
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-14,18:30,4:00:00,14:30
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-14,20:30,1:00:00,19:30
+Internal Project,b'Pony',b'Help Javi move in the new appartment',b'Inventory',2017-09-14,11:10,1:00:00,10:10
+Internal Project,b'Pony',"b'Morning check , deal some message of Airbnb, take photos of 2#301'",b'Inventory',2017-09-14,13:00,1:50:00,11:10
+Internal Project,b'Pony',b'',b'Marketing',2017-09-14,15:30,2:30:00,13:00
+Internal Project,b'Pony',b'Follow up RSVP',b'Marketing',2017-09-15,17:00,2:00:00,15:00
+Internal Project,b'Pony',b'Hosting events.',b'Administration',2017-09-16,12:00,2:30:00,9:30
+Internal Project,b'Pony',"b'Customer interview, breading inviting.'",b'Inventory',2017-09-16,17:00,2:00:00,15:00
+Internal Project,b'Pony',b'Dealing the information and draft the article of FCC and Freelancing',b'Marketing',2017-09-18,16:00,3:30:00,12:30
+Internal Project,b'Pony',"b'Update event calendar, desicion making, Fcc article thinking, DataCamp email checking, update timesheet.'",b'Marketing',2017-09-19,17:30,6:30:00,11:00
+Internal Project,b'Qiong',b'Disscuion with Pony and Fred about new writing piece on FCC and branding ideas for the community ',b'Marketing',2017-09-19,14:40,1:00:00,13:40
+Internal Project,b'Qiong',b'Co-write and edit and translate the writing piece on FCC.',b'Marketing',2017-09-19,17:00,1:10:00,15:50
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-19,12:00,2:30:00,9:30
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-20,21:00,1:30:00,19:30
+Internal Project,b'Pony',"b""Advertising Coderbunker's upcoming events, send to the group""",b'Marketing',2017-09-20,18:00,4:00:00,14:00
+Internal Project,b'Echo',b'Gabriel asked to issue fapiao to DLG',b'Freelancers Support',2017-09-20,15:30,0:30:00,15:00
+Internal Project,b'Mingyang',b'Event updating',b'Marketing',2017-09-21,16:45,1:00:00,15:45
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-21,18:15,1:30:00,16:45
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-21,22:00,2:00:00,20:00
+Internal Project,b'Pony',"b""dealing the information from Coderbunker's phone""",b'Marketing',2017-09-21,13:00,1:30:00,11:30
+Internal Project,b'Pony',"b""Advertising Coderbunker's upcoming events, send to the group.""",b'Marketing',2017-09-21,16:00,2:30:00,13:30
+Internal Project,b'Mingyang',b'Event updating',b'Marketing',2017-09-22,16:15,1:00:00,15:15
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-22,18:15,2:00:00,16:15
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-22,23:00,3:00:00,20:00
+Internal Project,b'Pony',"b'RSVP the upcoming event, having an meeting'",b'Inventory',2017-09-22,13:00,2:00:00,11:00
+Internal Project,b'Pony',b'dealing airbnb with Echo',b'Marketing',2017-09-22,19:00,1:00:00,18:00
+Internal Project,b'Pony',b'Event preparing and hosting',b'Task name',2017-09-23,12:00,2:30:00,9:30
+Internal Project,b'Echo',b'Send recurring invoices',b'Project',2017-09-25,11:00,1:00:00,10:00
+Internal Project,b'Pony',b'Help Echo deal the visa issue',b'Administration',2017-09-25,16:30,1:30:00,15:00
+Internal Project,b'Qiong',b'Meeting vistors from Hanhan',b'Marketing',2017-09-25,16:40,1:30:00,15:10
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-25,20:30,1:00:00,19:30
+Internal Project,b'Mingyang',b'Prepare notes for Fast.ai lesson',b'Event',2017-09-26,21:00,2:00:00,19:00
+Internal Project,b'Pony',"b'RSVP freelancer event, deal the information on Coderbunker'",b'Marketing',2017-09-26,12:30,1:00:00,11:30
+Internal Project,b'Pony',"b'RSVP freelancer event, deal the information on Coderbunker (continued)'",b'Marketing',2017-09-26,14:00,0:30:00,13:30
+Internal Project,b'Echo',b'Update contract template with freelancer hiring policy. Sent email to follow up VML payment.',b'Contract',2017-09-26,12:00,0:30:00,11:30
+Internal Project,b'Pony',b'Send freelancer event to Coderbunker wechat group and get more people',b'Marketing',2017-09-27,14:00,2:00:00,12:00
+Internal Project,b'Pony',b'RSVP the freelancer event',b'Marketing',2017-09-28,14:00,2:00:00,12:00
+Internal Project,b'Pony',b'Help check and hosting events.',b'Administration',2017-09-28,20:00,4:00:00,16:00
+Internal Project,b'Qiong',b'Arrange the space for evening event.',b'Event',2017-09-28,17:50,1:00:00,16:50
+Internal Project,b'Echo',b'Sent invoice to It consultis',b'Administration',2017-09-29,14:30,0:30:00,14:00
+Internal Project,b'Pony',"b'Publishing VR event, on wechat, meeetup, wechat groups'",b'Marketing',2017-09-29,16:00,4:00:00,12:00
+Internal Project,b'Pony',"b'update the blackboard, help setup the event place, cheekin'",b'Event',2017-09-29,19:00,3:00:00,16:00
+Internal Project,b'Pony',"b'post vr, TBZ event on Linkedin and facebook'",b'Marketing',2017-10-04,15:00,1:30:00,13:30
+Internal Project,b'Ricky',b'Follow up on various potential freelancers',b'Event',2017-10-09,18:00,2:00:00,16:00
+Internal Project,b'Echo',b'Monthly report',b'Project',2017-10-09,14:00,1:00:00,13:00
+Internal Project,b'Echo',b'Tidy freelancers timesheet and payment',b'Project',2017-10-09,18:30,1:30:00,17:00
+Internal Project,b'Mingyang',b'Update advertising',b'Marketing',2017-10-09,18:30,1:30:00,17:00
+Internal Project,b'Ricky',b'Discuss with William',b'Business Development',2017-10-10,10:30,1:30:00,9:00
+Internal Project,b'Mingyang',b'Update advertising',b'Marketing',2017-10-10,18:00,2:00:00,16:00
+Internal Project,b'Mingyang',b'Update advertising',b'Marketing',2017-10-11,15:30,3:00:00,12:30
+Internal Project,b'Echo',b'VML contract for Novermber',b'Project',2017-10-12,11:10,0:30:00,10:40
+Internal Project,b'Mingyang',b'Prepare fcc notes',b'Event',2017-10-13,14:00,2:00:00,12:00
+Internal Project,b'Mingyang',b'Update advertising',b'Marketing',2017-10-13,18:00,1:00:00,17:00
+Internal Project,b'Ricky',b'Follow up discussion with William',b'Business Development',2017-10-13,10:30,1:30:00,9:00
+Internal Project,b'Ricky',b'Review students weekly work on demoZuerich',b'Teaching',2017-10-13,18:00,1:00:00,17:00
+Internal Project,b'Mingyang',b'Host the FCC event',b'Event',2017-10-14,20:00,8:00:00,12:00
+Internal Project,b'Mingyang',b'Event updating',b'Event',2017-10-17,18:45,3:00:00,15:45
+Internal Project,b'Ricky',b'Follow up on a number of initiatives',b'Business Development',2017-10-17,10:30,1:00:00,9:30
+Internal Project,b'Ricky',b'Internship Proposal for Oscar: https://docs.google.com/document/d/1LrePvrzEFCbeNvQnmuyKKH2lkulteI8uaA2NHB82jtU/edit#heading=h.132rvynf7fae',b'Recruitment',2017-10-17,11:30,1:00:00,10:30
+Internal Project,b'Ricky',b'Help TBZ students',b'Teaching',2017-10-17,14:00,1:00:00,13:00
+Internal Project,b'Owen',b'Make poster',b'Event',2017-10-17,8:00,3:00:00,5:00
+Internal Project,b'Qiong',b'Edit wechat article',b'Event',2017-10-17,16:00,1:00:00,15:00
+Internal Project,b'Mingyang',b'Event updating',b'Event',2017-10-18,18:30,3:30:00,15:00
+Internal Project,b'Mingyang',b'Event updating',b'Event',2017-10-18,20:00,1:00:00,19:00
+Internal Project,b'Ricky',b'Review TBZ demoZuerich repo',b'Teaching',2017-10-18,11:30,1:00:00,10:30
+Internal Project,b'Ricky',b'Follow up with documentation of work',b'Teaching',2017-10-18,13:30,1:00:00,12:30
+Internal Project,b'Owen',b'Make poster',b'Event',2017-10-18,13:00,2:00:00,11:00
+Internal Project,b'Qiong',b'Edit wechat article',b'Event',2017-10-18,17:30,1:30:00,16:00
+Internal Project,b'Ricky',b'Listen in to the final presentation from students',b'Teaching',2017-10-19,15:30,2:00:00,13:30
+Internal Project,b'Mingyang',b'Event posting',b'Marketing',2017-10-19,12:00,3:00:00,9:00
+Internal Project,b'Mingyang',b'Event posting',b'Marketing',2017-10-19,14:30,1:00:00,13:30
+Internal Project,b'Mingyang',b'Event posting',b'Marketing',2017-10-19,18:30,1:30:00,17:00
+Internal Project,b'Mingyang',b'Event posting',b'Marketing',2017-10-19,20:30,1:00:00,19:30
+Internal Project,b'Mingyang',"b'Composing advertising, send messages, communicate with potential users'",b'Marketing',2017-10-20,18:45,5:00:00,13:45
+Internal Project,b'Echo',b'Colearning Saturday ',b'Event',2017-10-21,13:00,4:00:00,9:00
+Internal Project,b'Mingyang',b'Event hosting',b'Event',2017-10-21,19:00,9:00:00,10:00
+Internal Project,b'Ricky',b'Apps Scripts for freelancers slides import',b'Automation',2017-10-24,17:00,3:00:00,14:00
+Internal Project,b'Qiong',b'write the inventory app',b'Inventory',2017-10-24,16:00,2:00:00,14:00
+Internal Project,b'Mingyang',b'Event posting',b'Marketing',2017-10-25,21:30,6:00:00,15:30
+Internal Project,b'Mingyang',b'Event posting',b'Marketing',2017-10-26,19:00,4:30:00,14:30
+Internal Project,b'Ricky',b'Apps Scripts for freelancers slides import',b'Automation',2017-10-26,12:00,2:00:00,10:00
+Internal Project,b'Ricky',b'Apps Scripts for freelancers slides import',b'Automation',2017-10-26,17:30,3:30:00,14:00
+Internal Project,b'Mingyang',"b'Look at script editor, add member information'",b'Automation',2017-10-27,17:30,2:30:00,15:00
+Internal Project,b'Mingyang',b'Event posting',b'Marketing',2017-10-27,19:00,1:30:00,17:30
+Internal Project,b'Ricky',b'Organize Barcamp',b'Event',2017-10-27,12:00,2:00:00,10:00
+Internal Project,b'Ricky',b'Organize Barcamp',b'Event',2017-10-27,20:00,2:00:00,18:00
+Internal Project,b'Ricky',b'Sample code preparation',b'Event',2017-10-28,12:00,2:00:00,10:00
+Internal Project,b'Ricky',b'Barcamp talks',b'Event',2017-10-28,17:00,4:00:00,13:00
+Internal Project,b'Qiong',b'Edit event template and content',b'Event',2017-11-01,19:30,1:30:00,18:00
+Internal Project,b'Mingyang',b'Event posting',b'Event',2017-11-01,18:30,5:30:00,13:00
+Internal Project,b'Mingyang',"b'Add member information, look at Google developer document for slide API'",b'Event',2017-11-02,16:00,3:00:00,13:00
+Internal Project,b'Ricky',b'Strategy discussion with Fred',b'Strategy',2017-11-02,10:00,1:00:00,9:00
+Internal Project,b'Ricky',b'Update script rendering',b'Automation',2017-11-02,13:00,3:00:00,10:00
+Internal Project,b'Ricky',b'New intern integration',b'Automation',2017-11-02,14:00,1:00:00,13:00
+Internal Project,b'Mingyang',b'Help with wechat posting',b'Event',2017-11-03,18:00,0:30:00,17:30
+Internal Project,b'Ricky',b'Meeting with Qian from NakedHub about their team',b'Business Development',2017-11-03,13:30,1:30:00,12:00
+Internal Project,b'Qiong',b'Edit wechat article for 4M',b'Event',2017-11-03,18:00,2:00:00,16:00
+Internal Project,b'Eva',b'Assist event holding/Reception (Maching Learning Project)',b'Administration',2017-11-04,12:00,3:00:00,9:00
+Internal Project,b'Eva',b'Assist the meeting preparation',b'Event',2017-11-06,10:50,1:00:00,9:50
+Internal Project,b'Ricky',"b'initial meeting with knut wimberger, telopsi'",b'Business Development',2017-11-06,12:30,1:00:00,11:30
+Internal Project,b'Eva',b'Assist the 4M movie event(publish article on every fan pages)',b'Event',2017-11-07,18:30,3:30:00,15:00
+Internal Project,b'Ricky',b'follow up email explaining initial plan to telopsi',b'Business Development',2017-11-07,18:45,0:30:00,18:15
+Internal Project,b'Qiong',b'edit new wechat article for 4M event',b'Event',2017-11-07,15:30,0:30:00,15:00
+Internal Project,b'Ricky',b'contract follow up',b'Business Development',2017-11-08,9:45,0:45:00,9:00
+Internal Project,b'Eva',b'Checklist for 4M movie event',b'Event',2017-11-08,10:30,0:30:00,10:00
+Internal Project,b'Ricky',b'Meet with Linda Liu (iport-sg.com)',b'Business Development',2017-11-08,14:00,2:00:00,12:00
+Internal Project,b'Ricky',b'Meet with Ernie from Code Circles',b'Business Development',2017-11-08,18:30,0:30:00,18:00
+Internal Project,b'Ricky',b'Meet with Freda H (insead)',b'Business Development',2017-11-08,21:00,1:30:00,19:30
+Internal Project,b'Eva',"b'Preparation for 4M movie event(make bread, cafe creme, draw blackboard)'",b'Event',2017-11-08,20:00,7:00:00,13:00
+Internal Project,b'Qiong',"b'Preparation for 4M movie event (make bread, arrange the space, poster, check in)'",b'Event',2017-11-08,19:00,6:00:00,13:00
+Internal Project,b'Eva',b'Check/buy inventory',b'Inventory',2017-11-13,12:00,2:00:00,10:00
+Internal Project,b'Eva',b'Bake braed for Farewell lunch',b'Event',2017-11-15,9:30,0:30:00,9:00
+Internal Project,b'Eva',b'Advertise for Reinforcement Learning',b'Event',2017-11-15,19:00,6:00:00,13:00
+Internal Project,b'Eva',b'Discuss details with Jonas for lunch party',b'Event',2017-11-15,11:00,1:00:00,10:00
+Internal Project,b'Eva',b'Edit article on wechat for React co-learning',b'Event',2017-11-15,16:00,4:00:00,12:00
+Internal Project,b'Eva',b'Bake bread for Jonas lunch party',b'Event',2017-11-15,17:00,1:00:00,16:00
+Internal Project,b'Eva',b'Prepared the lunch',b'Event',2017-11-17,13:00,4:00:00,9:00
+Internal Project,b'Eva',b'Advertise for React co-learning',b'Event',2017-11-17,16:00,1:00:00,15:00
+Internal Project,b'Eva',b'Advertise for Blockchain',b'Event',2017-11-17,18:00,1:00:00,17:00
+Internal Project,b'Qiong',b'Prepare the painting material and blackboard',b'Event',2017-11-17,11:50,0:50:00,11:00
+Internal Project,b'Eva',b'RSVP for Reinforcement Learning/Preparing lunch',b'Event',2017-11-18,14:00,5:00:00,9:00
+Internal Project,b'Eva',b'discuss with Rick of event Blockchain',b'Event',2017-11-21,16:00,1:00:00,15:00
+Internal Project,b'Eva',b'RSVP for blockchain',b'Event',2017-11-21,19:30,1:00:00,18:30
+Internal Project,b'Ricky',b'Meet with Cecilia Tham',b'Business Development',2017-11-27,15:00,1:30:00,13:30
+Internal Project,b'Ricky',b'Discuss with Knut about blockchain',b'Business Development',2017-11-27,17:00,1:00:00,16:00
+Internal Project,b'Ricky',b'Discuss with Ernie about coding workshops',b'Business Development',2017-11-27,17:30,0:30:00,17:00
+Internal Project,b'Ricky',b'Luxury Society event',b'Business Development',2017-11-29,15:30,2:00:00,13:30
+Internal Project,b'Ricky',b'Talk with Helenc\xc3\xa9 (Vechain) and Bart about workshops in Singapore',b'Business Development',2017-11-29,22:00,2:00:00,20:00
+Internal Project,b'Oscar',b'Talk with Beverly about her startup',b'Business Development',2017-11-29,21:00,1:00:00,20:00
+Internal Project,b'Oscar',"b'Talk with Ray, Anna and Beverly about A.I.'",b'Business Development',2017-11-29,22:00,1:00:00,21:00
+Internal Project,b'Oscar',b'Learn about Coderbunker and my role',b'Administration',2017-11-30,11:00,1:00:00,10:00
+Internal Project,b'Ricky',b'For Oscar',b'Teaching',2017-11-30,12:00,2:00:00,10:00
+Internal Project,b'Oscar',b'Meet with DLG',b'Meeting',2017-11-30,16:30,2:00:00,14:30
+Internal Project,b'Oscar',b'Ask approval to join Scry.info project',b'Business Development',2017-12-01,12:00,2:00:00,10:00
+Internal Project,b'Oscar',b'Advertise saturday colearning',b'Event',2017-12-01,13:30,0:30:00,13:00
+Internal Project,b'Oscar',"b'Advertise 4M on meetup, facebook, and twitter'",b'Event',2017-12-02,18:00,4:30:00,13:30
+Internal Project,b'Oscar',b'Improve advertising process with Fred',b'Event',2017-12-02,12:00,2:00:00,10:00
+Internal Project,b'Oscar',b'Arrange lunch for saturday colearning',b'Event',2017-12-02,13:30,1:00:00,12:30
+Internal Project,b'Margot',b'Create event calendar Shanghai December',b'Event',2017-12-02,13:00,3:00:00,10:00
+Internal Project,b'Qiong',b'Help preparing the lunch',b'Event',2017-12-02,13:00,0:30:00,12:30
+Internal Project,b'Oscar',b'Create content for Bio/IT event',b'Event',2017-12-05,12:30,2:30:00,10:00
+Internal Project,b'Oscar',b'Attend Fudan Blockchain Association event',b'Business Development',2017-12-05,21:00,2:00:00,19:00
+Internal Project,b'Oscar',b'Attend xinchejian opening night',b'Business Development',2017-12-06,22:00,3:00:00,19:00
+Internal Project,b'Oscar',b'Prepare advertisement for Aurelia Introduction',b'Event',2017-12-07,17:00,1:00:00,16:00
+Internal Project,b'Qiong',b'Looking for picture for Data Science meetup wechat post',b'Event',2017-12-07,18:45,0:15:00,18:30
+Internal Project,b'Qiong',b'Research on zine; Plan for making zines to connect members',b'Business Development',2017-12-07,21:40,0:40:00,21:00
+Internal Project,b'Qiong',b'communication for the data science meetup group and edit the wechat post',b'Event',2017-12-08,14:00,0:40:00,13:20
+Internal Project,b'Qiong',b'communicate with visitors and check in for IPFS event',b'Event',2017-12-08,19:20,1:20:00,18:00
+Internal Project,b'Oscar',b'Validate the details of data science course',b'Meeting',2017-12-09,12:00,2:00:00,10:00
+Internal Project,b'Oscar',b'Arrange lunch for saturday colearning',b'Event',2017-12-09,13:30,1:00:00,12:30
+Internal Project,b'Margot',b'Get to now coderbunker services and discuss how to promote it',b'Administration',2017-12-09,15:00,1:30:00,13:30
+Internal Project,b'Oscar',"b'Enroll margot, the new community manager'",b'Administration',2017-12-09,16:30,1:30:00,15:00
+Internal Project,b'Margot',b'Enroll as a new stuff',b'Administration',2017-12-09,16:30,1:30:00,15:00
+Internal Project,b'Margot',b'Finish enrollement and learn about services ',b'Administration',2017-12-09,17:30,1:00:00,16:30
+Internal Project,b'Margot',b'upload on the calendar sheet new tab with event shanghai december',b'Event',2017-12-09,18:00,0:30:00,17:30
+Internal Project,b'Qiong',b'Validate the details of data science course',b'Meeting',2017-12-09,12:20,2:10:00,10:10
+Internal Project,b'Qiong',b'Edit wechat post for data science course',b'Event',2017-12-09,18:00,4:00:00,14:00
+Internal Project,b'Oscar',b'Create WeChat Post and Yoopay for aurelia event',b'Event',2017-12-09,19:00,1:00:00,18:00
+Internal Project,b'Oscar',b'Publish WeChat Post and Yoopay for aurelia event',b'Event',2017-12-10,19:00,1:00:00,18:00
+Internal Project,b'Sugandha',b'enrollment\xef\xbc\x8c tasks on trello',b'Administration',2017-12-11,19:00,10:00:00,9:00
+Internal Project,b'Todd',b'Enrolment',b'Administration',2017-12-11,21:00,11:00:00,10:00
+Internal Project,b'Oscar',"b'Enroll Todd and Sugandha, new community managers'",b'Administration',2017-12-11,15:00,3:00:00,12:00
+Internal Project,b'Oscar',b'Improve WeChat Post and advertise for aureia event',b'Event',2017-12-11,22:00,5:00:00,17:00
+Internal Project,b'Sugandha',b'enrollment\xef\xbc\x8c tasks on trello',b'Administration',2017-12-12,18:00,9:00:00,9:00
+Internal Project,b'Todd',b'Organising UTSEUS/ aurelia event',b'Event',2017-12-12,19:00,9:00:00,10:00
+Internal Project,b'Qiong',b'edit the new wechat post for machine learning',b'Event',2017-12-12,22:20,1:50:00,20:30
+Internal Project,b'Qiong',"b'print for the event; post ml course on meetup, weibo'",b'Event',2017-12-13,23:00,1:30:00,21:30
+Internal Project,b'sugandha',"b'enrollement, trello,event'",b'Administration',2017-12-13,20:30,11:30:00,9:00
+Internal Project,b'Todd',"b'Aurelia event, co-learning organisation'",b'Event',2017-12-13,20:20,9:50:00,10:30
+Internal Project,b'Oscar',b'Fix the RSVP list of aurelia event',b'Event',2017-12-13,17:00,2:00:00,15:00
+Internal Project,b'Oscar',b'Host aurelia event',b'Event',2017-12-13,21:30,3:30:00,18:00
+Internal Project,b'Todd',"b'Co-learning event, Machine learning, hackathon'",b'Event',2017-12-14,20:50,10:50:00,10:00
+Internal Project,b'Ricky',b'explore how to connect to cloud postgresql',b'Automation',2017-12-14,12:00,1:30:00,10:30
+Internal Project,b'Qiong',"b'post ml course article on blog, moments'",b'Event',2017-12-14,19:00,2:00:00,17:00
+Internal Project,b'Sugandha',"b'Aurelia event, enrollment, trello'",b'Administration',2017-12-14,18:00,9:00:00,9:00
+Internal Project,b'Oscar',b'Create follow-up article for aurelia event',b'Event',2017-12-14,15:00,2:00:00,13:00
+Internal Project,b'Todd',"b'Hackathon, co-learning'",b'Event',2017-12-15,20:00,12:00:00,8:00
+Internal Project,b'Qiong',"b'repost ML course on wechat group, RSVP'",b'Event',2017-12-15,18:00,1:20:00,16:40
+Internal Project,b'Sugandha',"b'enrollment,hackathon write up,Trello'",b'Administration',2017-12-15,18:00,9:00:00,9:00
+Internal Project,b'Qiong',"b'clean the venue, RSVP for ML course, take photos, sign-up, help kitchen'",b'Event',2017-12-16,13:30,3:30:00,10:00
+Internal Project,b'Todd',"b'co-learning, hackathon'",b'Event',2017-12-16,13:00,5:00:00,8:00
+Internal Project,b'Oscar',b'Update event planning checklist',b'Administration',2017-12-16,12:30,0:30:00,12:00
+Internal Project,b'Oscar',b'Close hackathon event',b'Event',2017-12-18,15:00,2:00:00,13:00
+Internal Project,b'Todd',b'Hackathon closing',b'Event',2017-12-18,15:00,4:00:00,11:00
+Internal Project,b'Oscar',b'Advertise hackathon event',b'Event',2017-12-18,17:00,2:00:00,15:00
+Internal Project,b'Sugandha',"b'enrollment,trello,ML edit,Xmas edit'",b'Administration',2017-12-18,18:00,9:00:00,9:00
+Internal Project,b'Qiong',b'edit for ML course',b'Event',2017-12-18,17:30,1:30:00,16:00
+Internal Project,b'Todd',b'Co-learning advertising and article writeup',b'Event',2017-12-19,14:00,4:00:00,10:00
+Internal Project,b'Oscar',b'Meet with Ray from Indienova to discuss game jam and workshop',b'Meeting',2017-12-19,17:00,3:00:00,14:00
+Internal Project,b'Sugandha',"b'Coliving advetising writing,editing,Airbnb listing check,support ticket'",b'Administration',2017-12-19,18:00,9:00:00,9:00
+Internal Project,b'Qiong',"b'ML colearning pipeline, edit colearning, communicate with customers'",b'Event',2017-12-21,15:00,1:30:00,13:30
+Internal Project,b'Oscar',b'Close hackathon event',b'Event',2017-12-21,17:30,1:00:00,16:30
+Internal Project,b'Sugandha',"b'enrollment,trello,ML edit,Xmas edit'",b'Administration',2017-12-21,18:00,9:00:00,9:00
+Internal Project,b'Todd',b'Co-learning article writeup',b'Event',2017-12-22,19:00,6:00:00,13:00
+Internal Project,b'Oscar',b'Mange hackathon money and improve Agora_Checklist',b'Administration',2017-12-22,17:00,5:00:00,12:00
+Internal Project,b'Sugandha',"b'enrollment,inventory,coliving'",b'Administration',2017-12-22,18:00,9:00:00,9:00
+Internal Project,b'Todd',b'Improve checklist',b'Administration',2017-12-23,18:00,7:00:00,11:00
+Internal Project,b'Oscar',b'Organize Christmas Party',b'Event',2017-12-23,19:00,2:00:00,17:00
+Internal Project,b'Todd',b'Improve checklist',b'Event',2017-12-24,17:00,7:00:00,10:00
+Internal Project,b'Oscar',b'Organize Christmas Party',b'Event',2017-12-24,23:00,11:00:00,12:00
+Internal Project,b'Todd',b'editing co-learning page on coderbunker website/ organising co-learning',b'Marketing',2017-12-26,16:00:00,4:00:00,12:00
+Internal Project,b'Sugandha',"b'Coliving,support ticketing'",b'Administration',2017-12-26,18:00,9:00:00,9:00
+Internal Project,b'Qiong',b'edit coderbunker website',b'Marketing',2017-12-27,18:00,1:00:00,17:00
+Internal Project,b'Char',b'Co-learning collecting payments and organising co-learning event',b'Event',2017-12-27,16:00,6:00:00,10:00
+Internal Project,b'Qiong',b'edit co-learning page on coderbunker website',b'Marketing',2017-12-28,19:30,5:00:00,14:30
+Internal Project,b'Sugandha',"b'Accounting,contract,co learning'",b'Administration',2017-12-28,18:00,9:00:00,9:00
+Internal Project,b'Sugandha',"b'Accounting,inventory,taobao purchasing'",b'Administration',2017-12-29,18:00,9:00:00,9:00
+Internal Project,b'Todd',b'coderbunker website/ad for co-learning',b'Marketing',2018-01-02,19:00,9:00:00,10:00
+Internal Project,b'Sugandha',"b'coliving member checklist,inventory'",b'Administration',2018-01-02,18:00,9:00:00,9:00
+Internal Project,b'Sugandha',"b'inventory,yoga translation,support ticketing'",b'Administration',2018-01-02,16:00,7:00:00,9:00
+Internal Project,b'Todd',b'inventory/events/helping organise guides',b'Inventory',2018-01-03,21:00,10:00:00,11:00
+Internal Project,b'Margot',"b'Creation of January ""Event Calendar Shanghai""'",b'Event',2018-01-04,21:00,1:30:00,19:30
+Internal Project,b'Qiong',b'organise and check in for biology event',b'Event',2018-01-05,21:00,3:00:00,18:00
+Internal Project,b'Oscar',b'Bioinformatics',b'Event',2018-01-01,19:00,8:00:00,11:00
+Internal Project,b'Oscar',b'Bioinformatics',b'Event',2018-01-02,19:00,8:00:00,11:00
+Internal Project,b'Oscar',b'Bioinformatics',b'Event',2018-01-03,19:00,8:00:00,11:00
+Internal Project,b'Oscar',b'Bioinformatics',b'Event',2018-01-04,19:00,8:00:00,11:00
+Internal Project,b'Oscar',b'Bioinformatics',b'Event',2018-01-05,19:00,8:00:00,11:00
+Internal Project,b'Oscar',b'Colearning',b'Event',2018-01-06,13:00,3:30:00,9:30
+Internal Project,b'Oscar',b'Enroll Tim and Jo',b'Administration',2018-01-08,10:00,0:30:00,9:30
+Internal Project,b'Oscar',b'Create event post of Dmitry blockchain event',b'Event',2018-01-08,13:00,3:00:00,10:00
+Internal Project,b'Oscar',b'Meeting with Nicolas for internship',b'Meeting',2018-01-08,16:00,2:00:00,14:00
+Internal Project,b'Oscar',b'Create email for Nicolas internship',b'Administration',2018-01-08,18:00,2:00:00,16:00
+Internal Project,b'Oscar',b'Publish biology@coderbunker article',b'Event',2018-01-08,19:00,1:00:00,18:00
+Internal Project,b'Oscar',b'Publish biology@coderbunker article',b'Event',2018-01-09,11:30,1:00:00,10:30
+Internal Project,b'Oscar',"b'Create event post of Dmitry blockchain event, connect Shuyu on her growth hacking talk'",b'Event',2018-01-09,15:00,3:00:00,12:00
+Internal Project,b'Oscar',b'Review enrollment and coworking checklist',b'Event',2018-01-09,16:00,1:00:00,15:00
+Internal Project,b'Oscar',b'Create event post for offline game design workshop',b'Event',2018-01-09,17:30,1:30:00,16:00
+Internal Project,b'Qiong',b'co-learning advertising and communication',b'Marketing',2018-01-09,22:30,1:30:00,21:00
+Internal Project,b'Oscar',"b'Dmitry talk, game workshop, enrollment, checklist'",b'Event',2018-01-10,13:30,2:00:00,11:30
+Internal Project,b'Oscar',"b'Dmitry talk, game workshop, enrollment, checklist'",b'Event',2018-01-10,21:30,7:30:00,14:00
+Internal Project,b'Oscar',"b'Dmitry talk, game workshop, event checklist'",b'Event',2018-01-11,13:00,2:00:00,11:00
+Internal Project,b'Oscar',"b'Dmitry talk, game workshop, event checklist, speak with Ricky and Fred'",b'Event',2018-01-11,19:30,6:00:00,13:30
+Internal Project,b'Oscar',"b'Advertising event, enrollment, colearning, '",b'Event',2018-01-12,17:00,6:00:00,11:00
+Internal Project,b'Oscar',"b'Advertising event, enrollment, colearning, '",b'Event',2018-01-12,20:00,2:30:00,17:30
+Internal Project,b'Oscar',"b'Enrollment, colearning'",b'Event',2018-01-13,15:30,6:00:00,9:30
+Internal Project,b'Terry Chen',b'Enrollment',b'Administration',2018-01-13,16:00,2:00:00,14:00
+Internal Project,b'Oscar',b'Video editing and posting',b'Marketing',2018-01-13,22:30,4:30:00,18:00
+Internal Project,b'Oscar',b'Insomnia: thinking about coderbunker and microconsulting on bed and cannot sleep',b'Event',2018-01-15,3:00,3:00:00,0:00
+Internal Project,b'Oscar',b'Advertising event',b'Event',2018-01-15,13:00,2:00:00,11:00
+Internal Project,b'Oscar',b'Advertising event',b'Event',2018-01-15,19:30,6:00:00,13:30
+Internal Project,b'Oscar',"b'Advertising biology, microconsulting'",b'Event',2018-01-16,13:00,1:30:00,11:30
+Internal Project,b'Oscar',"b'Meeting with Tony Shong, write article about game design workshop'",b'Event',2018-01-16,21:00,7:30:00,13:30
+Internal Project,b'Terry Chen',b'Writing up advert for python intro event',b'Marketing',2018-01-16,18:00,5:00:00,13:00
+Internal Project,b'Terry Chen',"b'Enrollment, taking pictures'",b'Event',2018-01-16,20:30,1:30:00,19:00
+Internal Project,b'Terry Chen',b'Writing up advert for python intro event',b'Event',2018-01-16,17:00,7:00:00,10:00
+Internal Project,b'Todd',b'Co-learning',b'Marketing',2018-01-16,18:00,8:00:00,10:00
+Internal Project,b'Todd',b'Organising blockchain event',b'Event',2018-01-17,19:00,8:00:00,11:00
+Internal Project,b'Todd',b'Asking philip for content and preparing ad for blockchain event',b'Event',2018-01-18,20:00,9:00:00,11:00
+Internal Project,b'Todd',b'Writing article for blockchain event',b'Event',2018-01-19,17:00,7:00:00,10:00
+Internal Project,b'Oscar',"b'Microconsulting, Game Workshop, Co-learning, Calendar'",b'Event',2018-01-17,12:00,3:00:00,9:00
+Internal Project,b'Oscar',"b'Microconsulting, Game Workshop, Co-learning, Calendar'",b'Event',2018-01-17,18:30,6:00:00,12:30
+Internal Project,b'Oscar',"b'Game Workshop, Co-learning, Calendar'",b'Event',2018-01-18,13:00,1:30:00,11:30
+Internal Project,b'Oscar',"b'Game Workshop, Co-learning, Calendar'",b'Event',2018-01-18,20:00,6:30:00,13:30
+Internal Project,b'Jesse',"b'Morning check, Ticketing, Update Inventory upsate for F&B'",b'Inventory',2018-01-22,12:00,3:00:00,9:00
+Internal Project,b'Jesse',b'Update Inventory update for F&B',b'Inventory',2018-01-22,15:00,1:30:00,13:30
+Internal Project,b'Jesse',b'staff enrollment procedure ',b'Administration',2018-01-22,18:30,3:30:00,15:00
+Internal Project,b'Oscar',"b'Game Workshop, Meetup Admin'",b'Event',2018-01-19,14:00,1:00:00,13:00
+Internal Project,b'Oscar',b'Game Workshop',b'Event',2018-01-19,18:00,3:30:00,14:30
+Internal Project,b'Todd',b'Preparing blockchain Mining event and colearning',b'Event',2018-01-20,20:00,10:00:00,10:00
+Internal Project,b'Oscar',b'Prepare the discuss with Fred on event organization (Insomina)',b'Event',2018-01-22,12:00,1:30:00,10:30
+Internal Project,b'Oscar',b'Discuss with Fred and Qiong on event organization',b'Event',2018-01-22,18:00,5:00:00,13:00
+Internal Project,b'Oscar',"b'Insomina, In the mood of love'",b'Event',2018-01-22,20:30,1:00:00,19:30
+Internal Project,b'Terry Chen',b'Co-organizing colearning session',b'Event',2018-01-20,18:00,9:00:00,9:00
+Internal Project,b'Jesse',"b'Morning check, updated inventory for tools, stationtary, tissue, and clean, updated coworking/coliving advertising & Writed procedure about morning check'",b'Event',2018-01-23,13:15,4:15:00,9:00
+Internal Project,b'Jesse',b'Writed procedure about morning check & writed procedure about inventory',b'Administration',2018-01-23,17:15,3:15:00,14:00
+Internal Project,b'Jesse',b'staff enrollment procedure ',b'Administration',2018-01-23,18:00,0:45:00,17:15
+Internal Project,b'Oscar',b'DNA Data storage',b'Event',2018-01-23,15:00,3:00:00,12:00
+Internal Project,b'Jesse',"b'updated coworking and coliving advertising, helped Sugandha revsing Inventory update guidance, writed procedure about inventory'",b'Administration',2018-01-24,13:00,3:45:00,9:15
+Internal Project,b'Jesse',"b'revised procedure about morning check, mailed items'",b'Administration',2018-01-24,14:30,0:45:00,13:45
+Internal Project,b'Jesse',"b'helped Echo scanning documents, drafted procedure for kuaidi '",b'Administration',2018-01-24,17:15,2:45:00,14:30
+Internal Project,b'Oscar',b'DNA Data storage',b'Event',2018-01-24,19:00,7:00:00,12:00
+Internal Project,b'Oscar',b'Confirm Advertising channels',b'Event',2018-01-25,13:00,4:00:00,9:00
+Internal Project,b'Oscar',"b'Reposting advertising, design biology poster'",b'Event',2018-01-25,18:00,4:30:00,13:30
+Internal Project,b'Oscar',b'Calendar',b'Event',2018-01-26,16:00,4:00:00,12:00
+Internal Project,b'Oscar',b'DNA Data storage advert and content',b'Event',2018-01-30,19:00,7:00:00,12:00
+Internal Project,b'Oscar',b'DNA Data storage advert and content',b'Event',2018-01-31,19:00,7:00:00,12:00
+Internal Project,b'Oscar',b'DNA Data storage advert and content',b'Event',2018-02-01,19:00,7:00:00,12:00
+Internal Project,b'Oscar',b'DNA Data storage advert and content',b'Event',2018-02-02,18:00,6:00:00,12:00
+Internal Project,b'Oscar',b'DNA Data storage speaking',b'Event',2018-02-02,21:00,2:00:00,19:00
+Internal Project,b'Oscar',b'Game Workshop Hosting',b'Event',2018-02-04,19:00,8:00:00,11:00
+Internal Project,b'Oscar',b'DNA Data storage and Game followup',b'Event',2018-02-05,19:00,6:00:00,13:00
+Internal Project,b'Todd',b'Preparing blockchain Mining event and writing content',b'Event',2018-01-22,21:00,9:00:00,12:00
+Internal Project,b'Todd',b'meetup/advertising for blockchain event',b'Event',2018-01-23,20:00,7:00:00,13:00
+Internal Project,b'Todd',b'preparing advertising for blockchain mining event',b'Marketing',2018-01-24,22:00,9:00:00,13:00
+Internal Project,b'Todd',"b'looking into feasibility of deeplearning timeshare computer, blockchain mining event and blockchain advertsiing'",b'Event',2018-01-25,22:00,10:00:00,12:00
+Internal Project,b'Todd',b'Blockchain event and blockchain mining event',b'Event',2018-01-26,21:00,8:00:00,13:00
+Internal Project,b'Jesse',b'inproved procedure for Kuaidi',b'Administration',2018-01-25,18:00,2:00:00,16:00
+Internal Project,b'Jesse',b'wrote content for dishwasher and fishtank',b'Administration',2018-01-26,14:00,2:00:00,12:00
+Internal Project,b'Jesse',"b'updated coworking and coliving advertising, post 4m to all channels, scanned documents '",b'Administration',2018-01-26,17:00,1:30:00,15:30
+Internal Project,b'Jesse',"b'improved procedure for Kuaidi, and tried to figure out braed price '",b'Administration',2018-01-26,18:00,1:00:00,17:00
+Internal Project,b'Terry Chen',b'Advertising for colearning',b'Marketing',2018-01-25,18:00,8:00:00,10:00
+Internal Project,b'Terry Chen',b'Coorganizing colearning',b'Event',2018-01-27,18:00,8:30:00,9:30
+Internal Project,b'Jesse',"b'Counted inventory, updated inventor for food'",b'Administration',2018-01-29,13:00,3:45:00,9:15
+Internal Project,b'Jesse',"b'Updated coworking/coliving advertsing, Post 4m to all channels'",b'Event',2018-01-29,18:00,3:45:00,14:15
+Internal Project,b'Jesse',"b'Shopping for inventory, drafted rules for phone'",b'Administration',2018-01-30,13:30,3:00:00,10:30
+Internal Project,b'Jesse',"b'Shopping for inventory, setup DNA data storage event on Yoopay, post DNA data storage event to all channels'",b'Administration',2018-01-30,18:15,4:15:00,14:00
+Internal Project,b'Jesse',"b'revised DNA data storage event on Yoopay, continued to post DNA data storage event to all channels'",b'Event',2018-01-31,13:00,3:15:00,9:45
+Internal Project,b'Jesse',"b'Updated poster of 4m film on all advertising channels. Post Genuine Game Design Experience event on WeChat official account, continued to post DNA data storage event to all channels'",b'Event',2018-01-31,18:15,4:15:00,14:00
+Internal Project,b'Jesse',"b'Morning Check, phone check, wrote phone rules'",b'Administration',2018-02-01,11:00,1:30:00,9:30
+Internal Project,b'Jesse',b'ChinaClickGo work',b'ChinaClickGo',2018-02-01,13:15,2:15:00,11:00
+Internal Project,b'Charles',b'Used python to extract Json from google Drive',b'Timesheet',2018-01-26,17:00,4:00:00,13:00
+Internal Project,b'Charles',b'Kick-Off meeting w Anne-Sophie and Mohammed',b'Timesheet',2018-01-29,12:00,1:00:00,11:00
+Internal Project,b'Charles',b'Kick-Off meeting w Terry',b'Timesheet',2018-01-29,14:30,0:30:00,14:00
+Internal Project,b'Charles',b'Postgresql setup plus Json Processing',b'Timesheet',2018-01-29,17:30,3:30:00,14:00
+Internal Project,b'Charles',b'Python ETL to CSV',b'Timesheet',2018-01-31,15:20,3:20:00,12:00
+Internal Project,b'Charles',b'Redash install',b'Timesheet',2018-01-31,18:00,2:00:00,16:00
+Internal Project,b'Qiong',b'Organise DNA data storage event',b'Event',2018-02-02,21:00,2:30:00,18:30
+Internal Project,b'Qiong',b'Meeting with Fred',b'Meeting',2018-02-03,19:50,1:20:00,18:30
+Internal Project,b'CHar',b'',b'',2018-02-05,18:30,4:30:00,14:00
