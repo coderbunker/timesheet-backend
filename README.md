@@ -10,7 +10,7 @@ npm init
 npm install --save postgraphile
 ```
 
-## Environment initialized
+## Environment initialo ized
 
 ```
 brew install postgresql
@@ -28,8 +28,9 @@ python spreadsheet.py
 
 ```
 createdb timesheet
-psql timesheet -f import.sql  → imports timesheet.json in the DB
-psql timesheet -f timesheet.sql → creates views
+sudo -u postgres psql -c "CREATE USER $USER SUPERUSER;" --> create a user in PostgreSQL so you can connect
+psql timesheet -f create_dw.sql  →  creates tables, views and functions to connect to postgraphile
+python copy_files.py
 ```
 ## Running
 
