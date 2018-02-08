@@ -27,8 +27,8 @@ python spreadsheet.py
 ## Database setup
 
 ```
-createdb timesheet
 sudo -u postgres psql -c "CREATE USER $USER SUPERUSER;" --> create a user in PostgreSQL so you can connect
+createdb timesheet
 psql timesheet -f create_dw.sql  →  creates tables, views and functions to connect to postgraphile
 python copy_files.py
 ```
