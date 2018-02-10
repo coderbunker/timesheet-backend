@@ -3,14 +3,13 @@
 Timesheet Datawarehouse backend
 
 
-## How this repo was initialized
+## How to install the dependencies
 
 ```
-npm init
-npm install --save postgraphile
+npm install
 ```
 
-## Environment initialo ized
+## Running the database server
 
 ```
 brew install postgresql
@@ -19,10 +18,12 @@ pg_ctl -D /usr/local/var/postgres start
 
 ## To extract Data from Google
 
-Create a private key “Client_Secret.json” following the procedure in  GoogleAPI.txt
+Create a private key “Client_Secret.json” following the procedure in GoogleAPI.txt
 ```
 python spreadsheet.py 
 ``` 
+
+This step can be skipped if you have the .csv file for testing data.
 
 ## Database setup
 
@@ -32,16 +33,15 @@ createdb timesheet
 psql timesheet -f create_dw.sql  →  creates tables, views and functions to connect to postgraphile
 python copy_files.py
 ```
+
+You might not need ```sudo -u postgres``` if you're running the postgresql database process as your own user. 
+
 ## Running
 
 
-### Start the database server
-
-    pg_ctl -D sqldatabase/ start
-
 ### Start postgraphil server 
 
-    postgraphil -c $USER:localhost:5432/timesheet -s timedata
+    node_modules/.bin/postgraphil -c $USER:localhost:5432/timesheet -s timedata
 
 ## Manually test the servers
 
