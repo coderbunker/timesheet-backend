@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/coderbunker/timesheet-backend#readme",
   "dependencies": {
-    "postgraphile": "^4.0.0-alpha2.30",
-    "graphql": "0.11"
+    "express": "^4.16.2",
+    "graphql": "0.11",
+    "postgraphile": "^4.0.0-alpha2.30"
   }
 }

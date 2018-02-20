@@ -1,0 +1,384 @@
+resource,activity,taskname,date,stop,start,hours,hourly rate,total
+Atlas,Ricky,Prepare presentation for project and setup kickoff,Recruitment,2017-08-16,12:00,11:00,1:00:00,¥700.00,-¥700.00
+Atlas,Ricky,Discuss project over lunch with Miguel,Recruitment,2017-08-16,13:00,12:00,1:00:00,¥700.00,-¥700.00
+Atlas,Ricky,Setup meeting with Sean Z,Recruitment,2017-08-17,10:30,10:00,0:30:00,¥700.00,-¥350.00
+Atlas,Ricky,"Get the source code on Github, get Chun and Lukas briefed",Setup,2017-08-18,12:00,9:00,3:00:00,¥700.00,"-¥2,100.00"
+Atlas,Ricky,"Get the team setup, rate approval",Setup,2017-08-18,15:00,13:00,2:00:00,¥700.00,"-¥1,400.00"
+Atlas,Ricky,Follow up with Stephane and Nelson,Recruitment,2017-08-21,11:00,10:30,0:30:00,¥700.00,-¥350.00
+Atlas,Stephane,"Reading intitial documents, reseach on main mathematical tools",Core Model,2017-08-21,10:10,9:40,0:30:00,¥700.00,-¥350.00
+Atlas,Stephane,Initial code and technology review with Sean,Core Model,2017-08-23,11:40,9:40,2:00:00,¥700.00,"-¥1,400.00"
+Atlas,Chun,Reading Atlas branding ducments,Website,2017-08-23,20:45,18:45,2:00:00,¥150.00,-¥300.00
+Atlas,Stephane,Litterature review on  Attitude determination technology and Karman filtering. Identification of pertinent pyhton libraries. Review of the code with updated knoledge on this topic,Core Model,2017-08-24,18:40,16:10,2:30:00,¥700.00,"-¥1,750.00"
+Atlas,Ricky,Plan for the September 15th demo,Planning,2017-08-25,12:30,10:30,2:00:00,¥700.00,"-¥1,400.00"
+Atlas,Ricky,React-Native demo,React-Native,2017-08-25,16:30,14:30,2:00:00,¥700.00,"-¥1,400.00"
+Atlas,Nelson,"OBD2 interface research and selection, iAP vs BT Classic vs BLE research",Planning,2017-08-25,15:30,14:30,1:00:00,¥600.00,-¥600.00
+Atlas,Fred,project set up. meeting. recruitment of iOS developer. Planning for demo.,Planning,2017-08-25,12:30,10:15,2:15:00,¥700.00,"-¥1,575.00"
+Atlas,Lukas,"Getting qingcloud instance through the shared account, communication with qingcloud support",Setup,2017-08-25,16:00,15:00,1:00:00,¥350.00,-¥350.00
+Atlas,Fred,"Enrolling Gaurav, project introduction, building source code.",Recruitment,2017-08-26,13:10,11:00,2:10:00,¥700.00,"-¥1,516.67"
+Atlas,Gaurav,Studying the old source code and evaluating,iOSApp,2017-08-26,22:00,21:00,1:00:00,¥330.00,-¥330.00
+Atlas,Gaurav,Creating a new project from scratch. Sending location data to RabbitMQ,iOSApp,2017-08-27,14:00,11:00,3:00:00,¥330.00,-¥990.00
+Atlas,Ricky,General guidance remotely,Planning,2017-08-27,11:30,11:00,0:30:00,¥700.00,-¥350.00
+Atlas,Ricky,Figure out how to build react-native demo,React-Native,2017-08-27,0:00,18:30,5:30:00,¥700.00,"-¥3,850.00"
+Atlas,Stephane,"Algorythm review with Sean, definition of the reference frame, implementation of the algorythm for geoframe from gps data ",Core Model,2017-08-27,13:30,9:30,4:00:00,¥700.00,"-¥2,800.00"
+Atlas,Stephane,"Implementation of the geoframe from compas and gravity data, implementation of the fully quaternion workflow",Core Model,2017-08-27,21:15,19:45,1:30:00,¥700.00,"-¥1,050.00"
+Atlas,Lukas,Writing python rabbitmq-postgres bridge,Setup,2017-08-27,18:30,18:00,0:30:00,¥350.00,-¥175.00
+Atlas,Nelson,Ordering OBD2 interfaces from China and US,Planning,2017-08-27,19:00,18:00,1:00:00,¥600.00,-¥600.00
+Atlas,Ricky,Document demo,React-Native,2017-08-27,1:30,0:00,1:30:00,¥700.00,"-¥1,050.00"
+Atlas,Lukas,deploying Ricky's mqtt-postgres bridge to the qingcloud instance,Setup,2017-08-28,19:00,18:30,0:30:00,¥350.00,-¥175.00
+Atlas,Lukas,communicating with Godaddy support about the domain not being visible in the DNS administration tool,Setup,2017-08-28,19:00,18:30,0:30:00,¥350.00,-¥175.00
+Atlas,Lukas,Installed Resilio Sync to the qingcloud server,Setup,2017-08-28,8:20,8:00,0:20:00,¥350.00,-¥116.67
+Atlas,Ricky,Share with team progress,React-Native,2017-08-28,9:00,8:00,1:00:00,¥700.00,-¥700.00
+Atlas,Stephane,"Implementation of the frame from gryroscope, production of a demo notebook",Core Model,2017-08-28,9:30,8:00,1:30:00,¥700.00,"-¥1,050.00"
+Atlas,Lukas,Installed Resilio Sync to the qingcloud server,Setup,2017-08-28,8:20,8:00,0:20:00,¥350.00,-¥116.67
+Atlas,Echo,Monthly Report,Admin,2017-09-01,10:15,10:00,0:15:00,¥90.00,-¥22.50
+Atlas,Stephane,Exploring and testing phone to car frame conversion through imu and gps data,Core Model,2017-09-01,12:30,8:30,4:00:00,¥700.00,"-¥2,800.00"
+Atlas,Stephane,Exploring and testing phone to car frame conversion through imu and gps data,Core Model,2017-09-01,17:00,13:30,3:30:00,¥700.00,"-¥2,450.00"
+Atlas,Nelson,Receiving and testing OBD2 and bluetooth components,Setup,2017-09-02,16:00,13:00,3:00:00,¥600.00,"-¥1,800.00"
+Atlas,Nelson,"POC test of hardware set up at home (different model Buick) - basic power, ELM327 boot-up and UART data output",Setup,2017-09-02,17:00,14:00,3:00:00,¥600.00,"-¥1,800.00"
+Atlas,Stephane,Code for rotation rate and accereration in car frame,Core Model,2017-09-07,12:30,8:30,4:00:00,¥700.00,"-¥2,800.00"
+Atlas,Stephane,Notebook for doing conversion on all datasets,Core Model,2017-09-07,17:00,14:00,3:00:00,¥700.00,"-¥2,100.00"
+Atlas,Stephane,Solving problem encontered when duplicated time index in the data and in course angle smoothing method,Core Model,2017-09-08,11:25,10:10,1:15:00,¥700.00,-¥875.00
+Atlas,Ricky,"Feedback on core model functions interface, plan further deployment with Lukas",Planning,2017-09-08,12:30,11:30,1:00:00,¥700.00,-¥700.00
+Atlas,Lukas,"mqtt behind nginx, letsencrypt",Setup,2017-09-08,12:30,11:30,1:00:00,¥350.00,-¥350.00
+Atlas,Lukas,dealing with the domain (godaddy support); updating readme for domain and resilio sync on the server,Setup,2017-09-08,13:10,12:30,0:40:00,¥350.00,-¥233.33
+Atlas,Lukas,testing mqtt over websockets,Setup,2017-09-09,12:30,11:00,1:30:00,¥350.00,-¥525.00
+Atlas,Ricky,"Review devops work, fix postgresql-bridge and setup react-native app",React-Native,2017-09-09,17:00,15:00,2:00:00,¥700.00,"-¥1,400.00"
+Atlas,Chun,edit landing page,Website,2017-09-09,17:00,13:00,4:00:00,¥150.00,-¥600.00
+Atlas,Lukas,configuring and testing codeship pipeline for the postgresql-bridge,Setup,2017-09-10,12:00,11:00,1:00:00,¥350.00,-¥350.00
+Atlas,Miguel,Meeting introduction for server task (postgres notify to python worker that executes algorithm) ,Planning,2017-09-11,14:45,13:45,1:00:00,¥350.00,-¥350.00
+Atlas,Lukas,"changes in mqtt configuration - users; channels; unattended-upgrades for ubuntu server, put rabbitmq management on new domain, goddaddy support",Setup,2017-09-11,19:30,17:30,2:00:00,¥350.00,-¥700.00
+Atlas,Ricky,Update project board,Planning,2017-09-11,11:00,10:00,1:00:00,¥700.00,-¥700.00
+Atlas,Ricky,Plan data processing pipeline,Planning,2017-09-11,15:00,14:00,1:00:00,¥700.00,-¥700.00
+Atlas,Miguel,Initial version of data processing pipeline (issue #8),Processing,2017-09-11,0:00,22:30,1:30:00,¥350.00,-¥525.00
+Atlas,Lukas,dealing with the domain (godaddy support - cannot add cname for the website); dealing with resilio on the server -> switching to syncthing,Setup,2017-09-11,12:30,9:30,3:00:00,¥350.00,"-¥1,050.00"
+Atlas,Ricky,"fix mqtt authentication, configuration and plan/discussions for demo",React-Native,2017-09-12,20:00,16:00,4:00:00,¥700.00,"-¥2,800.00"
+Atlas,Miguel,Youtube video interaction on jupyter notebook,Demo BMW,2017-09-12,0:00,22:00,2:00:00,¥350.00,-¥700.00
+Atlas,Stephane,Defining demo visualisation technology + code refactoring,Core Model,2017-09-12,20:00,17:00,3:00:00,¥700.00,"-¥2,100.00"
+Atlas,Miguel,Youtube video interaction on jupyter notebook,Demo BMW,2017-09-13,1:30,0:00,1:30:00,¥350.00,-¥525.00
+Atlas,Ricky,Added Alex Miller to the team,Recruitment,2017-09-13,19:30,19:00,0:30:00,¥700.00,-¥350.00
+Atlas,Miguel,Added slider and js code to sync video and chart data ,Demo BMW,2017-09-13,18:50,17:00,1:50:00,¥350.00,-¥641.67
+Atlas,Alex Miller,Update to common document format field names #12,React-Native,2017-09-13,21:30,20:00,1:30:00,¥250.00,-¥375.00
+Atlas,Stephane,Development of data visualisation for the BMW demo,Demo BMW,2017-09-13,22:00,13:00,9:00:00,¥700.00,"-¥6,300.00"
+Atlas,Nelson,Assembling OBD2 hardware interfaces,Demo BMW,2017-09-13,23:59,21:59,2:00:00,¥600.00,"-¥1,200.00"
+Atlas,Nelson,"Assembling OBD2 hardware interfaces, testing in Sean's Buick, compiling and testing open source Bluetooth comm app",Demo BMW,2017-09-14,7:30,0:00,7:30:00,¥600.00,"-¥4,500.00"
+Atlas,Lukas,"changes in users and postgres ansible roles  (#9, #16, #17)",Setup,2017-09-14,16:45,16:00,0:45:00,¥350.00,-¥262.50
+Atlas,Alex Miller,Update to common document format field names #12,React-Native,2017-09-14,18:30,18:00,0:30:00,¥250.00,-¥125.00
+Atlas,Miguel,Finish up BMW demo (chart+video webpage),Demo BMW,2017-09-14,20:15,17:15,3:00:00,¥350.00,"-¥1,050.00"
+Atlas,Stephane,finalizing  the BMW demo,Demo BMW,2017-09-14,19:30,13:00,6:30:00,¥700.00,"-¥4,550.00"
+Atlas,Chun,edit landing page,Website,2017-09-14,17:00,15:00,2:00:00,¥150.00,-¥300.00
+Atlas,Miguel,Changes on demo notebook to automatically generate the HTML demo (issue #1),Demo BMW,2017-09-17,19:30,18:30,1:00:00,¥350.00,-¥350.00
+Atlas,Ricky,Review pull request / setTimeout with Alex,React-Native,2017-09-18,12:00,11:00,1:00:00,¥700.00,-¥700.00
+Atlas,Alex Miller,"Fix start/stop button, add location timeout",React-Native,2017-09-18,12:00,11:00,1:00:00,¥250.00,-¥250.00
+Atlas,Ricky,Make a plan for the app,React-Native,2017-09-18,17:00,16:30,0:30:00,¥700.00,-¥350.00
+Atlas,Alex Miller,Preparing the app for ejecting,React-Native,2017-09-18,18:00,17:00,1:00:00,¥250.00,-¥250.00
+Atlas,Miguel,Fixed worker to preprocess measurement data so that the detection model receives the expected input,Processing,2017-09-19,1:45,0:15,1:30:00,¥350.00,-¥525.00
+Atlas,Alex Miller,"Build test android app, detach apps to add bluetooth support, add speed in measurements",React-Native,2017-09-19,16:00,13:00,3:00:00,¥250.00,-¥750.00
+Atlas,Chun,edit website photos,Website,2017-09-19,14:00,12:30,1:30:00,¥150.00,-¥225.00
+Atlas,Alex Miller,"Detached the app, adding bluetooth",React-Native,2017-09-20,11:00,10:00,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,Add bluetooth features,React-Native,2017-09-20,20:00,18:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Keep working on bt,React-Native,2017-09-21,23:00,21:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Add attitude sensor,React-Native,2017-09-21,23:00,21:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Fix orientation,React-Native,2017-09-22,22:00,20:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ricky,Discussing ways forward for the app,Planning,2017-09-26,10:00,9:30,0:30:00,¥700.00,-¥350.00
+Atlas,Ricky,document buliding the react-native detached app from the command-line,React-Native,2017-09-26,15:30,13:30,2:00:00,¥700.00,"-¥1,400.00"
+Atlas,Alex Miller,"fix android build, documentation Issue#6",React-Native,2017-09-26,17:00,15:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ricky,review Alex's pull request for issue #6,React-Native,2017-09-26,20:00,19:30,0:30:00,¥700.00,-¥350.00
+Atlas,Alex Miller,Styling UI,React-Native,2017-09-26,23:00,21:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Configuring ios build / ui,React-Native,2017-09-27,21:00,19:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Building ios app,React-Native,2017-09-28,23:00,20:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,issue #6: ios and android build,React-Native,2017-09-30,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,"Fixing and ejecting the app, documentation for ios build",React-Native,2017-10-05,16:00,13:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Issue #2: configurable from QRcode,React-Native,2017-10-07,21:30,18:30,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Issue #2: configurable from QRcode / refactor components,React-Native,2017-10-08,20:00,18:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ricky,MQTT topics: https://github.com/atlas-ai/postgresql-bridge/issues/7,Processing,2017-10-09,11:00,10:30,0:30:00,¥700.00,-¥350.00
+Atlas,Ricky,Diagram techstack relationships,Recruitment,2017-10-09,12:00,11:00,1:00:00,¥700.00,-¥700.00
+Atlas,Ricky,add Natalie,Recruitment,2017-10-09,17:00,16:30,0:30:00,¥700.00,-¥350.00
+Atlas,Alex Miller,mqtt topics for measurements and profile | orientation sensor,React-Native,2017-10-09,19:00,17:30,1:30:00,¥250.00,-¥375.00
+Atlas,Natalie,Working on logo and color palette,Design,2017-10-09,19:00,16:00,3:00:00,¥150.00,-¥450.00
+Atlas,Alex Miller,Created gravity sensor,React-Native,2017-10-09,23:30,20:30,3:00:00,¥250.00,-¥750.00
+Atlas,Echo,Monthly Report,Admin,2017-10-09,14:21,14:10,0:11:00,¥90.00,-¥16.50
+Atlas,Miguel,Updated worker with new algorithm workflow ,Core Model,2017-10-10,19:20,18:00,1:20:00,¥350.00,-¥466.67
+Atlas,Alex Miller,Fix location and connection | test if data correct,React-Native,2017-10-10,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,Natalie,Logo and color palette,Design,2017-10-10,22:00,18:30,3:30:00,¥150.00,-¥525.00
+Atlas,Alex Miller,Changing some modules and adding them to coderbunker github ,React-Native,2017-10-11,15:00,14:00,1:00:00,¥250.00,-¥250.00
+Atlas,Ricky,Recruit David Yu,Recruitment,2017-10-12,19:30,19:00,0:30:00,¥700.00,-¥350.00
+Atlas,Ricky,Added David Yu,Recruitment,2017-10-13,7:30,7:00,0:30:00,¥700.00,-¥350.00
+Atlas,Alex Miller,"Rebuild the app without expo, add navigator and sensors",React-Native,2017-10-13,16:00,13:00,3:00:00,¥250.00,-¥750.00
+Atlas,Natalie,Working on colors,Design,2017-10-13,22:00,20:00,2:00:00,¥150.00,-¥300.00
+Atlas,Alex Miller,Fix ios sensors | work on qr code scanner,React-Native,2017-10-13,21:00,19:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Add orientation sensor for ios | fix android,React-Native,2017-10-16,12:30,11:00,1:30:00,¥250.00,-¥375.00
+Atlas,David,Bluetooth read data and get notifications for devices,React-Native,2017-10-17,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,iOS GPS constant update. iOS offline bundle. ,React-Native,2017-10-18,18:00,15:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Issues #10 and #12 GPS and Android bundle,React-Native,2017-10-18,20:00,18:00,2:00:00,¥250.00,-¥500.00
+Atlas,Natalie,Infographics and template for presentation\,Design,2017-10-18,20:00,17:00,3:00:00,¥150.00,-¥450.00
+Atlas,Alex Miller,Issue#12 GPS wouldn't update the values | Android permission fix,React-Native,2017-10-19,19:30,18:00,1:30:00,¥250.00,-¥375.00
+Atlas,David,Issue#12 iOS GPS tracking speed and course,React-Native,2017-10-20,18:00,16:00,2:00:00,¥250.00,-¥500.00
+Atlas,Miguel,"Meeting with Ricky, Alex, David and Sean",Planning,2017-10-20,17:30,17:00,0:30:00,¥350.00,-¥175.00
+Atlas,Lukas,helping David with app testing,Setup,2017-10-21,16:20,16:00,0:20:00,¥350.00,-¥116.67
+Atlas,David,Issue#16 #18. Testing faster rate of data transmission. 20 per second.,React-Native,2017-10-22,17:20,14:00,3:20:00,¥250.00,-¥833.33
+Atlas,Alex Miller,Pull#20 Changes to sensors interval and listeners,React-Native,2017-10-22,14:30,12:30,2:00:00,¥250.00,-¥500.00
+Atlas,Natalie,Website design,Design,2017-10-22,21:30,16:00,5:30:00,¥150.00,-¥825.00
+Atlas,David,#21 Home page added. Track distance and time. ,React-Native,2017-10-23,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,"Pull#24 Added baidu map, user accelerometer and convert m/s2 to G ",React-Native,2017-10-23,18:00,14:00,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Chun,"homepage foto revise, add presentation pdf to the github.io server",Website,2017-10-23,17:00,16:00,1:00:00,¥150.00,-¥150.00
+Atlas,David,Prevent iOS going to sleep while tracking data,React-Native,2017-10-24,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Store uuids and time and display them,React-Native,2017-10-24,13:00,11:00,2:00:00,¥250.00,-¥500.00
+Atlas,Lukas,preparing to deploy pipeline-processor to server,Setup,2017-10-25,10:15,9:30,0:45:00,¥350.00,-¥262.50
+Atlas,Alex Miller,Issue#22 & issue#30 home page,React-Native,2017-10-25,17:00,14:30,2:30:00,¥250.00,-¥625.00
+Atlas,David,#27 Prevent app from crashing when MQTT disconnects,React-Native,2017-10-25,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Lukas,"deployed pipeline-processor to server, moved hardcoded settings to dotenv, put in place codeship pipeline and simple does-it-run test",Setup,2017-10-25,19:30,16:30,3:00:00,¥350.00,"-¥1,050.00"
+Atlas,Chun,edit website photos,Website,2017-10-25,17:00,16:00,1:00:00,¥150.00,-¥150.00
+Atlas,David,#33 Automate iOS yarn install so ios geolcation works for speed and course #36 Update distance by the second,React-Native,2017-10-26,18:00,14:00,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Alex Miller,Issue #34 integrate codepush into android and ios builds,React-Native,2017-10-26,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Pull#34 Succesfully integrated CodePush and upgraded android to v27.0.0,React-Native,2017-10-26,0:00,21:00,3:00:00,¥250.00,-¥750.00
+Atlas,Miguel,merged few PRs and #18 (use SQLAlchemy models in pipeline),Core Model,2017-10-27,18:00,17:00,1:00:00,¥350.00,-¥350.00
+Atlas,Alex Miller,Issue#40 api keys and map,React-Native,2017-10-27,16:00,13:30,2:30:00,¥250.00,-¥625.00
+Atlas,Ricky,new intern integration and discuss development plan and team management,Admin,2017-10-30,16:00,14:30,1:30:00,¥700.00,"-¥1,050.00"
+Atlas,David,Issue#41 Make app universal for tablet and mobile,React-Native,2017-10-30,12:00,11:00,1:00:00,¥250.00,-¥250.00
+Atlas,David,Issue #44 Record coordinates and display on map,React-Native,2017-10-30,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Pull#46 Get sensors data without re-render and codepush options change,React-Native,2017-10-30,19:00,16:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Android display trip on Baidu Map,React-Native,2017-10-30,0:00,22:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,Issue #48 Coordinate accuracy fix,React-Native,2017-10-31,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Pull#50 Buffer for messages to be sent. Handle offline messages,React-Native,2017-10-31,18:00,13:00,5:00:00,¥250.00,"-¥1,250.00"
+Atlas,Echo,Admin,Admin,2017-11-01,16:17,16:00,0:17:00,¥90.00,-¥25.50
+Atlas,Alex Miller,Fix scanner ui for tablets and updated projects,React-Native,2017-11-01,0:00,22:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,#54 Track Coordinates Faster,React-Native,2017-11-02,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ricky,discuss with Stephane and Rick and Sean: https://trello.com/b/uPzjJR7I/eva-chen-internship,Core Model,2017-11-03,15:00,14:00,1:00:00,¥700.00,-¥700.00
+Atlas,Rick,"discuss status, todos with Stephand, Ricky and Sean",Core Model,2017-11-03,15:00,14:00,1:00:00,¥250.00,-¥250.00
+Atlas,Stephane,"discuss status, todos with Rick , Ricky and Sean",Core Model,2017-11-03,15:00,14:00,1:00:00,¥700.00,-¥700.00
+Atlas,Rick,"Getting set up with repos, reading docs",Core Model,2017-11-03,16:15,15:30,0:45:00,¥250.00,-¥187.50
+Atlas,Rick,"discussing with Sean overview of project, immediate needs",Core Model,2017-11-03,17:00,16:15,0:45:00,¥250.00,-¥187.50
+Atlas,Alex Miller,Issue#56 Detect Landscape view in iPad,React-Native,2017-11-03,16:00,15:00,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,Pull#57 Show routes connected by coordinates,React-Native,2017-11-03,0:00,19:00,5:00:00,¥250.00,"-¥1,250.00"
+Atlas,David,Meeting with Sean on expectation of mid-november,Planning,2017-11-03,15:30,15:00,0:30:00,¥250.00,-¥125.00
+Atlas,Alex Miller,Pull#58 Use different layout depending on device orientation,React-Native,2017-11-04,13:30,12:00,1:30:00,¥250.00,-¥375.00
+Atlas,David,Implement GraphQL Apollo,React-Native,2017-11-04,18:00,12:00,6:00:00,¥250.00,"-¥1,500.00"
+Atlas,Alex Miller,Pull#62 Android doesn't read from bluetooth device,React-Native,2017-11-04,18:00,16:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Pull#62 Android: Succesfully read from device and decode values,React-Native,2017-11-04,21:00,18:30,2:30:00,¥250.00,-¥625.00
+Atlas,Chun,"homepage foto revise, add demo",Website,2017-11-05,11:00,10:00,1:00:00,¥150.00,-¥150.00
+Atlas,David,Use Gao De Map for coordinate tracking - High precision,React-Native,2017-11-06,19:00,15:00,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,David,Issue #63 Add more detail to trip.js in Chinese,React-Native,2017-11-07,13:00,10:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,"Realtime map tracking, draw polyline on map, remove redundant code in home.js",React-Native,2017-11-07,18:00,14:00,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Alex Miller,"Pull#62 Using different components on android and ios, display devices and read values",React-Native,2017-11-07,22:00,19:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,Implement Section List for trip list and swipe to delete function,React-Native,2017-11-08,17:30,14:30,3:00:00,¥250.00,-¥750.00
+Atlas,Rick,implementing testing framework,Core Model,2017-11-08,17:30,16:00,1:30:00,¥250.00,-¥375.00
+Atlas,Chun,homepage foto revise,Website,2017-11-08,11:30,11:00,0:30:00,¥150.00,-¥75.00
+Atlas,David,Road Test at driving school,React-Native,2017-11-09,12:00,9:30,2:30:00,¥250.00,-¥625.00
+Atlas,David,Change to faster buffering for MQTT messages,React-Native,2017-11-09,18:00,17:00,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,Pulls#69&70 Amap wouldnt render on the page,React-Native,2017-11-09,19:00,16:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Pull#71 Store trips on the phone so messages can be sent any time,React-Native,2017-11-09,0:00,21:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,Event list in Chinese Issue #72,React-Native,2017-11-10,18:00,15:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,Pull#71 Save trip data every minute and when app goes to the background,React-Native,2017-11-10,24:00:00,20:00,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Lukas,"work on pipeline-processor (core_model), helping Miguel with connection to China",Setup,2017-11-10,18:30,16:00,2:30:00,¥350.00,-¥875.00
+Atlas,Miguel,Fixes on pipeline processor timestamp data type and reduce algorithm executions by better management of measurements status (issue #8),Core Model,2017-11-11,13:50,10:50,3:00:00,¥350.00,"-¥1,050.00"
+Atlas,Alex Miller,Continue sending mqtt messages at any time,React-Native,2017-11-11,23:00,20:30,2:30:00,¥250.00,-¥625.00
+Atlas,Natalie,Design UI for iPad and iPhone,Design,2017-11-11,17:00,10:00,7:00:00,¥150.00,"-¥1,050.00"
+Atlas,Alex Miller,Pull#71 Ability to send all messages that wasn't sent,React-Native,2017-11-12,16:30,13:30,3:00:00,¥250.00,-¥750.00
+Atlas,Miguel,Test new fixes on core model (issues #22 and #23),Core Model,2017-11-12,21:30,21:00,0:30:00,¥350.00,-¥175.00
+Atlas,David,Scanner and profile storage bug fix,React-Native,2017-11-12,18:30,18:00,0:30:00,¥250.00,-¥125.00
+Atlas,Lukas,adding china. cname to strikingly,Setup,2017-11-13,14:10,14:00,0:10:00,¥350.00,-¥58.33
+Atlas,David,Adding diagnostic detail and speed chart,React-Native,2017-11-13,15:30,11:30,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Miguel,Rerun old data for Sean and document how anyone can rerun old data on their local machines,Core Model,2017-11-13,18:20,17:50,0:30:00,¥350.00,-¥175.00
+Atlas,Lukas,preparing postgraphql deployment to dev server,Setup,2017-11-13,19:00,17:00,2:00:00,¥350.00,-¥700.00
+Atlas,Lukas,postgraphql deployment to dev server,Setup,2017-11-13,18:30,17:00,1:30:00,¥350.00,-¥525.00
+Atlas,Chun,edit demo,Website,2017-11-13,10:00,9:00,1:00:00,¥150.00,-¥150.00
+Atlas,David,GPS accuracy changes and testing with walking and metro,React-Native,2017-11-14,14:30,10:30,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,David,History page UI,React-Native,2017-11-14,18:00,16:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Pull#83 Clean up PRs and add settings page,React-Native,2017-11-14,15:00,13:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Issue#66 Starting a new trip would remove old data & Pull#86 New app structure,React-Native,2017-11-14,23:30,20:00,3:30:00,¥250.00,-¥875.00
+Atlas,Miguel,Rerun old data for Sean,Core Model,2017-11-14,19:20,19:00,0:20:00,¥350.00,-¥116.67
+Atlas,Chun,edit demo,Website,2017-11-14,13:00,11:00,2:00:00,¥150.00,-¥300.00
+Atlas,David,Minor changes in Home.js and History.js,React-Native,2017-11-15,8:20,8:00,0:20:00,¥250.00,-¥83.33
+Atlas,David,Trip UI done,React-Native,2017-11-15,11:00,8:20,2:40:00,¥250.00,-¥666.67
+Atlas,David,Navigation UI,React-Native,2017-11-15,19:30,16:00,3:30:00,¥250.00,-¥875.00
+Atlas,Rick,implementing testing framework,Testing,2017-11-15,12:40,11:00,1:40:00,¥250.00,-¥416.67
+Atlas,Rick,worked with Sean to setup local runs,Setup,2017-11-15,17:10,13:30,3:40:00,¥250.00,-¥916.67
+Atlas,Alex Miller,Adding avatar adder,React-Native,2017-11-15,23:00,21:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,Added app icons and debug,React-Native,2017-11-16,13:00,12:00,1:00:00,¥250.00,-¥250.00
+Atlas,David,Link to Atlas GraphQL endpoint and get query,React-Native,2017-11-16,14:00,13:00,1:00:00,¥250.00,-¥250.00
+Atlas,Lukas,working on postgraphql api,Setup,2017-11-16,16:30,15:00,1:30:00,¥350.00,-¥525.00
+Atlas,David,Chinese diagnostics for different conditions,React-Native,2017-11-16,17:30,14:00,3:30:00,¥250.00,-¥875.00
+Atlas,Miguel,Long wechat discussion with Sean and Rick to clean up messed up setup :)   (discussion went over two days with interrumptions so I'll just count 1 hour),Setup,2017-11-16,11:00,10:00,1:00:00,¥350.00,-¥350.00
+Atlas,Alex Miller,Pull#94 Image picker,React-Native,2017-11-16,21:30,20:30,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,Pull#95 TabBar styling,React-Native,2017-11-16,23:00,21:30,1:30:00,¥250.00,-¥375.00
+Atlas,Rick,working with Sean and Miguel debugging local runs,Setup,2017-11-16,20:30,19:45,0:45:00,¥250.00,-¥187.50
+Atlas,Chun,ICP: collect information,Admin,2017-11-16,16:00,14:30,1:30:00,¥150.00,-¥225.00
+Atlas,Ricky,"Quick chat with Sean about design, database",Admin,2017-11-17,16:00,15:30,0:30:00,¥700.00,-¥350.00
+Atlas,Rick,"Quick chat with Ricky and Sean about design, database, local runs",Admin,2017-11-17,16:00,15:30,0:30:00,¥250.00,-¥125.00
+Atlas,Alex Miller,Pull#96 UI for free route page,React-Native,2017-11-18,23:30,21:30,2:00:00,¥250.00,-¥500.00
+Atlas,Natalie,Re-Design UI for iPad,Design,2017-11-19,18:00,12:00,6:00:00,¥150.00,-¥900.00
+Atlas,David,Meeting about the current focus of the project,Planning,2017-11-20,15:00,14:30,0:30:00,¥250.00,-¥125.00
+Atlas,David,Get data by UUID from GraphQL,React-Native,2017-11-20,16:00,15:00,1:00:00,¥250.00,-¥250.00
+Atlas,Ricky,"Meeting with Sean for how to do closed circuit testing, replacing Rick by Ilya and follow ups / notes",Planning,2017-11-20,15:00,14:00,1:00:00,¥700.00,-¥700.00
+Atlas,Lukas,getting stream url from the wifi camera,Setup,2017-11-21,18:30,18:00,0:30:00,¥350.00,-¥175.00
+Atlas,Stephane,Model review + initial code to compare acceleration and rotation rates in the car frame from GPS and imu data respectively,Core Model,2017-11-21,18:00,17:00,1:00:00,¥700.00,-¥700.00
+Atlas,Chun,"ICP: aliyun platform registration, information inputing.",Admin,2017-11-21,17:00,14:30,2:30:00,¥150.00,-¥375.00
+Atlas,Chun,update llya's info,Website,2017-11-21,19:15,19:00,0:15:00,¥150.00,-¥37.50
+Atlas,Stephane,Production on the code in the core model  to compare acceleration and rotation rates in the car frame from GPS and imu data respectively,Core Model,2017-11-22,11:30,9:00,2:30:00,¥700.00,"-¥1,750.00"
+Atlas,David,New UI update for Road Training and update app icons,React-Native,2017-11-22,18:00,14:00,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Lukas,getting stream url from the wifi camera,Setup,2017-11-22,23:00,22:00,1:00:00,¥350.00,-¥350.00
+Atlas,Chun,ICP: follow up. First audition passed and input manger's photo.,Admin,2017-11-23,11:00,10:30,0:30:00,¥150.00,-¥75.00
+Atlas,Chun,"ICP: qingcloud platform registration, including consulting qingcloud support, issue domain certification, information inputing",Admin,2017-11-23,15:00,12:00,3:00:00,¥150.00,-¥450.00
+Atlas,David,Trip map route color update and uses region instead of zoomLevel,React-Native,2017-11-24,17:00,16:00,1:00:00,¥250.00,-¥250.00
+Atlas,Lukas,graphql api,Setup,2017-11-24,19:30,18:00,1:30:00,¥350.00,-¥525.00
+Atlas,Alex Miller,"Pulls #99 #101 #102 TabBar icons fix, Navbar custom buttons and logo",React-Native,2017-11-27,19:00,17:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,Convert data to diagnostic text in trip detail,React-Native,2017-11-28,18:00,14:00,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Miguel,Find out why production algorithm wasn't producing any outputs and fix it,Core Model,2017-11-28,20:50,19:40,1:10:00,¥350.00,-¥408.33
+Atlas,Chun,"Chinese website editing, change DNS record for cn.atlasaitech.com",Website,2017-11-28,22:00,18:00,4:00:00,¥150.00,-¥600.00
+Atlas,Miguel,Add SQL trigger for clean up process and modify worker to handle this event,Core Model,2017-11-29,20:40,19:25,1:15:00,¥350.00,-¥437.50
+Atlas,David,Speed chart with real data,React-Native,2017-11-30,11:00,9:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,Track recording bug fixes and query from algothrithm generated events,React-Native,2017-11-30,18:00,15:00,3:00:00,¥250.00,-¥750.00
+Atlas,Miguel,Modified pipeline to process the few seconds of unprocessed data between the last algorithm execution and the moment that the track stops,Core Model,2017-11-30,21:20,20:40,0:40:00,¥350.00,-¥233.33
+Atlas,Alex Miller,"Pull#105 Fix time and data from storage, send clean_results message, test if data correct",React-Native,2017-11-30,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,Road test. Result: Not getting generated events ,Testing,2017-11-30,15:30,14:30,1:00:00,¥250.00,-¥250.00
+Atlas,David,FreeRoute speed and distance bug fix,React-Native,2017-11-30,17:00,16:00,1:00:00,¥250.00,-¥250.00
+Atlas,Miguel,Find out what error happened on today's track,Core Model,2017-12-01,18:10,17:50,0:20:00,¥350.00,-¥116.67
+Atlas,Chun,revise website photos,Website,2017-12-01,22:00,21:30,0:30:00,¥150.00,-¥75.00
+Atlas,Stephane,presentation to Sean of the comparison between acceleration and rotation rates in the car frame from GPS and imu data respectively,Core Model,2017-12-01,17:45,17:30,0:15:00,¥700.00,-¥175.00
+Atlas,Chun,"ICP: qingcloud platform registration (account apply, information inputing)",Admin,2017-12-02,13:30,12:00,1:30:00,¥150.00,-¥225.00
+Atlas,Ricky,bootstrap Ilya on the AprilTags,AprilTags,2017-12-02,15:30,14:30,1:00:00,¥700.00,-¥700.00
+Atlas,Ilya,Bootstraping AprilTags,AprilTags,2017-12-02,16:30,14:30,2:00:00,¥250.00,-¥500.00
+Atlas,Ilya,AprilTags code research,AprilTags,2017-12-03,15:30,13:00,2:30:00,¥250.00,-¥625.00
+Atlas,Natalie,Re-Design UI for iPad,Design,2017-12-03,19:30,11:00,8:30:00,¥150.00,"-¥1,275.00"
+Atlas,Alex Miller,"Pull#108 Fix clean message, save time with coordinates",React-Native,2017-12-03,16:00,14:30,1:30:00,¥250.00,-¥375.00
+Atlas,Alex Miller,Pull#109 New homepage layout,React-Native,2017-12-04,17:30,14:00,3:30:00,¥250.00,-¥875.00
+Atlas,David,Trip Detail Layout,React-Native,2017-12-04,17:30,15:00,2:30:00,¥250.00,-¥625.00
+Atlas,David,Testing by taxi,Testing,2017-12-04,18:00,17:30,0:30:00,¥250.00,-¥125.00
+Atlas,Ricky,reading through the AprilTags code with Ilya,AprilTags,2017-12-04,21:00,19:00,2:00:00,¥700.00,"-¥1,400.00"
+Atlas,Ricky,setting up the test code,AprilTags,2017-12-04,22:00,21:00,1:00:00,¥700.00,-¥700.00
+Atlas,Alex Miller,History Page and additional tweaks of Homepage,React-Native,2017-12-04,23:00,21:30,1:30:00,¥250.00,-¥375.00
+Atlas,Ilya,AprilTags code with Ricky,AprilTags,2017-12-04,21:00,19:00,2:00:00,¥250.00,-¥500.00
+Atlas,Miguel,Rerun old data,Core Model,2017-12-04,19:15,19:00,0:15:00,¥350.00,-¥87.50
+Atlas,David,Update charts and map according to new UI design for Trip Detail,React-Native,2017-12-05,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Chun,ICP: domain certificate issues,Admin,2017-12-04,18:20,18:00,0:20:00,¥150.00,-¥50.00
+Atlas,Lukas,"changing server size, updating devops docs, investigating postgres deadlock",Setup,2017-12-05,13:30,10:00,3:30:00,¥350.00,"-¥1,225.00"
+Atlas,Alex Miller,"Fix bug with sending clean message, test run",React-Native,2017-12-05,15:00,13:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Pull#111 UI for home history and training pages ,React-Native,2017-12-05,18:00,16:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ricky,brief Ruud Peters,AprilTags,2017-12-05,19:00,18:30,0:30:00,¥700.00,-¥350.00
+Atlas,Miguel,"Added index to measurements, updated README and added try-except-logging to pipeline workers ",Core Model,2017-12-05,20:00,18:40,1:20:00,¥350.00,-¥466.67
+Atlas,David,Fix coordinates jumping issue. Only updates when speed is larger than 0,React-Native,2017-12-06,12:00,10:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,"Store finish track uuid, send final message fix in Trip",React-Native,2017-12-06,14:00,12:00,2:00:00,¥250.00,-¥500.00
+Atlas,Lukas,"change instance size, help checking pipeline-processor run",Setup,2017-12-05,11:40,11:00,0:40:00,¥350.00,-¥233.33
+Atlas,Miguel,"Long discussion over wechat on automatic data replay, rerunning tracks and help Sean with his setup (discussion went over 2-3 hours with interrumptions so I'm counting 1.5 hours)",Setup,2017-12-06,15:30,14:00,1:30:00,¥350.00,-¥525.00
+Atlas,David,Chart with data and functionality,React-Native,2017-12-06,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ilya,intro to Core_model dev with Miguel,Core Model,2017-12-06,20:00,19:00,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,Pull#114 117 118 Modify UI and fix errors,React-Native,2017-12-06,13:00,10:00,3:00:00,¥250.00,-¥750.00
+Atlas,Miguel,"Add automatic replay functionality to core_model when receiving ""replay"" event",Core Model,2017-12-06,19:00,18:10,0:50:00,¥350.00,-¥291.67
+Atlas,Miguel,intro to Core_model dev with Ilya,Setup,2017-12-06,20:00,19:00,1:00:00,¥350.00,-¥350.00
+Atlas,Miguel,"Add automatic replay functionality to core_model when receiving ""replay"" event",Core Model,2017-12-06,23:50,22:10,1:40:00,¥350.00,-¥583.33
+Atlas,David,Chart highlight and history list sorting,React-Native,2017-12-07,16:00,15:00,1:00:00,¥250.00,-¥250.00
+Atlas,David,Sync time for local storage and mqtt to retrieve coordinates for trip detail,React-Native,2017-12-07,18:00,16:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Getting average score for trips,React-Native,2017-12-07,21:00,19:30,1:30:00,¥250.00,-¥375.00
+Atlas,David,Reorganize recomendations,React-Native,2017-12-07,15:30,15:00,0:30:00,¥250.00,-¥125.00
+Atlas,Ricky,quick discussion,Admin,2017-12-08,16:30,16:15,0:15:00,¥700.00,-¥175.00
+Atlas,David,Fix bug in History page,React-Native,2017-12-07,18:00,17:30,0:30:00,¥250.00,-¥125.00
+Atlas,David,Testing by taxi,Testing,2017-12-07,15:00,14:30,0:30:00,¥250.00,-¥125.00
+Atlas,Miguel,Review Sean changes on issue 29,Core Model,2017-12-08,21:45,21:20,0:25:00,¥350.00,-¥145.83
+Atlas,Lukas,daily database backup to github,Setup,2017-12-08,22:45,22:00,0:45:00,¥350.00,-¥262.50
+Atlas,Ruud,Get to know apriltags tagtest & camtest. Setup linux virtual box and compile,Setup,2017-12-10,16:00,12:00,4:00:00,¥150.00,-¥600.00
+Atlas,Miguel,Review new changes on issue 29 and prepared data migration SQL code,Core Model,2017-12-10,22:20,21:30,0:50:00,¥350.00,-¥291.67
+Atlas,Ricky,more briefing for Ruud,AprilTags,2017-12-11,7:30,7:00,0:30:00,¥700.00,-¥350.00
+Atlas,Lukas,adding Ilya to dev server,Setup,2017-12-11,11:10,11:00,0:10:00,¥350.00,-¥58.33
+Atlas,David,Replay track function,React-Native,2017-12-07,15:30,14:30,1:00:00,¥250.00,-¥250.00
+Atlas,Miguel,"Review issue 29 PR, merge it, migrate staging DB, and check that is working fine",Core Model,2017-12-12,10:40,10:00,0:40:00,¥350.00,-¥233.33
+Atlas,Ruud,Study the OpenCV documentation,AprilTags,2017-12-12,15:00,10:00,5:00:00,¥150.00,-¥750.00
+Atlas,Ruud,Basic distance calculation,AprilTags,2017-12-12,19:00,16:00,3:00:00,¥150.00,-¥450.00
+Atlas,David,"Fetch new data from api, UI adjustment in trip detail, print out value for testing",React-Native,2017-12-13,9:00,7:00,2:00:00,¥250.00,-¥500.00
+Atlas,Lukas,"change in .env of pipeline-processor, small change in ansible",Setup,2017-12-13,11:15,11:00,0:15:00,¥350.00,-¥87.50
+Atlas,David,Events highlights on map,React-Native,2017-12-13,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,Ruud,"Spoke to teacher about homography, studies solvePNP function and camera distortion correction",AprilTags,2017-12-13,15:00,12:00,3:00:00,¥150.00,-¥450.00
+Atlas,David,Apply GDouglasPeucker algothrithm for coordinates' smoothing. ,React-Native,2017-12-14,13:00,12:00,1:00:00,¥250.00,-¥250.00
+Atlas,David,"Bug fix: FreeRoute.js prevent mqtt from sending when coordinates are zero, and render coordiantes accordingly",React-Native,2017-12-14,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,Miguel,Tried to modify test.py to add automatic extraction of track data and added comment on README explaning how to export data from staging DB,Core Model,2017-12-14,17:40,17:00,0:40:00,¥350.00,-¥233.33
+Atlas,David,Replay track new uuid save locally and query for testing/ Marker highlight events,React-Native,2017-12-14,18:00,16:00,2:00:00,¥250.00,-¥500.00
+Atlas,Miguel,Help Sean with exporting data from staging,Setup,2017-12-14,19:25,18:20,1:05:00,¥350.00,-¥379.17
+Atlas,Ruud,Camera distortion calibration,AprilTags,2017-12-14,17:30,14:00,3:30:00,¥150.00,-¥525.00
+Atlas,David,Trip detail coorindate graph,React-Native,2017-12-15,10:00,9:00,1:00:00,¥250.00,-¥250.00
+Atlas,David,Acceleration and speed chart for 20 points,React-Native,2017-12-15,12:00,10:00,2:00:00,¥250.00,-¥500.00
+Atlas,Miguel,Review and merge issue 31 branch,Core Model,2017-12-18,9:50,9:30,0:20:00,¥350.00,-¥116.67
+Atlas,David,"Initial coordinates sets, otherwise, updates when there's speed",React-Native,2017-12-18,9:30,9:00,0:30:00,¥250.00,-¥125.00
+Atlas,David,Update MQTT to QoS 2 and test data locally,React-Native,2017-12-18,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,Debug mqtt messages,React-Native,2017-12-18,16:00,15:00,1:00:00,¥250.00,-¥250.00
+Atlas,Ricky,Discuss real-time requirements with Alex,React-Native,2017-12-19,11:45,11:15,0:30:00,¥700.00,-¥350.00
+Atlas,David,Refactor FreeRoute Sensors and MQTT/Send timestamp with exactly 50ms of difference,React-Native,2017-12-19,18:00,13:00,5:00:00,¥250.00,"-¥1,250.00"
+Atlas,Alex Miller,Refactor FreeRoute Page,React-Native,2017-12-19,17:30,13:30,4:00:00,¥250.00,"-¥1,000.00"
+Atlas,Ruud,Distance calculation final,AprilTags,2017-12-19,18:00,10:00,8:00:00,¥150.00,"-¥1,200.00"
+Atlas,David,"Testing for new coordinates, course, altitude",Testing,2017-12-19,14:00,13:00,1:00:00,¥250.00,-¥250.00
+Atlas,Miguel,Review and merge PR #33,Core Model,2017-12-20,18:30,18:00,0:30:00,¥350.00,-¥175.00
+Atlas,Alex Miller,GPS send data only new values,React-Native,2017-12-20,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,Store replay uuid in local storage and query it. ,React-Native,2017-12-21,11:00,10:00,1:00:00,¥250.00,-¥250.00
+Atlas,Miguel,Fix issue with empty string numeric fields and debug replay function,Core Model,2017-12-21,14:20,14:00,0:20:00,¥350.00,-¥116.67
+Atlas,David,Road Test,Testing,2017-12-22,15:00,14:30,0:30:00,¥250.00,-¥125.00
+Atlas,David,Change empty string value to null in freeroute,React-Native,2017-12-22,15:30,15:00,0:30:00,¥250.00,-¥125.00
+Atlas,Alex Miller,Test,React-Native,2017-12-22,15:00,14:30,0:30:00,¥250.00,-¥125.00
+Atlas,Ilya,Unit tests outline for core model,Core Model,2017-12-24,21:30,20:00,1:30:00,¥250.00,-¥375.00
+Atlas,Alex Miller,Pull#134 Adjust interface for iPhone,React-Native,2017-12-26,15:00,12:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,Fix inconsistent time interval,React-Native,2017-12-27,16:00,14:00,2:00:00,¥250.00,-¥500.00
+Atlas,David,Send GPS data separately,React-Native,2017-12-29,15:00,14:00,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,"Couple test runs, find measurement issues",Testing,2017-12-29,16:00,14:30,1:30:00,¥250.00,-¥375.00
+Atlas,Alex Miller,"Sending measurements with exact 0.05 interval, clean message at the end and merge with gps",React-Native,2017-12-29,22:00,16:00,6:00:00,¥250.00,"-¥1,500.00"
+Atlas,Alex Miller,"Pull#137 Fix gps data, count messages for imu and gps, display more info",React-Native,2017-12-30,15:00,13:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ilya,tests outline with Sean,Core Model,2017-12-30,12:30,11:00,1:30:00,¥250.00,-¥375.00
+Atlas,Ilya,restart GraphQL,Core Model,2017-12-30,16:30,16:00,0:30:00,¥250.00,-¥125.00
+Atlas,Chun,update website icp informaiton,Website,2017-12-14,9:40,9:30,0:10:00,¥150.00,-¥25.00
+Atlas,Chun,icp domain registrar issues,Admin,2017-12-15,10:00,9:40,0:20:00,¥150.00,-¥50.00
+Atlas,Alex Miller,Pull#138 Update trip's page info and map,React-Native,2018-01-02,17:00,15:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ilya,"checking pipline processor on the server, logs",Core Model,2018-01-02,23:00,22:00,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,"Increase the imu sending up to 100Hz, fix timestamps, do the tests",React-Native,2018-01-03,21:20,17:40,3:40:00,¥250.00,-¥916.67
+Atlas,Ilya,Changed samp_rate and n_smooth on the server,DevOps,2018-01-03,21:50,21:30,0:20:00,¥250.00,-¥83.33
+Atlas,Alex Miller,"Pull#139 match gps timestamp with imu data, check rotation rate",React-Native,2018-01-04,11:30,10:00,1:30:00,¥250.00,-¥375.00
+Atlas,Lukas,"changed samp_rate and n_smooth in ansible, moved settings to variables, updated readme for others how to change settings",Setup,2018-01-05,16:30,16:00,0:30:00,¥350.00,-¥175.00
+Atlas,Ricky,"Discuss how to improve our development process, testing and next steps for parking practice",Planning,2018-01-05,17:30,17:00,0:30:00,¥700.00,-¥350.00
+Atlas,Ricky,Talk with Ruud about the updated system,Planning,2018-01-05,18:00,17:30,0:30:00,¥700.00,-¥350.00
+Atlas,David,Started add fix route page,React-Native,2018-01-05,17:30,16:30,1:00:00,¥250.00,-¥250.00
+Atlas,Alex Miller,Parking mode animation,React-Native,2018-01-05,21:20,17:00,4:20:00,¥250.00,"-¥1,083.33"
+Atlas,Ruud,"Project working on windows, json research and started json implementation",Setup,2018-01-05,20:00,12:00,8:00:00,¥150.00,"-¥1,200.00"
+Atlas,Alex Miller,"Animating an image, supporting xy and degree",React-Native,2018-01-07,18:30,15:00,3:30:00,¥250.00,-¥875.00
+Atlas,Alex Miller,"Switch to 50Hz, test ride",React-Native,2018-01-08,18:00,17:00,1:00:00,¥250.00,-¥250.00
+Atlas,Ruud,"Fixed JSON, VisualGDB setup (preparation for raspberry PI)",AprilTags,2018-01-08,18:00,12:00,6:00:00,¥150.00,-¥900.00
+Atlas,Ruud,"Code refactoring, fixing the tag transformations so it matches the frame conversion agreement",AprilTags,2018-01-09,17:00,12:00,5:00:00,¥150.00,-¥750.00
+Atlas,Echo,Monthly report,Admin,2018-01-08,13:20,13:10,0:10:00,¥90.00,-¥15.00
+Atlas,David,Circle on turn event,React-Native,2018-01-08,15:30,14:00,1:30:00,¥250.00,-¥375.00
+Atlas,Ilya,Setting dev env with Sean,Core Model,2018-01-10,20:30,19:00,1:30:00,¥250.00,-¥375.00
+Atlas,Lukas,"changed samp_rate and n_smooth in ansible, updated readme",Setup,2018-01-11,9:45,9:30,0:15:00,¥350.00,-¥87.50
+Atlas,Alex Miller,Adjusting ui ,React-Native,2018-01-11,16:00,14:40,1:20:00,¥250.00,-¥333.33
+Atlas,Alex Miller,"Pull#143 Upgrade react-native, fix logo, parking page",React-Native,2018-01-11,17:40,16:00,1:40:00,¥250.00,-¥416.67
+Atlas,Ilya,Piple line model examination,Core Model,2018-01-13,15:00,13:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ilya,Piple line model examination,Core Model,2018-01-14,17:00,15:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ilya,Detection model with Sean,Core Model,2018-01-15,20:30,19:00,1:30:00,¥250.00,-¥375.00
+Atlas,Ruud,World position of camera,AprilTags,2018-01-15,18:00,10:00,8:00:00,¥150.00,"-¥1,200.00"
+Atlas,David,Fixed Route: Add route page,React-Native,2018-01-17,13:00,8:00,5:00:00,¥250.00,"-¥1,250.00"
+Atlas,David,"Fixed Route: Navigation page starts, store coordinates in local storage, and initialize navigation",React-Native,2018-01-17,18:30,15:00,3:30:00,¥250.00,-¥875.00
+Atlas,Ruud,studied matrixes in openCV,AprilTags,2018-01-17,17:30,14:00,3:30:00,¥150.00,-¥525.00
+Atlas,Ruud,"World orientation towards tag, adding support for video",AprilTags,2018-01-18,18:30,11:00,7:30:00,¥150.00,"-¥1,125.00"
+Atlas,Ruud,Testing tagtest,Testing,2018-01-19,21:00,20:00,1:00:00,¥150.00,-¥150.00
+Atlas,Stephane,backend strategy review with Sean,Core Model,2018-01-19,15:00,14:00,1:00:00,¥700.00,-¥700.00
+Atlas,David,Navigation page toggle between map and navigation. Calculate route from user position,React-Native,2018-01-20,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,Swipe to delete fixed route,React-Native,2018-01-21,19:00,18:00,1:00:00,¥250.00,-¥250.00
+Atlas,David,Handle navigation stop and reset data on new navigation start,React-Native,2018-01-22,21:00,19:00,2:00:00,¥250.00,-¥500.00
+Atlas,Ilya,"Detection model, meeting with Sean",Core Model,2018-01-23,21:30,20:00,1:30:00,¥250.00,-¥375.00
+Atlas,David,Start and stop sending measurement for navigation,React-Native,2018-01-24,12:00,9:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,Navigation testing by walking and bike,Testing,2018-01-24,15:00,14:00,1:00:00,¥250.00,-¥250.00
+Atlas,David,UI refinement for navigation and trip detail,React-Native,2018-01-24,18:00,15:00,3:00:00,¥250.00,-¥750.00
+Atlas,Alex Miller,"History pull to refresh | Install apriltags, calibrate camera, start testing",AprilTags,2018-01-25,20:30,17:00,3:30:00,¥250.00,-¥875.00
+Atlas,Ruud,Help alex setup apriltags on mac,AprilTags,2018-01-26,17:00,15:00,2:00:00,¥150.00,-¥300.00
+Atlas,Ruud,Update docs,AprilTags,2018-01-27,20:00,19:00,1:00:00,¥150.00,-¥150.00
+Atlas,Alex Miller,Setting up apriltags,AprilTags,2018-01-26,23:00,21:00,2:00:00,¥250.00,-¥500.00
+Atlas,Alex Miller,"Getting data from recorded videos, trying live",AprilTags,2018-01-27,18:30,15:00,3:30:00,¥250.00,-¥875.00
+Atlas,Ruud,Bug fixes,AprilTags,2018-01-28,23:30,22:00,1:30:00,¥150.00,-¥225.00
+Atlas,Ruud,"Cleanup, refactoring, better transform implementation",AprilTags,2018-01-29,14:30,9:30,5:00:00,¥150.00,-¥750.00
+Atlas,Natalie,"Worked with Ipad app. Added settings page, new button, icon. Also worked with Ipad and find some mistakes in design in the app. ",Design,2018-01-27,19:20,13:30,5:50:00,¥150.00,-¥875.00
+Atlas,Natalie,UI/UX for Iphone,Design,2018-01-27,22:00,19:30,2:30:00,¥150.00,-¥375.00
+Atlas,Natalie,Iphone Profile pages,Design,2018-01-29,22:00,20:00,2:00:00,¥150.00,-¥300.00
+Atlas,Ruud,Tinkering with http library pistache,AprilTags,2018-01-30,17:00,15:30,1:30:00,¥150.00,-¥225.00
+Atlas,Alex Miller,"Setup atlas mobile version, install all the dependencies",React-Native,2018-01-28,23:30,19:00,4:30:00,¥250.00,"-¥1,125.00"
+Atlas,David,Implement speech synthesizer for navigation for amap,React-Native,2018-01-30,18:00,13:00,5:00:00,¥250.00,"-¥1,250.00"
+Atlas,Lukas,checking with Miguel why was Monday test ride data not processed,Setup,2018-01-31,21:10,19:50,1:20:00,¥350.00,-¥466.67
+Atlas,Miguel,checking with Lukas why was Monday test ride data not processed,Setup,2018-01-31,21:10,19:50,1:20:00,¥350.00,-¥466.67
+Atlas,Miguel,"devops issue #24, adding more logging to both SQL trigger and python pipeline and worker",Processing,2018-01-31,23:00,22:00,1:00:00,¥350.00,-¥350.00
+Atlas,David,Added locate current position button to free route and fixed route and add route page,React-Native,2018-01-31,17:00,14:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,"Changed car heading north for navigation, add route set map center to previous point",React-Native,2018-01-31,13:00,10:00,3:00:00,¥250.00,-¥750.00
+Atlas,David,"Car testing, bugs fixes in Chart.js, UI translation, Detail enhancement in Trip.js",React-Native,2018-02-01,19:00,13:00,6:00:00,¥250.00,"-¥1,500.00"
+Atlas,Ilya,Pre-screening with signals implementation into core model,Core Model,2018-02-04,18:30,15:00,3:30:00,¥250.00,-¥875.00
+Atlas,Alex Miller,"Getting the data from the video, getting it to show up in the app",React-Native,2018-02-04,21:40,18:00,3:40:00,¥250.00,-¥916.67
+Atlas,Ruud,"Fixed bug with getting cam world pos, calibration now only needs same aspect ratio as input video instead of same resolution",AprilTags,2018-02-07,19:00,11:00,8:00:00,¥150.00,"-¥1,200.00"

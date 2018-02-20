@@ -1,0 +1,170 @@
+Resource,Activity,Task name,Date,Stop,Start ,Hours,Hourly rate,Total
+Yedian,Ricky,checkout,Requirements,2017-06-07,14:30,14:00,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,"meeting, initial setup",Requirements,2017-06-07,16:00,14:30,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,debrief with Doug,Requirements,2017-06-07,16:30,16:00,0:30:00,¥700.00,-¥350.00
+Yedian,Doug,"meeting, initial setup",Requirements,2017-06-07,16:00,14:30,1:30:00,¥150.00,-¥225.00
+Yedian,Doug,debrief with Ricky,Requirements,2017-06-07,16:30,16:00,0:30:00,¥150.00,-¥75.00
+Yedian,Ricky,Development setup,Integration,2017-06-07,18:00,16:30,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,https://github.com/ab-inbev/APAC_Yedian_Merchant_WebApp_Frontend/issues/233,#233 Order history filtering,2017-06-07,18:30,18:00,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,https://github.com/ab-inbev/APAC_Yedian_Merchant_WebApp_Frontend/issues/233,#233 Order history filtering,2017-06-07,19:30,18:30,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,"Added Dora, follow up with Doug and Ross",Recruitment,2017-06-07,16:30,15:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Doug,"Follow up with Ricky, Dora and Ross",Requirements,2017-06-10,16:30,15:00,1:30:00,¥150.00,-¥225.00
+Yedian,Ross,"Briefing about YeDian project, learning React",Integration,2017-06-10,18:00,13:00,5:00:00,¥150.00,-¥750.00
+Yedian,Dora,debrief with Ricky,Requirements,2017-06-10,17:00,14:00,3:00:00,¥200.00,-¥600.00
+Yedian,Ricky,Meet with Julien,Recruitment,2017-06-12,13:30,12:30,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,Follow up issue #233,#233 Order history filtering,2017-06-12,17:30,13:30,4:00:00,¥700.00,"-¥2,800.00"
+Yedian,Ricky,Review new issues with Justin and team,Requirements,2017-06-12,19:30,18:30,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,integrate Doug and Dora,Integration,2017-06-12,20:15,19:30,0:45:00,¥700.00,-¥525.00
+Yedian,Ross,"Integration with project, simple fixes",#341 misspellings,2017-06-12,20:30,13:00,7:30:00,¥150.00,"-¥1,125.00"
+Yedian,Ricky,,Requirements,2017-06-12,21:30,20:30,1:00:00,¥700.00,-¥700.00
+Yedian,Dora,Initial setup and simple fix,Integration,2017-06-12,22:00,20:00,2:00:00,¥200.00,-¥400.00
+Yedian,Doug,Initial setup and familiarizing with the files,Integration,2017-06-12,22:00,18:45,3:15:00,¥150.00,-¥487.50
+Yedian,Ricky,Brief Julien and setup freelancers,Recruitment,2017-07-21,15:30,13:00,2:30:00,¥700.00,"-¥1,750.00"
+Yedian,Ricky,issue #409 (login tabs),#409 Login tabs,2017-07-21,16:00,15:30,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,issue #416 (testing),#416 Testing,2017-07-21,17:30,16:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,login,#431 Login issue,2017-07-21,18:00,17:30,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,discuss senior contributions to the project,Requirements,2017-07-21,18:30,18:00,0:30:00,¥700.00,-¥350.00
+Yedian,Julien,"Meeting with Ricky and Justin, general code review/discovery",Requirements,2017-07-21,14:30,13:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,add information on testing process,Docs,2017-07-24,16:00,15:30,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,Merge to staging,#409 Login tabs,2017-07-24,17:00,16:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ross,"Get set up with Postman, document API calls to retrieve information for client front end",Docs,2017-07-24,21:30,19:30,2:00:00,¥150.00,-¥300.00
+Yedian,Julien,"Project configuration review, meeting with Justin, preparation for improving Webpack config",Requirements,2017-07-24,18:00,16:00,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Julien,Coaching with Ross for setting up Postman and API calls,#420 API testing,2017-07-24,20:00,19:30,0:30:00,¥700.00,-¥350.00
+Yedian,Julien,"Documenting Postman on Github, issue #421 for improving dev experience",#420 API testing,2017-07-25,20:00,19:30,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,Greg and follow up integration with Ross,Recruitment,2017-07-26,14:00,13:30,0:30:00,¥700.00,-¥350.00
+Yedian,Julien,Issue #421: improve webpack config and add React Hot Loader support,#421 React Hot Loader ,2017-07-26,17:00,14:00,3:00:00,¥700.00,"-¥2,100.00"
+Yedian,Ross,"Attempting to pull information from API, learning Postman and Graphql",#420 API testing,2017-07-26,18:00,16:00,2:00:00,¥150.00,-¥300.00
+Yedian,Ricky,rework timesheet and communicate direction,Recruitment,2017-07-28,14:30,13:30,1:00:00,¥700.00,-¥700.00
+Yedian,Gregory,"Meeting with Ye Dian, meet the team.",Recruitment,2017-07-28,20:00,19:00,1:00:00,¥200.00,-¥200.00
+Yedian,Julien,Issue #421: improve webpack config and add React Hot Loader support,#421 React Hot Loader ,2017-07-28,18:30,16:30,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Julien,Review Postman and API with team,#420 API testing,2017-07-28,20:00,19:30,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,Provide some background on API,#233 Order history filtering,2017-07-29,17:00,15:00,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Ricky,workout indicator interface,#338 ding,2017-07-29,18:00,17:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,continued documentation,#338 ding,2017-07-29,21:00,19:00,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Gregory,New Venue dashboard page; new KOL section; new key metrics section; new reusable components created.,#411 merchant dashboard,2017-07-29,19:30,10:30,8:00:00,¥200.00,"-¥1,600.00"
+Yedian,Ross,Refactor all instances of a badge indicator to use BadgeIndicator,#338 ding,2017-07-30,18:30,11:30,7:00:00,¥150.00,"-¥1,050.00"
+Yedian,Julien,Fix merge conflict and improve config further to separate build type and config file selection,#421 React Hot Loader ,2017-07-31,10:30,10:00,0:30:00,¥700.00,-¥350.00
+Yedian,Gregory,Add chart.js charting libary and mock data for traffic stats,#411 merchant dashboard,2017-07-31,23:15,20:30,2:45:00,¥200.00,-¥550.00
+Yedian,Julien,PR Review,#411 merchant dashboard,2017-08-01,11:15,10:30,0:45:00,¥700.00,-¥525.00
+Yedian,Julien,Opened new technical debt and recommendations issues,"#439, #440, #441",2017-08-01,12:00,11:15,0:45:00,¥700.00,-¥525.00
+Yedian,Gregory,Ask and answer questions from PO,#411 merchant dashboard,2017-08-02,12:00,11:30,0:30:00,¥200.00,-¥100.00
+Yedian,Gregory,Implementing PR #437 feedback - CSS refactor and prop-types data-safety module,#411 merchant dashboard,2017-08-04,23:30,22:00,1:30:00,¥200.00,-¥300.00
+Yedian,Gregory,"refactor graph component, fix visual bug",#411 merchant dashboard,2017-08-06,0:00,22:00,2:00:00,¥200.00,-¥400.00
+Yedian,Gregory,"add revenue section components + chart, add switcher between month / daily for metrics, UI tweaks on traffic chart, refactor metrics components",#411 merchant dashboard,2017-08-07,0:00,12:00,12:00:00,¥200.00,"-¥2,400.00"
+Yedian,Ricky,discuss next sprint and upcoming changes,Requirements,2017-08-07,15:45,15:15,0:30:00,¥700.00,-¥350.00
+Yedian,Ricky,see about implementing backend issues (backend install),#1 datawarehouse,2017-08-07,19:00,16:00,3:00:00,¥700.00,"-¥2,100.00"
+Yedian,Ricky,see about implementing backend issues (backend install),#1 datawarehouse,2017-08-07,23:30,19:30,4:00:00,¥700.00,"-¥2,800.00"
+Yedian,Gregory,"PO review, sprint planning",#411 merchant dashboard,2017-08-07,21:00,18:45,2:15:00,¥200.00,-¥450.00
+Yedian,Ross,"PO review, sprint planning, Ding",#338 ding,2017-08-07,21:00,19:45,2:15:00,¥150.00,-¥337.50
+Yedian,Gregory,"Investigating API, confirming data available on current microservices",#420 API testing,2017-08-07,12:00:00,11:00,1:00:00,¥200.00,-¥200.00
+Yedian,Ricky,datawarehouse build using postgresql,#1 datawarehouse,2017-08-08,18:30,13:30,5:00:00,¥700.00,"-¥3,500.00"
+Yedian,Ricky,update new repo: APAC_Yedian_Datawarehouse,#1 datawarehouse,2017-08-09,11:30,10:30,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,Running against staging,#1 datawarehouse,2017-08-11,15:45,15:00,0:45:00,¥700.00,-¥525.00
+Yedian,Ricky,"create usable metrics document sample (x,y) datapoints",#1 datawarehouse,2017-08-11,17:45:00,16:15,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,create metrics table with calendar,#1 datawarehouse,2017-08-11,22:00:00,19:00,3:00:00,¥700.00,"-¥2,100.00"
+Yedian,Gregory,Discussing backend data requirements,#411 merchant dashboard,2017-08-11,19:45:00,18:45,1:00:00,¥200.00,-¥200.00
+Yedian,Ricky,setup table,#1 datawarehouse,2017-08-12,1:15:00,0:00,1:15:00,¥700.00,-¥875.00
+Yedian,Ricky,example graphql query,#1 datawarehouse,2017-08-12,11:30:00,10:00:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ross,Troubleshoot authentication issues,#338 ding,2017-08-12,18:30:00,17:30,1:00:00,¥150.00,-¥150.00
+Yedian,Gregory,Integration of backend data into front-end,#411 merchant dashboard,2017-08-12,13:00,11:00,2:00:00,¥200.00,-¥400.00
+Yedian,Julien,Troubleshoot API call to getMerchantData(),#411 merchant dashboard,2017-08-12,13:30,13:15,0:15:00,¥700.00,-¥175.00
+Yedian,Ross,Troubleshoot API call to getMerchantData(),#338 ding,2017-08-13,13:30:00,12:30,1:00:00,¥150.00,-¥150.00
+Yedian,Ricky,add more time periods to table,#1 datawarehouse,2017-08-15,15:00:00,14:00:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,refactor into separate files and add metrics,#1 datawarehouse,2017-08-15,18:00:00,16:00:00,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Ricky,"work on deployment, documentation",#1 datawarehouse,2017-08-15,19:00:00,18:00:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ross,Experimenting with antd Badge component instead of BadgeIndicator,#338 ding,2017-08-16,23:00,21:00,2:00:00,¥150.00,-¥300.00
+Yedian,Ross,"Added badges, working on understanding how orders increment",#338 ding,2017-08-19,15:30:00,10:30:00,5:00:00,¥150.00,-¥750.00
+Yedian,Doug,local environment setup,Docs,2017-08-19,21:30:00,19:00:00,2:30:00,¥150.00,-¥375.00
+Yedian,Ricky,discussion on architecture,Requirements,2017-08-21,13:00:00,12:00:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,refactor common time rollup into function,#1 datawarehouse,2017-08-21,17:30:00,13:30:00,4:00:00,¥700.00,"-¥2,800.00"
+Yedian,Ricky,scripting datawarehouse,#1 datawarehouse,2017-08-21,21:30:00,19:00:00,2:30:00,¥700.00,"-¥1,750.00"
+Yedian,Ross,"Learning about sagas, 'redux-actions'",#338 ding,2017-08-21,18:00:00,15:30:00,2:30:00,¥150.00,-¥375.00
+Yedian,Ross,,#338 ding,2017-08-21,21:30:00,19:00:00,2:30:00,¥150.00,-¥375.00
+Yedian,Gregory,Analysing solution for global notifications,#338 ding,2017-08-21,21:00:00,18:30:00,2:30:00,¥200.00,-¥500.00
+Yedian,Ricky,,#10 DW isDeleted,2017-08-22,13:30:00,12:30:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,,#2 DW system.indexes,2017-08-22,15:00:00,13:30:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,"cleanup issues, create separate Project Board",Requirements,2017-08-22,15:45:00,15:00:00,0:45:00,¥700.00,-¥525.00
+Yedian,Ricky,,#15 DW Like,2017-08-22,17:15:00,15:45:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,,#11 DW KOL,2017-08-22,19:30:00,15:45:00,3:45:00,¥700.00,"-¥2,625.00"
+Yedian,Ricky,,#4 DW staging,2017-08-22,22:30:00,21:00:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Gregory,"Design solution for global API polling component, pair-coding implementation",#338 ding,2017-08-26,19:30:00,10:00:00,9:30:00,¥200.00,"-¥1,900.00"
+Yedian,Doug,"Experimenting with metricSwitch for weekly, monthly and annual visualization",#411 merchant dashboard,2017-08-26,15:30:00,10:00,5:30:00,¥150.00,-¥825.00
+Yedian,Ross,"Design solution for global API polling component, pair-coding implementation",#338 ding,2017-08-26,18:30:00,10:30:00,8:00:00,¥150.00,"-¥1,200.00"
+Yedian,Gregory,implemented new sidebar design to requirements in issue,#446 sidebar redesign,2017-08-27,14:00:00,10:30:00,3:30:00,¥200.00,-¥700.00
+Yedian,Gregory,"submit PR, update mobile styles",#446 sidebar redesign,2017-08-29,13:30:00,13:00:00,0:30:00,¥200.00,-¥100.00
+Yedian,Gregory,"fix mobile resize bug, add new routes to handle different merchantInfo sections",#446 sidebar redesign,2017-08-29,23:30:00,19:00:00,4:30:00,¥200.00,-¥900.00
+Yedian,Ross,Stateful Listener component final implement and cleanup,#338 ding,2017-08-31,0:00:00,21:00:00,3:00:00,¥150.00,-¥450.00
+Yedian,Ricky,"create postgraphql.sh and document, follow up with importing in staging",#4 DW staging,2017-09-01,12:30,10:30,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Ross,ding and notification implemented on new unConfirmed Order,#338 ding,2017-09-01,15:00:00,13:00:00,2:00:00,¥150.00,-¥300.00
+Yedian,Gregory,"PR review, learn queries, and integrate with issue411-dashboard branch",#4 DW staging,2017-09-02,19:00:00,11:00:00,8:00:00,¥200.00,"-¥1,600.00"
+Yedian,Gregory,Discussing #411 new design with stakeholders,Requirements,2017-09-04,20:00:00,18:30,1:30:00,¥200.00,-¥300.00
+Yedian,Ross,"Discuss with Terry and Wenqing how to do,create branch, get set up/plan to solve issue",#340 Mark Bookings,2017-09-04,20:30:00,18:30,2:00:00,¥150.00,-¥300.00
+Yedian,Gregory,New sketch design for dashboard -- sent to Wen Qing,#487 Dashboard redesign,2017-09-06,21:00:00,19:30,1:30:00,¥200.00,-¥300.00
+Yedian,Gregory,Fixed bugs + style in sidebar with BadgeIndicator,#484 Merge SideBar and Playing Sound Issue,2017-09-08,12:30:00,11:00:00,1:30:00,¥200.00,-¥300.00
+Yedian,Ross,"Added logic to make withdrawal button only work on Fri, Sat, Sun",Issue #486-Money Button,2017-09-08,18:00:00,15:30,2:30:00,¥150.00,-¥375.00
+Yedian,Ricky,work out how to hand off tasks to Yedian,Requirements,2017-09-08,16:30:00,15:30,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,investigate and support setup of staging,#4 DW staging,2017-09-08,18:00:00,16:30,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Gregory,Split components for order counts and ding/notification functions. Fix order count display issue.,#484 Merge SideBar and Playing Sound Issue,2017-09-08,22:00:00,20:00:00,2:00:00,¥200.00,-¥400.00
+Yedian,Ricky,"discuss how to setup the synchronization, fix synchronization issue",#4 DW staging,2017-09-11,20:00:00,17:00:00,3:00:00,¥700.00,"-¥2,100.00"
+Yedian,Gregory,Discuss #487 feedback. Discuss DW #4 and remaining issues.,Requirements,2017-09-11,20:15:00,19:00:00,1:15:00,¥200.00,-¥250.00
+Yedian,Ricky,https://github.com/ab-inbev/APAC_Yedian_Datawarehouse/wiki/DW-Available-Measurements,Requirements,2017-09-15,15:30:00,12:00:00,3:30:00,¥700.00,"-¥2,450.00"
+Yedian,Ricky,fixes and additional missing metrics,#4 DW staging,2017-09-15,18:00:00,15:30:00,2:30:00,¥700.00,"-¥1,750.00"
+Yedian,Ross,"Bookings will turn yellow, orange, red after 5,10,15 mins. Still need styling.",#340 markBooking,2017-09-15,18:00:00,14:30:00,3:30:00,¥150.00,-¥525.00
+Yedian,Ricky,discuss remaining asks,Integration,2017-09-15,18:30:00,18:00:00,0:30:00,¥700.00,-¥350.00
+Yedian,Gregory,"issues on DW blocking this story, confirming requirements",#487 Dashboard redesign,2017-09-15,15:30:00,13:00:00,2:30:00,¥200.00,-¥500.00
+Yedian,Ross,CSS changes to highlight header border instead of whole header,#340 markBooking,2017-09-16,20:30:00,18:30:00,2:00:00,¥150.00,-¥300.00
+Yedian,Gregory,Investigating user API,#487 Dashboard redesign,2017-09-16,24:00:00,22:00:00,2:00:00,¥200.00,-¥400.00
+Yedian,Gregory,New UI for each different Metric,#487 Dashboard redesign,2017-09-17,16:45:00,11:00:00,5:45:00,¥200.00,"-¥1,150.00"
+Yedian,Gregory,"Add additional metrics to UI, redesign CSS for responsive display of 6 metrics",#487 Dashboard redesign,2017-09-18,13:00:00,10:00:00,3:00:00,¥200.00,-¥600.00
+Yedian,Gregory,refactor chart component,#487 Dashboard redesign,2017-09-18,23:30:00,19:00:00,4:30:00,¥200.00,-¥900.00
+Yedian,Gregory,integrate antd rangepicker,#487 Dashboard redesign,2017-09-19,23:30:00,21:00:00,2:30:00,¥200.00,-¥500.00
+Yedian,Gregory,learn momentjs API,#487 Dashboard redesign,2017-09-20,23:00:00,21:00:00,2:00:00,¥200.00,-¥400.00
+Yedian,Gregory,"fake API response generation, requirements testing",#487 Dashboard redesign,2017-09-24,24:00:00,18:00:00,6:00:00,¥200.00,"-¥1,200.00"
+Yedian,Ricky,,#38 Service missing interfaces,2017-09-25,17:00:00,16:00:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,Briefing Charles on the project,Recruitment,2017-09-25,17:00:00,16:00:00,1:00:00,¥700.00,-¥700.00
+Yedian,Gregory,"Integrating backend to dashboard, modularizing API calls.",#487 Dashboard redesign,2017-09-25,12:00:00,7:00:00,5:00:00,¥200.00,"-¥1,000.00"
+Yedian,Gregory,refactor backend integration. implement KOL display,#487 Dashboard redesign,2017-10-04,21:00:00,11:00:00,10:00:00,¥200.00,"-¥2,000.00"
+Yedian,Gregory,fix data integration bugs,#487 Dashboard redesign,2017-10-05,17:30:00,15:30:00,2:00:00,¥200.00,-¥400.00
+Yedian,Gregory,refactor data processing code,#487 Dashboard redesign,2017-10-05,21:00:00,19:30:00,1:30:00,¥200.00,-¥300.00
+Yedian,Gregory,fix chart generation bugs,#487 Dashboard redesign,2017-10-07,19:00,15:30:00,3:30:00,¥200.00,-¥700.00
+Yedian,Echo,Monthly Report,Admin,2017-10-09,15:10,15:00:00,0:10:00,¥90.00,-¥15.00
+Yedian,Ricky,install on server with documentation,#43 DW production,2017-10-23,17:00,16:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,add continuous processing setup,#43 DW production,2017-10-27,18:00,17:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,brief Henry on the Datawarehouse,#43 DW production,2017-10-30,16:00,14:30,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,update diagram: https://docs.google.com/drawings/d/11HG9LWkNQuGeRg1SdhRGI_3LhcjHWmdvs9VzilnnXMI/edit,#43 DW production,2017-10-30,19:00,18:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,documents all steps from install to running,#43 DW production,2017-10-30,20:00,19:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,failed attempt at deploying to production,#43 DW production,2017-10-30,23:00,21:30,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Gregory,"remove test code, document dashboard <=> datawarehouse interactions",#487 Dashboard redesign,2017-10-30,22:00,18:45,3:15:00,¥200.00,-¥650.00
+Yedian,Lukas,preparing docker container for the datawarehouse app,#43 DW production,2017-10-30,20:45,18:45,2:00:00,¥350.00,-¥700.00
+Yedian,Ricky,fix scripts issues,#43 DW production,2017-11-01,19:30,17:30,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Echo,Monthly Report,Admin,2017-11-01,15:15,15:00,0:15:00,¥90.00,-¥22.50
+Yedian,Gregory,testing docker image,#43 DW production,2017-11-03,12:00,10:00,2:00:00,¥200.00,-¥400.00
+Yedian,Lukas,"looking for chinese mirrors for all sw, changes in docker
+",#43 DW production,2017-11-03,16:45,15:45,1:00:00,¥350.00,-¥350.00
+Yedian,Charles Umemoto,"Onboarding project learning, getting familiar with DW architecture",Architecture learning,2017-11-04,12:00,9:00,3:00:00,¥350.00,"-¥1,050.00"
+Yedian,Charles Umemoto,Docker installation and SQL troubleshooting,Docker debugging,2017-11-04,17:00,15:00,2:00:00,¥350.00,-¥700.00
+Yedian,Ricky,outline script needed to move bash to nodejs,#35 to NodeJS script,2017-11-06,19:30,18:30,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,start implementation,#35 to NodeJS script,2017-11-07,13:00,12:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,continue step by step implementation,#35 to NodeJS script,2017-11-07,15:30,15:00,0:30:00,¥700.00,-¥350.00
+Yedian,Lukas,"helping Charles with local dev environment, changes in docker container",#43 DW production,2017-11-07,12:00,11:00,1:00:00,¥350.00,-¥350.00
+Yedian,Ricky,continue step by step implementation,#35 to NodeJS script,2017-11-08,18:30,17:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Lukas,deploying docker on staging,#43 DW production,2017-11-08,9:00,8:00,1:00:00,¥350.00,-¥350.00
+Yedian,Ricky,converting import-mongodb.sh,#35 to NodeJS script,2017-11-09,12:00,10:30,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Ricky,converting variety analysis of mongodb,#35 to NodeJS script,2017-11-09,14:00,13:00,1:00:00,¥700.00,-¥700.00
+Yedian,Ricky,converting variety analysis of mongodb,#35 to NodeJS script,2017-11-09,15:45,14:45,1:00:00,¥700.00,-¥700.00
+Yedian,Lukas,testing docker container - imports,#43 DW production,2017-11-11,11:30,10:00,1:30:00,¥350.00,-¥525.00
+Yedian,Ricky,follow up script running issue,#43 DW production,2017-11-13,10:00,9:45,0:15:00,¥700.00,-¥175.00
+Yedian,Ricky,follow up and investigate NaN issue,#43 DW production,2017-11-13,15:30,14:00,1:30:00,¥700.00,"-¥1,050.00"
+Yedian,Lukas,testing docker container - imports,#43 DW production,2017-11-13,11:30,10:00,1:30:00,¥350.00,-¥525.00
+Yedian,Ricky,converting variety analysis of mongodb,#35 to NodeJS script,2017-11-13,19:00,16:00,3:00:00,¥700.00,"-¥2,100.00"
+Yedian,Ricky,,#35 to NodeJS script,2017-11-17,19:30,17:30,2:00:00,¥700.00,"-¥1,400.00"
+Yedian,Lukas,"testing docker container - imports, NaN bug",#43 DW production,2017-11-17,11:30,10:00,1:30:00,¥350.00,-¥525.00
+Yedian,Lukas,preparing for deployment - bug with VCoupon,#43 DW production,2017-11-23,8:30,7:00,1:30:00,¥350.00,-¥525.00
+Yedian,Lukas,"testing DW again, changes in docker, detailed production deployment instructions",#43 DW production,2017-11-24,13:00,9:00,4:00:00,¥350.00,"-¥1,400.00"
+Yedian,Gregory,"fix bug, test, update wiki pages, discuss with team",#487 Dashboard redesign,2017-11-27,10:00,9:00,1:00:00,¥200.00,-¥200.00
+Yedian,Lukas,deploying on production,#43 DW production,2017-12-04,23:45,20:45,3:00:00,¥350.00,"-¥1,050.00"
+Yedian,Lukas,updating docs; pull request staging -> master,#43 DW production,2017-12-05,19:15,18:30,0:45:00,¥350.00,-¥262.50
+Yedian,Lukas,testing imports on staging again after merging changes to master; updating docs,#43 DW production,2017-12-06,21:30,20:30,1:00:00,¥350.00,-¥350.00
+Yedian,Lukas,investigating dw schema creation gets stuck when run against staging postgres,#43 DW production,2017-12-07,17:15,16:30,0:45:00,¥350.00,-¥262.50
+Yedian,Lukas,testing deployment on production,#43 DW production,2017-12-07,22:00,21:00,1:00:00,¥350.00,-¥350.00
+Yedian,Ricky,follow up with missing column in production deployment,#43 DW production,2017-12-15,23:30,23:00,0:30:00,¥700.00,-¥350.00
