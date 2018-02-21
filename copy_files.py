@@ -14,7 +14,7 @@ target_table='timedata.entries'
 csvfiles=os.listdir('./data')
 
 # Connect to postgresql
-connection = psycopg2.connect("dbname=timesheet user=chuck")
+connection = psycopg2.connect("dbname=timesheet user=" + os.environ['USER'])
 
 
 # Function declaration
