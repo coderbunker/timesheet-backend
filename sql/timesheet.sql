@@ -15,81 +15,53 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: dw; Type: SCHEMA; Schema: -; Owner: rngadam
+-- Name: dw; Type: SCHEMA; Schema: -; Owner: -
 --
 
 CREATE SCHEMA dw;
 
 
-ALTER SCHEMA dw OWNER TO rngadam;
-
 --
--- Name: incoming; Type: SCHEMA; Schema: -; Owner: rngadam
+-- Name: incoming; Type: SCHEMA; Schema: -; Owner: -
 --
 
 CREATE SCHEMA incoming;
 
 
-ALTER SCHEMA incoming OWNER TO rngadam;
-
 --
--- Name: postgraphql_watch; Type: SCHEMA; Schema: -; Owner: rngadam
---
-
-CREATE SCHEMA postgraphql_watch;
-
-
-ALTER SCHEMA postgraphql_watch OWNER TO rngadam;
-
---
--- Name: timedata; Type: SCHEMA; Schema: -; Owner: rngadam
+-- Name: timedata; Type: SCHEMA; Schema: -; Owner: -
 --
 
 CREATE SCHEMA timedata;
 
 
-ALTER SCHEMA timedata OWNER TO rngadam;
-
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
--- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: 
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
-
-SET search_path = postgraphql_watch, pg_catalog;
-
---
--- Name: notify_watchers(); Type: FUNCTION; Schema: postgraphql_watch; Owner: rngadam
---
-
-CREATE FUNCTION notify_watchers() RETURNS event_trigger
-    LANGUAGE plpgsql
-    AS $$ begin perform pg_notify( 'postgraphql_watch', (select array_to_json(array_agg(x)) from (select schema_name as schema, command_tag as command from pg_event_trigger_ddl_commands()) as x)::text ); end; $$;
-
-
-ALTER FUNCTION postgraphql_watch.notify_watchers() OWNER TO rngadam;
 
 SET search_path = timedata, pg_catalog;
 
@@ -98,7 +70,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: entries; Type: TABLE; Schema: timedata; Owner: rngadam
+-- Name: entries; Type: TABLE; Schema: timedata; Owner: -
 --
 
 CREATE TABLE entries (
@@ -110,12 +82,10 @@ CREATE TABLE entries (
 );
 
 
-ALTER TABLE entries OWNER TO rngadam;
-
 SET search_path = dw, pg_catalog;
 
 --
--- Name: entries; Type: VIEW; Schema: dw; Owner: rngadam
+-- Name: entries; Type: VIEW; Schema: dw; Owner: -
 --
 
 CREATE VIEW entries AS
@@ -127,10 +97,8 @@ CREATE VIEW entries AS
    FROM timedata.entries;
 
 
-ALTER TABLE entries OWNER TO rngadam;
-
 --
--- Name: projects; Type: VIEW; Schema: dw; Owner: rngadam
+-- Name: projects; Type: VIEW; Schema: dw; Owner: -
 --
 
 CREATE VIEW projects AS
@@ -138,12 +106,10 @@ CREATE VIEW projects AS
    FROM timedata.entries;
 
 
-ALTER TABLE projects OWNER TO rngadam;
-
 SET search_path = incoming, pg_catalog;
 
 --
--- Name: data; Type: TABLE; Schema: incoming; Owner: rngadam
+-- Name: data; Type: TABLE; Schema: incoming; Owner: -
 --
 
 CREATE TABLE data (
@@ -153,10 +119,8 @@ CREATE TABLE data (
 );
 
 
-ALTER TABLE data OWNER TO rngadam;
-
 --
--- Name: data data_pkey; Type: CONSTRAINT; Schema: incoming; Owner: rngadam
+-- Name: data data_pkey; Type: CONSTRAINT; Schema: incoming; Owner: -
 --
 
 ALTER TABLE ONLY data
@@ -164,7 +128,7 @@ ALTER TABLE ONLY data
 
 
 --
--- Name: postgraphql_watch; Type: EVENT TRIGGER; Schema: -; Owner: rngadam
+-- Name: postgraphql_watch; Type: EVENT TRIGGER; Schema: -; Owner: -
 --
 
 CREATE EVENT TRIGGER postgraphql_watch ON ddl_command_end
@@ -173,14 +137,14 @@ CREATE EVENT TRIGGER postgraphql_watch ON ddl_command_end
 
 
 --
--- Name: incoming; Type: ACL; Schema: -; Owner: rngadam
+-- Name: incoming; Type: ACL; Schema: -; Owner: -
 --
 
 GRANT ALL ON SCHEMA incoming TO postgraphql;
 
 
 --
--- Name: data; Type: ACL; Schema: incoming; Owner: rngadam
+-- Name: data; Type: ACL; Schema: incoming; Owner: -
 --
 
 GRANT ALL ON TABLE data TO PUBLIC;
