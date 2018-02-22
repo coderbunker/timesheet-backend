@@ -7,6 +7,12 @@ npm install
 node app.js
 ```
 
+database:
+
+```bash
+pg_dump -s postgresql://localhost/timesheet > sql/timesheet.sql
+```
+
 ## Setup
 
 creates two routes:
