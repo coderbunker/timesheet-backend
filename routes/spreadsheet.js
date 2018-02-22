@@ -10,17 +10,19 @@ const router = new Router()
 // export our router to be mounted by the parent application
 module.exports = router
 
-router.post('/full/:id', async (req, res) => {
+router.post('/snapshot/:id', async (req, res) => {
   const { id } = req.params
   console.log(JSON.stringify(req.body));
   const { rows } = await db.query(
-      'INSERT INTO incoming.data(data, id) VALUES($1,$2) ON CONFLICT(id) DO UPDATE SET data = EXCLUDED.data WHERE data.id = EXCLUDED.id',
+      'INSERT INTO incoming.data(data, id) VALUES($1, $2) ON CONFLICT(id) DO UPDATE SET data = EXCLUDED.data WHERE data.id = EXCLUDED.id',
       [JSON.stringify(req.body), req.params.id])
   res.end('OK');
 })
 
 router.post('/change/:id', async (req, res) => {
   const { id } = req.params
-  const { rows } = await db.query('INSERT INTO incoming.changes(data,id) VALUES($1,$2)', [req.body, req.params.id])
-  res.end();
+  const { rows } = await db.query(
+      'INSERT INTO incoming.changes(data,id) VALUES($1, $2)',
+      [JSON.stringify(req.body), req.params.id])
+  res.end('OK');
 })
