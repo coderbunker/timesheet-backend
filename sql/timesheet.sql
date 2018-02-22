@@ -109,10 +109,10 @@ CREATE VIEW projects AS
 SET search_path = incoming, pg_catalog;
 
 --
--- Name: data; Type: TABLE; Schema: incoming; Owner: -
+-- Name: change; Type: TABLE; Schema: incoming; Owner: -
 --
 
-CREATE TABLE data (
+CREATE TABLE change (
     data json,
     ts timestamp with time zone DEFAULT now(),
     id text NOT NULL
@@ -120,11 +120,30 @@ CREATE TABLE data (
 
 
 --
--- Name: data data_pkey; Type: CONSTRAINT; Schema: incoming; Owner: -
+-- Name: snapshot; Type: TABLE; Schema: incoming; Owner: -
 --
 
-ALTER TABLE ONLY data
+CREATE TABLE snapshot (
+    data json,
+    ts timestamp with time zone DEFAULT now(),
+    id text NOT NULL
+);
+
+
+--
+-- Name: snapshot data_pkey; Type: CONSTRAINT; Schema: incoming; Owner: -
+--
+
+ALTER TABLE ONLY snapshot
     ADD CONSTRAINT data_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: change incoming_change_data_pkey; Type: CONSTRAINT; Schema: incoming; Owner: -
+--
+
+ALTER TABLE ONLY change
+    ADD CONSTRAINT incoming_change_data_pkey PRIMARY KEY (id);
 
 
 --
@@ -144,10 +163,17 @@ GRANT ALL ON SCHEMA incoming TO postgraphql;
 
 
 --
--- Name: data; Type: ACL; Schema: incoming; Owner: -
+-- Name: change; Type: ACL; Schema: incoming; Owner: -
 --
 
-GRANT ALL ON TABLE data TO PUBLIC;
+GRANT ALL ON TABLE change TO PUBLIC;
+
+
+--
+-- Name: snapshot; Type: ACL; Schema: incoming; Owner: -
+--
+
+GRANT ALL ON TABLE snapshot TO PUBLIC;
 
 
 --
