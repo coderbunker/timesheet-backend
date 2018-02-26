@@ -10,20 +10,18 @@ const router = new Router()
 // export our router to be mounted by the parent application
 module.exports = router
 
-router.post('/snapshot/:id', async (req, res) => {
-  const { id } = req.params
+router.post('/snapshot', async (req, res) => {
   console.log(JSON.stringify(req.body));
   const { rows } = await db.query(
-      'INSERT INTO incoming.snapshot(data, id) VALUES($1, $2) ON CONFLICT(id) DO UPDATE SET data = EXCLUDED.data WHERE snapshot.id = EXCLUDED.id',
-      [JSON.stringify(req.body), req.params.id])
+      'INSERT INTO incoming.snapshot(data, id, name, timezone) VALUES($1, $2, $3, $4) ON CONFLICT(id) DO UPDATE SET data = EXCLUDED.data WHERE snapshot.id = EXCLUDED.id',
+      [JSON.stringify(req.body.data), req.body.id, req.body.name, req.body.timezone])
   res.end('OK');
-})
+});
 
-router.post('/change/:id', async (req, res) => {
-  const { id } = req.params
+router.post('/change', async (req, res) => {
   console.log(JSON.stringify(req.body));
   const { rows } = await db.query(
-      'INSERT INTO incoming.change(data, id) VALUES($1, $2)',
-      [JSON.stringify(req.body), req.params.id])
+      'INSERT INTO incoming.change(data, id, name, timezone) VALUES($1, $2, $3, $4)',
+      [JSON.stringify(req.body.data), req.body.id, req.body.name, req.body.timezone])
   res.end('OK');
-})
+});
