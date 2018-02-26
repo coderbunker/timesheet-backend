@@ -59,3 +59,11 @@ database:
 ```bash
 pg_dump -N postgraphql_watch -O -s postgresql://localhost/timesheet > sql/timesheet.sql
 ```
+
+## deploying to Heroku
+
+Because Heroku requires the app to be in the root, we use subtree to push:
+
+```
+git subtree push --prefix server heroku master
+```
