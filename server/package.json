@@ -4,7 +4,7 @@
   "description": "First version of the timesheet backend",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
