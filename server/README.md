@@ -67,3 +67,9 @@ Because Heroku requires the app to be in the root, we use subtree to push:
 ```
 git subtree push --prefix server heroku master
 ```
+
+Pushing the local database:
+
+```
+heroku pg:push timesheet postgresql-rigid-65921 --app coderbunker-timesheet
+```
