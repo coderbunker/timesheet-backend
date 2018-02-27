@@ -21,7 +21,7 @@ router.post('/snapshot', async (req, res) => {
 router.post('/change', async (req, res) => {
   console.log(JSON.stringify(req.body));
   const { rows } = await db.query(
-      'INSERT INTO incoming.change(data, id, name, timezone) VALUES($1, $2, $3, $4)',
-      [JSON.stringify(req.body.data), req.body.id, req.body.name, req.body.timezone])
+      'INSERT INTO incoming.change(data, id) VALUES($1, $2)',
+      [JSON.stringify(req.body.data), req.body.id])
   res.end('OK');
 });
