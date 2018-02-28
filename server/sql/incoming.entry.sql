@@ -29,15 +29,15 @@ CREATE OR REPLACE VIEW incoming.entry AS
 				(
 					ELEMENT ->> 'stop'
 				)::INTERVAL AS stop,
-				ELEMENT ->> 'resource' AS resource,
+				COALESCE(element->> 'resource', element->> 'name')  AS resource,
 				id AS project_id,
-				ELEMENT->>'task name' AS taskname,
+				ELEMENT->>'taskname' AS taskname,
 				ELEMENT->>'activity' AS activity
 			FROM incoming.raw_entry AS ELEMENT
 			WHERE
 				length(ELEMENT->>'start') > 0 AND
 				length(ELEMENT->>'stop') > 0 AND
-				length(ELEMENT->>'resource') > 0 AND
+				(length(ELEMENT->>'resource') > 0 OR (length(ELEMENT->>'name') > 0) AND
 				length(ELEMENT->>'date') > 0 
 		) AS converted
 
