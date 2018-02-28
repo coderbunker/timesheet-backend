@@ -1,5 +1,8 @@
-const spreadsheet = require('./spreadsheet')
+const timesheet = require('./timesheet')
+const profile = require('./profile')
 
 module.exports = (app) => {
-  app.use('/spreadsheet', spreadsheet)
+  app.use('/timesheet', timesheet)
+  app.use('/profile', profile)
+
 }
