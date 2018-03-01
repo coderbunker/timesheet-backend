@@ -1,9 +1,9 @@
 CREATE OR REPLACE VIEW incoming.raw_entry AS
 	SELECT
-		json_array_elements(DATA) AS element,
-		"timezone",
+		json_array_elements((doc#>'{sheets, Timesheet, data}')::json) AS element,
+		doc->>'timezone' AS timezone,
 		id,
-		name
+		doc->>'name' AS name
 	FROM
 		incoming.snapshot
 	;
@@ -37,8 +37,8 @@ CREATE OR REPLACE VIEW incoming.entry AS
 			WHERE
 				length(ELEMENT->>'start') > 0 AND
 				length(ELEMENT->>'stop') > 0 AND
-				(length(ELEMENT->>'resource') > 0 OR (length(ELEMENT->>'name') > 0) AND
+				(length(ELEMENT->>'resource') > 0 OR length(ELEMENT->>'name') > 0) AND
 				length(ELEMENT->>'date') > 0 
 		) AS converted
-
-	ORDER BY start_datetime;
+	ORDER BY start_datetime
+	;
