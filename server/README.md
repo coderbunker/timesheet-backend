@@ -73,3 +73,22 @@ Pushing the local database:
 ```
 heroku pg:push timesheet postgresql-rigid-65921 --app coderbunker-timesheet
 ```
+
+Puling the Heroku database locally:
+
+```
+heroku pg:pull postgresql-rigid-65921 heroku-timesheet --app coderbunker-timesheet
+```
+
+## troubleshooting
+
+want to push an amended history with subtree push? sadly, does not support push.
+
+create a local branch and force push that first:
+
+```
+git subtree split --prefix server -b backup-branch
+git push -f heroku backup-branch:master
+```
+
+should now be back to normal...

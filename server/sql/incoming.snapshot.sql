@@ -1,9 +1,9 @@
-CREATE TABLE incoming.snapshot
-(
-  data json,
-  ts timestamp with time zone DEFAULT now(),
-  id text NOT NULL,
-  name text,
-  timezone text,
-  CONSTRAINT data_pkey PRIMARY KEY (id)
-);
+CREATE TABLE incoming.snapshot (
+	doc json NOT NULL,
+	ts timestamptz NOT NULL DEFAULT now(),
+	id text NOT NULL,
+	CONSTRAINT data_pkey PRIMARY KEY (id)
+)
+WITH (
+	OIDS=FALSE
+) ;

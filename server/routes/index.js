@@ -1,8 +1,5 @@
-const timesheet = require('./timesheet')
-const profile = require('./profile')
+const snapshot = require('./snapshot')
 
 module.exports = (app) => {
-  app.use('/timesheet', timesheet)
-  app.use('/profile', profile)
-
+  app.use('/gsuite', snapshot)
 }
