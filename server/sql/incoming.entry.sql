@@ -6,6 +6,8 @@ CREATE OR REPLACE VIEW incoming.raw_entry AS
 		doc->>'name' AS name
 	FROM
 		incoming.snapshot
+	WHERE doc->>'apptype' = 'Spreadsheet' AND doc->>'category' = 'Timesheet'
+
 	;
 					
 CREATE OR REPLACE VIEW incoming.entry AS
