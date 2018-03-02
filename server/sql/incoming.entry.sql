@@ -6,7 +6,9 @@ CREATE OR REPLACE VIEW incoming.raw_entry AS
 		doc->>'name' AS name
 	FROM
 		incoming.snapshot
-	WHERE doc->>'apptype' = 'Spreadsheet' AND doc->>'category' = 'Timesheet'
+	WHERE 
+		doc->>'apptype' = 'Spreadsheet' 
+		AND doc->>'category' = 'Timesheet'
 
 	;
 					
@@ -26,10 +28,10 @@ CREATE OR REPLACE VIEW incoming.entry AS
 					ELEMENT ->> 'date'
 				)::TIMESTAMP WITH TIME ZONE AS DATE,
 				(
-					ELEMENT ->> 'start'
+					(regexp_matches(ELEMENT ->> 'start', '[0-9:]*'))[0]
 				)::INTERVAL AS START,
 				(
-					ELEMENT ->> 'stop'
+					(regexp_matches(ELEMENT ->> 'stop', '[0-9:]*'))[0]
 				)::INTERVAL AS stop,
 				COALESCE(element->> 'resource', element->> 'name')  AS resource,
 				id AS project_id,
@@ -37,8 +39,6 @@ CREATE OR REPLACE VIEW incoming.entry AS
 				ELEMENT->>'activity' AS activity
 			FROM incoming.raw_entry AS ELEMENT
 			WHERE
-				length(ELEMENT->>'start') > 0 AND
-				length(ELEMENT->>'stop') > 0 AND
 				(length(ELEMENT->>'resource') > 0 OR length(ELEMENT->>'name') > 0) AND
 				length(ELEMENT->>'date') > 0 
 		) AS converted
