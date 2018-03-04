@@ -66,7 +66,7 @@ You might not need ```sudo -u postgres``` if you're running the postgresql datab
 2. add CNAME to google domains
 
     | NAME   |      TYPE      |  TTL  |                  DATA                 |
-    |--------|:--------------:|------:|--------------------------------------:|t
+    |--------|:--------------:|------:|--------------------------------------:|
     | data   |      CNAME     |  1h   |   data.coderbunker.com.herokudns.com. | 
     
 
