@@ -54,3 +54,14 @@ You might not need ```sudo -u postgres``` if you're running the postgresql datab
 
     alias ql='curl -X POST -H "Content-Type: application/graphql" -d'
     ql '{ allEntries { edges { node { projectName, resource } }}}' http://localhost:5000/graphql
+
+
+## Domain name setup
+
+1. Get CNAME from heroku:   `heroku domains -a coderbunker-timesheet`
+
+2. add CNAME to google domains
+
+    | NAME   |      TYPE      |  TTL  |                  DATA                 |
+    |--------|:--------------:|------:|--------------------------------------:|
+    | data   |      CNAME     |  1h   |   data.coderbunker.com.herokudns.com. | 
