@@ -55,8 +55,25 @@ CREATE OR REPLACE VIEW incoming.warnings AS
 			FROM incoming.raw_people
 			WHERE doc->>'rate' IS NULL
 		) 
+		UNION ALL
+		(
+			SELECT 
+				to_json(raw_people.*) AS doc,
+				'incoming.raw_people' AS table_name,
+				'no key rate specified' AS error
+			FROM incoming.raw_people
+			WHERE doc->>'rate' IS NULL
+		) 
+		UNION ALL
+		(
+			SELECT 
+				to_json(entry.*) AS doc,
+				'incoming.entry' AS table_name,
+				'duration is negative' AS error
+			FROM incoming.entry
+			WHERE EXTRACT (epoch FROM duration) < 0
+		) 
 	) AS all_errors
 	;
 
-SELECT DISTINCT doc->>'project_id' FROM incoming.warnings;
-
+SELECT * FROM incoming.warnings;

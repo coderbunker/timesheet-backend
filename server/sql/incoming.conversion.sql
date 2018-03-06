@@ -31,10 +31,12 @@ $func$
 DECLARE	
 	return_value FLOAT;
 BEGIN
-	SELECT ((regexp_matches($1, '[0-9]*\.[0-9]'))[1])::float INTO return_value;
+	SELECT ((regexp_matches($1, '[0-9]*\.?[0-9]'))[1])::float INTO return_value;
 	RETURN return_value;
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
+
+SELECT incoming.extract_rate('600');
 
 CREATE OR REPLACE FUNCTION incoming.extract_currency(text)
   RETURNS text AS
@@ -53,7 +55,8 @@ $func$
 DECLARE	
 	return_value text;
 BEGIN
-	SELECT COALESCE($1->>'resource', COALESCE($1->>'freelancer')) INTO return_value;
+	SELECT COALESCE($1->>'resource', COALESCE($1->>'freelancer', 'MISSINGKEY')) INTO return_value;
+    RETURN return_value;
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
 
