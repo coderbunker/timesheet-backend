@@ -16,7 +16,9 @@ CREATE OR REPLACE VIEW incoming.entry AS
 	SELECT
 		DATE + START AS start_datetime,
 		DATE + stop AS stop_datetime,
-		stop - START AS duration,
+		START,
+		incoming.convert_stop(START, stop) AS stop,
+		incoming.convert_stop(START, stop) - START AS duration,
 		resource,
 		project_id,
 		taskname,
@@ -27,12 +29,8 @@ CREATE OR REPLACE VIEW incoming.entry AS
 				(
 					ELEMENT ->> 'date'
 				)::TIMESTAMP WITH TIME ZONE AS DATE,
-				(
-					(regexp_matches(ELEMENT ->> 'start', '[0-9:]*'))[0]
-				)::INTERVAL AS START,
-				(
-					(regexp_matches(ELEMENT ->> 'stop', '[0-9:]*'))[0]
-				)::INTERVAL AS stop,
+				incoming.convert_to_interval(ELEMENT ->> 'start') AS START,
+				incoming.convert_to_interval(ELEMENT ->> 'stop') AS stop,
 				COALESCE(element->> 'resource', element->> 'name')  AS resource,
 				id AS project_id,
 				ELEMENT->>'taskname' AS taskname,

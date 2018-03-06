@@ -6,7 +6,7 @@ CREATE VIEW incoming.profile_raw AS
 	WHERE doc->>'apptype' = 'Slides' AND doc->>'category' = 'Freelancers'
 	;
 		
-CREATE VIEW incoming.profile AS
+CREATE OR REPLACE VIEW incoming.profile AS
 	SELECT 
 		freelancer->>'fullname' AS fullname,
 		freelancer->>'email' AS email,
@@ -14,7 +14,8 @@ CREATE VIEW incoming.profile AS
 		freelancer->>'wechat' AS wechat,
 		freelancer->>'status' AS status,
 		freelancer->>'rate' AS rate,
-		freelancer->>'keywords' AS keywords
+		freelancer->>'rate' AS rate_currency,
+		freelancer->>'keywords' AS keywords,
+		freelancer->>'altnames' AS altnames
 	FROM 
 		incoming.profile_raw;
-		

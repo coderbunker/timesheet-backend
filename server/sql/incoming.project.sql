@@ -1,8 +1,9 @@
-CREATE VIEW incoming.project AS
+CREATE OR REPLACE VIEW incoming.project AS
 	SELECT 
-		id, 
-		name, 
-		timezone, 
-		ts AS last_updated
+		*
 	FROM 
 		incoming.snapshot;
+		
+
+SELECT ts FROM incoming.snapshot 
+-- WHERE id = '1F7TYweE11OqGyZZRZYmmMMHLDokhfyPHQMkdZKzV6Qs';
