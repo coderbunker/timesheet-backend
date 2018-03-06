@@ -13,7 +13,7 @@ module.exports = router
 router.post('/snapshot', async (req, res) => {
   console.log(JSON.stringify(req.body));
   const { rows } = await db.query(
-      `SELECT api.snapshot($1, $2::json)`
+      `SELECT api.snapshot($1, $2::json)`,
       [
         req.body.id,
         JSON.stringify(req.body.doc)
