@@ -16,7 +16,7 @@ router.post('/snapshot', async (req, res) => {
       `INSERT INTO incoming.snapshot(id, doc)
         VALUES($1, $2)
         ON CONFLICT(id) DO
-          UPDATE SET doc = EXCLUDED.doc WHERE snapshot.id = EXCLUDED.id`,
+          UPDATE SET doc = EXCLUDED.doc, ts = now() WHERE snapshot.id = EXCLUDED.id`,
       [
         req.body.id,
         JSON.stringify(req.body.doc)
