@@ -5,5 +5,5 @@ CREATE OR REPLACE VIEW incoming.project AS
 		incoming.snapshot;
 		
 
-SELECT ts FROM incoming.snapshot 
+SELECT ts FROM incoming.snapshot;
 -- WHERE id = '1F7TYweE11OqGyZZRZYmmMMHLDokhfyPHQMkdZKzV6Qs';

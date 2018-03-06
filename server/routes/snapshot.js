@@ -13,13 +13,10 @@ module.exports = router
 router.post('/snapshot', async (req, res) => {
   console.log(JSON.stringify(req.body));
   const { rows } = await db.query(
-      `INSERT INTO incoming.snapshot(id, doc)
-        VALUES($1, $2)
-        ON CONFLICT(id) DO
-          UPDATE SET doc = EXCLUDED.doc, ts = now() WHERE snapshot.id = EXCLUDED.id`,
+      `SELECT api.snapshot($1, $2::json)`
       [
         req.body.id,
         JSON.stringify(req.body.doc)
       ])
-  res.end('OK');
+  res.end('Snapshot OK');
 });
