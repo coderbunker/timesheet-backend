@@ -60,6 +60,4 @@ BEGIN
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
 
-SELECT INTERVAL '24:00' - INTERVAL '22:00'
-
-SELECT incoming.convert_stop(INTERVAL '15:00', INTERVAL '00:30') 
+-- SELECT incoming.convert_stop(INTERVAL '15:00', INTERVAL '00:30') 

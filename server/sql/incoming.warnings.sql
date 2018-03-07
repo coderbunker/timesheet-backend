@@ -73,7 +73,17 @@ CREATE OR REPLACE VIEW incoming.warnings AS
 			FROM incoming.entry
 			WHERE EXTRACT (epoch FROM duration) < 0
 		) 
+		UNION ALL
+		(
+			SELECT 
+				(array_agg(to_json(people_project.*)))[1] AS doc,
+				'incoming.people_project' AS table_name,
+				'multiple resource matches for ' || resource || ' count: ' || count(*) AS error
+			FROM incoming.people_project
+			GROUP BY project_id, resource
+			HAVING count(*) > 1 
+		)
 	) AS all_errors
 	;
 
-SELECT * FROM incoming.warnings;
+-- SELECT * FROM incoming.warnings;
