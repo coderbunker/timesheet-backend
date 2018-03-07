@@ -6,25 +6,27 @@ CREATE OR REPLACE VIEW incoming.raw_people AS
 	FROM incoming.snapshot
 	;
 
-DROP VIEW incoming.people_project;
+DROP VIEW incoming.people_project CASCADE;
 CREATE OR REPLACE VIEW incoming.people_project AS
 	SELECT 	
 		project_id,
+		profile.email,
+		-- todo: apply discount if available
 		incoming.extract_rate(doc->>'rate') AS project_rate,
-		incoming.extract_currency(doc->>'rate') AS currency,
-		incoming.extract_freelancer(doc) AS resource,
-		profile.*
+		incoming.extract_currency(doc->>'rate') AS currency
 	FROM incoming.raw_people LEFT JOIN incoming.profile ON (incoming.search_profile(doc->>'resource') = profile.email)
-	WHERE 
-		fullname IS NOT NULL
 	;
 
 DROP VIEW incoming.people CASCADE;
 CREATE OR REPLACE VIEW incoming.people AS
 	SELECT 	
-		fullname, email, github, altnames, array_agg(DISTINCT resource) AS nicknames
-	FROM incoming.people_project
-	GROUP BY email, fullname, github, altnames
+		fullname, 
+		email, 
+		github, 
+		altnames, 
+		array_agg(DISTINCT doc->>'resource') AS nicknames
+	FROM incoming.raw_people LEFT JOIN incoming.profile ON (incoming.search_profile(doc->>'resource') = profile.email)
+	GROUP BY profile.email, profile.fullname, profile.github, profile.altnames
 	;
 
 

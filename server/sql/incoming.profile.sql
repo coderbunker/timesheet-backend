@@ -22,7 +22,9 @@ CREATE OR REPLACE VIEW incoming.profile AS
 		incoming.profile_raw;
 
 DROP VIEW incoming.profile_textsearch;
-CREATE OR REPLACE VIEW incoming.profile_textsearch AS
+
+DROP MATERIALIZED VIEW incoming.profile_textsearch;
+CREATE MATERIALIZED VIEW incoming.profile_textsearch AS
 	SELECT 
 			email,
 			setweight(to_tsvector(COALESCE(altnames, '')), 'A') || 
@@ -30,6 +32,8 @@ CREATE OR REPLACE VIEW incoming.profile_textsearch AS
 			setweight(to_tsvector(COALESCE(github, '')), 'C') || 
 			setweight(to_tsvector(COALESCE(fullname, '')), 'D') AS textsearch
 	FROM incoming.profile;
+
+CREATE INDEX profile_textsearch_index ON incoming.profile_textsearch USING GIN(textsearch);
 
 CREATE OR REPLACE FUNCTION incoming.search_profile(text) RETURNS text AS
 $func$
@@ -46,4 +50,4 @@ BEGIN
 END
 $func$ LANGUAGE plpgsql IMMUTABLE;
 
--- SELECT search_profile('Stephane');
+SELECT incoming.search_profile('Joe');

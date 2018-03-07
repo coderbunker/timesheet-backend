@@ -13,8 +13,9 @@ BEGIN
 END;
 $func$  LANGUAGE plpgsql;
 
-SELECT api.snapshot('fakeid', '{}'::json);
 
-SELECT id, ts FROM incoming.snapshot ORDER BY ts desc;
-
-DELETE FROM incoming.snapshot WHERE id = 'fakeid';
+--SELECT api.snapshot('fakeid', '{}'::json);
+--
+--SELECT id, ts FROM incoming.snapshot ORDER BY ts desc;
+--
+--DELETE FROM incoming.snapshot WHERE id = 'fakeid';
