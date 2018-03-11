@@ -83,7 +83,14 @@ CREATE OR REPLACE VIEW report.gross_people_project AS
 		compute_gross(project_id, project_rate, sum(duration)) AS gross,
 		(extract(year FROM start_datetime)*100 + extract(MONTH FROM start_datetime))::text AS billable_month
 	FROM report.entry_people_project
-	GROUP BY project_id, email, name, project_rate, currency, extract(MONTH FROM start_datetime), extract(year FROM start_datetime)
+	GROUP BY 
+		project_id, 
+		email, 
+		name, 
+		project_rate, 
+		currency, 
+		extract(MONTH FROM start_datetime), 
+		extract(year FROM start_datetime)
 	ORDER BY total_time DESC
 	;
 
@@ -109,3 +116,17 @@ CREATE OR REPLACE VIEW report.gross_project AS
 	FROM report.gross_people_project
 	GROUP BY project_id, billable_month
 	;
+
+DROP VIEW IF EXISTS report.organization CASCADE;
+CREATE OR REPLACE VIEW report.organization AS 
+	SELECT 
+			'Coderbunker Shanghai' AS orgname,
+			min(summary_person.first_entry) AS since,
+			age(now(), min(summary_person.first_entry))::text AS activity,
+			count(DISTINCT summary_person.email) AS people_count,
+			(SELECT count(DISTINCT gross_project.project_id) FROM report.gross_project) AS project_count,
+			(SELECT sum(gross_overall) FROM report.gross_project) AS total_gross
+		FROM report.summary_person
+		WHERE total_hours >= 40
+		;
+

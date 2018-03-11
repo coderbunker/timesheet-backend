@@ -14,7 +14,8 @@ app.use(postgraphile(
         dynamicJson: true,
         disableDefaultMutations: true,
         graphiql: true,
-        watchPg: true
+        watchPg: true,
+        enableCors: true
     }
 ));
 
@@ -27,6 +28,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json({
     limit: "5mb"
 }))
+
+app.use(express.static(__dirname + '/public'));
 
 mountRoutes(app)
 

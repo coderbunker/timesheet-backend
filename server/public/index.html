@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <script>
+            //require('isomorphic-fetch');
+
+            fetch('https://data.coderbunker.com/graphql', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: '{ allOrganizations { id } }' }),
+            })
+                .then(res => res.json())
+                .then(res => console.log(res.data));
+        </script>
+    </head>
+    <body>
+        hello world
+    </body>
+</html>

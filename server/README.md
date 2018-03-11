@@ -64,20 +64,26 @@ pg_dump -N postgraphql_watch -O -s postgresql://localhost/timesheet > sql/timesh
 
 Because Heroku requires the app to be in the root, we use subtree to push:
 
-```
+```bash
 git subtree push --prefix server heroku master
 ```
 
 Pushing the local database:
 
-```
+```bash
 heroku pg:push timesheet postgresql-rigid-65921 --app coderbunker-timesheet
 ```
 
 Puling the Heroku database locally:
 
-```
+```bash
 heroku pg:pull postgresql-rigid-65921 heroku-timesheet --app coderbunker-timesheet
+```
+
+Restarting the dyno (to load changes to the database for example)
+
+```bash
+heroku restart -a coderbunker-timesheet
 ```
 
 ## troubleshooting
