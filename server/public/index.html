@@ -3,7 +3,13 @@
 <head>
     <script>
         //require('isomorphic-fetch');
-
+        function formatDate(f) {
+            var d = Date.parse(f);
+            if (!isNaN(d)) {
+                return new Date(d).toISOString().substring(0, 10)
+            }
+            throw new Error('not a date')
+        }
         fetch('https://data.coderbunker.com/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -20,6 +26,8 @@
                         projectCount
                         totalGross
                         lastRefresh
+                        lastUpdate
+                        totalEngMonths
                       }
                     }
                   }
@@ -29,9 +37,22 @@
             .then(res => {
                 return res.json().then(o => {
                     console.log(o);
-                    Object.keys(o.data.allOrganizations.edges[0].node).map(k => document.getElementById(k).innerText = o.data.allOrganizations.edges[0].node[k])
+                    Object.keys(o.data.allOrganizations.edges[0].node).map(k => {
+                        var holder;
+                        try {
+                            holder = document.getElementById(k)
+                            holder.innerText = o.data.allOrganizations.edges[0].node[k]
+                        } catch (e) {
+                            console.log('ignoring ' + k)
+                            return;
+                        }
+                    });
                     const e = document.getElementById('totalGross')
                     e.innerText = 'RMB' + e.innerText.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+                    ['lastUpdate', 'since'].map(i => {
+                        const e2 = document.getElementById(i)
+                        e2.innerText = formatDate(e2.innerText);
+                    })
                 });
             })
             .then(res => console.log(res.data))
@@ -39,47 +60,47 @@
     </script>
     <style>
         div {
-          width: 800px;
+            width: 800px;
         }
 
         h2 {
-          font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
-          margin: 0;
-          padding: 0;
+            font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
         }
 
         li {
-          font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
-          border-bottom: 1px solid #ccc;
+            font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+            border-bottom: 1px solid #ccc;
         }
 
         li:last-child {
-          border: none;
+            border: none;
         }
 
         li span {
-          text-decoration: none;
-          color: #000;
-          display: block;
-          width: 800px;
-          font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
+            text-decoration: none;
+            color: #000;
+            display: block;
+            width: 800px;
+            font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
 
-          -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-          -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-          -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-          -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-          transition: font-size 0.3s ease, background-color 0.3s ease;
+            -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+            -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+            -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+            -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+            transition: font-size 0.3s ease, background-color 0.3s ease;
         }
 
         li span:hover {
-          font-size: 72px;
-          background: #f6f6f6;
+            font-size: 72px;
+            background: #f6f6f6;
         }
     </style>
 </head>
@@ -90,23 +111,26 @@
             <div id="orgname"></div>
         </h2>
         <ul>
-            <li>People count:
+            <li>People count
                 <span id="peopleCount"></span>
             </li>
-            <li> Project count:
+            <li> Project count
                 <span id="projectCount"></span>
             </li>
-            <li> Since:
+            <li> First billable hour recorded
                 <span id="since"></span>
             </li>
-            <li>Active:
+            <li>Time since first billable hour
                 <span id="activity"></span>
             </li>
-            <li> Total Gross Billed (RMB):
+            <li> Total Gross Billed (RMB)
                 <span id="totalGross"></span>
             </li>
-            <li> Data last updated:
-                <span id="lastRefresh"></span>
+            <li> Total Engineering months
+                <span id="totalEngMonths"></span>
+            </li>
+            <li> Data last updated
+                <span id="lastUpdate"></span>
             </li>
         </ul>
     </div>
