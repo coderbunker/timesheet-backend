@@ -86,6 +86,23 @@ Restarting the dyno (to load changes to the database for example)
 heroku restart -a coderbunker-timesheet
 ```
 
+## Manage Domain
+
+### CNAME Setup for Heroku app
+
+1. Get CNAME from heroku:   `heroku domains -a coderbunker-timesheet`
+
+2. add CNAME to google domains
+
+    | NAME   |      TYPE      |  TTL  |                  DATA                 |
+    |--------|:--------------:|------:|--------------------------------------:|
+    | data   |      CNAME     |  1h   |   data.coderbunker.com.herokudns.com. |
+
+
+### SSL Setup
+
+Enable SSL automatically managed by heroku.
+
 ## troubleshooting
 
 want to push an amended history with subtree push? sadly, does not support push.
