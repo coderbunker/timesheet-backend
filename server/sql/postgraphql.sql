@@ -18,7 +18,8 @@ SELECT
 DROP MATERIALIZED VIEW IF EXISTS postgraphql.organization;
 CREATE MATERIALIZED VIEW postgraphql.organization AS
 	SELECT 
-		* 
+		organization.*,
+		now() AS last_refresh
 	FROM report.organization;
 
 CREATE FUNCTION postgraphql.refresh_data() RETURNS void AS
