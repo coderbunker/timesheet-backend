@@ -6,7 +6,3 @@ CREATE OR REPLACE VIEW incoming.project AS
 		ts AS last_update
 	FROM 
 		incoming.snapshot;
-		
-
-SELECT * FROM incoming.snapshot;
--- WHERE id = '1F7TYweE11OqGyZZRZYmmMMHLDokhfyPHQMkdZKzV6Qs';

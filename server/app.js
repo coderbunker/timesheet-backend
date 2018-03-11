@@ -3,8 +3,20 @@ require('dotenv').config()
 const express = require('express')
 const mountRoutes = require('./routes')
 const bodyParser = require('body-parser')
+const { postgraphile } = require("postgraphile");
 
 const app = express()
+
+app.use(postgraphile(
+    process.env.DATABASE_URL || "postgres://localhost/",
+    "postgraphql",
+    {
+        dynamicJson: true,
+        disableDefaultMutations: true,
+        graphiql: true,
+        watchPg: true
+    }
+));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -20,7 +32,8 @@ mountRoutes(app)
 
 console.log('port: %s', process.env.PORT)
 var server = app.listen(process.env.PORT, () => {
+    console.log(JSON.stringify(server.address()))
     const host = server.address().address;
     const port = server.address().port;
-    console.log('Example app listening at http://%s:%s', host, port);
+    console.log('timesheet app listening at http://%s:%s', host, port);
 });

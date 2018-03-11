@@ -23,6 +23,6 @@
     "express-promise-router": "^3.0.1",
     "googleapis": "^26.0.1",
     "pg": "^7.4.1",
-    "postgraphile": "^4.0.0-alpha2.30"
+    "postgraphile": "^4.0.0-beta.2"
   }
 }

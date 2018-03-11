@@ -1,4 +1,4 @@
-CREATE VIEW incoming.profile_raw AS
+CREATE OR REPLACE VIEW incoming.profile_raw AS
 	SELECT
 		json_array_elements((doc#>'{data}')::json) AS freelancer
 	FROM
@@ -7,6 +7,7 @@ CREATE VIEW incoming.profile_raw AS
 	;
 		
 SELECT * FROM incoming.profile_raw;
+DROP VIEW IF EXISTS incoming.profile CASCADE;
 CREATE OR REPLACE VIEW incoming.profile AS
 	SELECT 
 		freelancer->>'fullname' AS fullname,
@@ -21,9 +22,7 @@ CREATE OR REPLACE VIEW incoming.profile AS
 	FROM 
 		incoming.profile_raw;
 
-DROP VIEW incoming.profile_textsearch;
-
-DROP MATERIALIZED VIEW incoming.profile_textsearch;
+DROP MATERIALIZED VIEW IF EXISTS incoming.profile_textsearch;
 CREATE MATERIALIZED VIEW incoming.profile_textsearch AS
 	SELECT 
 			email,
@@ -35,6 +34,12 @@ CREATE MATERIALIZED VIEW incoming.profile_textsearch AS
 
 CREATE INDEX profile_textsearch_index ON incoming.profile_textsearch USING GIN(textsearch);
 
+CREATE OR REPLACE FUNCTION incoming.f_unaccent(text)
+  RETURNS text AS
+$func$
+	SELECT public.unaccent('public.unaccent', $1)  -- schema-qualify function and dictionary
+$func$  LANGUAGE sql IMMUTABLE;
+
 CREATE OR REPLACE FUNCTION incoming.search_profile(text) RETURNS text AS
 $func$
 DECLARE
@@ -42,12 +47,10 @@ DECLARE
 BEGIN
 	SELECT 
 		email INTO return_email 
-		FROM incoming.profile_textsearch, plainto_tsquery(unaccent($1)) query
+		FROM incoming.profile_textsearch, plainto_tsquery(incoming.f_unaccent($1)) query
 		WHERE query @@ textsearch
 		ORDER BY ts_rank_cd(textsearch, query) DESC
 		LIMIT 1;
 	RETURN return_email;
 END
 $func$ LANGUAGE plpgsql IMMUTABLE;
-
-SELECT incoming.search_profile('Joe');

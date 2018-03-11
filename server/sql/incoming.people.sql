@@ -1,4 +1,4 @@
-CREATE EXTENSION unaccent;
+CREATE EXTENSION IF NOT EXISTS unaccent;
 CREATE OR REPLACE VIEW incoming.raw_people AS
 	SELECT 
 		json_array_elements((doc#>'{sheets, Balance, data}')::json) AS doc,
@@ -6,7 +6,7 @@ CREATE OR REPLACE VIEW incoming.raw_people AS
 	FROM incoming.snapshot
 	;
 
-DROP VIEW incoming.people_project CASCADE;
+DROP VIEW IF EXISTS incoming.people_project CASCADE;
 CREATE OR REPLACE VIEW incoming.people_project AS
 	SELECT 	
 		project_id,
@@ -17,7 +17,7 @@ CREATE OR REPLACE VIEW incoming.people_project AS
 	FROM incoming.raw_people LEFT JOIN incoming.profile ON (incoming.search_profile(doc->>'resource') = profile.email)
 	;
 
-DROP VIEW incoming.people CASCADE;
+DROP VIEW IF EXISTS incoming.people CASCADE;
 CREATE OR REPLACE VIEW incoming.people AS
 	SELECT 	
 		fullname, 
@@ -25,9 +25,6 @@ CREATE OR REPLACE VIEW incoming.people AS
 		github, 
 		altnames, 
 		array_agg(DISTINCT doc->>'resource') AS nicknames
-	FROM incoming.raw_people LEFT JOIN incoming.profile ON (incoming.search_profile(doc->>'resource') = profile.email)
+	FROM incoming.raw_people INNER JOIN incoming.profile ON (incoming.search_profile(doc->>'resource') = profile.email)
 	GROUP BY profile.email, profile.fullname, profile.github, profile.altnames
 	;
-
-
-SELECT email, count(*) AS record_count FROM incoming.people GROUP BY email HAVING count(*)  > 1 ORDER BY record_count DESC;

@@ -1,6 +1,6 @@
 
           
-CREATE SCHEMA api;
+CREATE SCHEMA IF NOT EXISTS api;
 
 CREATE OR REPLACE FUNCTION api.snapshot(text, json)
 RETURNS void AS

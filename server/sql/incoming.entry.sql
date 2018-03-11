@@ -42,5 +42,3 @@ CREATE OR REPLACE VIEW incoming.entry AS
 		) AS converted
 	ORDER BY start_datetime
 	;
-	
-SELECT count(*) FROM incoming.entry;

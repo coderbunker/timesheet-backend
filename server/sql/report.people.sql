@@ -1,7 +1,6 @@
-CREATE SCHEMA report;
-DROP VIEW report.summary_person;
-DROP VIEW report.entry_people_project;
+CREATE SCHEMA IF NOT EXISTS report;
 
+DROP VIEW IF EXISTS report.entry_people_project CASCADE;
 CREATE OR REPLACE VIEW report.entry_people_project AS 
 	SELECT 
 		entry.*,
@@ -16,8 +15,8 @@ CREATE OR REPLACE VIEW report.entry_people_project AS
 	WHERE duration IS NOT NULL 
 	;
 
-SELECT * FROM report.entry_people_project;
 -- https://gist.github.com/ryandotsmith/4602274
+DROP AGGREGATE IF EXISTS array_accum(anyarray);
 CREATE AGGREGATE array_accum (anyarray)
 (
     sfunc = array_cat,
@@ -25,7 +24,7 @@ CREATE AGGREGATE array_accum (anyarray)
     initcond = '{}'
 );  
 
-CREATE VIEW report.duplicate_entries AS
+CREATE OR REPLACE VIEW report.duplicate_entries AS
 	SELECT 
 		email,
 		max(resource) AS resource,
@@ -35,15 +34,13 @@ CREATE VIEW report.duplicate_entries AS
 		max(stop_datetime) AS stop_datetime,
 		max(duration) AS duration,
 		COUNT(*) AS duplicate_count
-	FROM report.entry_people LEFT JOIN incoming.project ON (entry_people.project_id = project.id)
+	FROM report.entry_people_project
 	GROUP BY email, project_id, start_datetime, stop_datetime
 	HAVING COUNT(*) > 1
 	ORDER BY resource, project_name;
 
 
-SELECT * FROM report.entry_people WHERE start_datetime = '2017-07-17T15:00:00+08:00';
-
-DROP VIEW report.summary_person;
+DROP VIEW IF EXISTS report.summary_person;
 CREATE OR REPLACE VIEW report.summary_person AS 
 	SELECT 
 		round(extract(HOUR FROM sum(duration)))::integer AS total_hours,
@@ -55,7 +52,7 @@ CREATE OR REPLACE VIEW report.summary_person AS
 		max(stop_datetime) AS latest_entry,
 		extract(days FROM max(stop_datetime) - min(start_datetime))::int AS active_days,
 		round(avg(EXTRACT(hours FROM duration))::numeric, 1) AS avg_entry_hours
-	FROM report.entry_people
+	FROM report.entry_people_project
 	GROUP BY email
 	ORDER BY total_hours DESC
 ;
@@ -74,7 +71,7 @@ BEGIN
 END 
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-DROP VIEW report.gross_people_project;
+DROP VIEW IF EXISTS report.gross_people_project CASCADE;
 CREATE OR REPLACE VIEW report.gross_people_project AS 
 	SELECT 
 		project_id,
@@ -83,12 +80,10 @@ CREATE OR REPLACE VIEW report.gross_people_project AS
 		sum(duration) AS total_time,
 		project_rate,
 		currency,
-		compute_gross(project_id, project_rate, sum(duration)) AS gross
+		compute_gross(project_id, project_rate, sum(duration)) AS gross,
+		(extract(year FROM start_datetime)*100 + extract(MONTH FROM start_datetime))::text AS billable_month
 	FROM report.entry_people_project
-	WHERE 
-		extract(MONTH FROM start_datetime) = '02' AND 
-		extract(year FROM start_datetime) = '2018'
-	GROUP BY project_id, email, name, project_rate, currency
+	GROUP BY project_id, email, name, project_rate, currency, extract(MONTH FROM start_datetime), extract(year FROM start_datetime)
 	ORDER BY total_time DESC
 	;
 
@@ -96,22 +91,21 @@ CREATE OR REPLACE VIEW report.gross_people AS
 	SELECT
 		email,
 		array_agg(name),
-		sum(gross) AS gross_overall
+		round(sum(gross)) AS gross_overall,
+		billable_month
 	FROM report.gross_people_project
-	GROUP BY email
+	GROUP BY email, billable_month
+	ORDER BY billable_month
 	;
 
-SELECT * FROM report.gross_people ORDER BY gross_overall DESC;
-
-DROP VIEW  report.gross_project;
+DROP VIEW IF EXISTS report.gross_project;
 CREATE OR REPLACE VIEW report.gross_project AS 
 	SELECT
 		project_id,
 		max(name) AS project_name,
 		array_agg(email) AS participants,
-		sum(gross) AS gross_overall
+		round(sum(gross)) AS gross_overall,
+		billable_month	
 	FROM report.gross_people_project
-	GROUP BY project_id
+	GROUP BY project_id, billable_month
 	;
-SELECT * FROM report.gross_project ORDER BY gross_overall DESC;
-

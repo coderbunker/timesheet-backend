@@ -1,4 +1,4 @@
-DROP VIEW incoming.warnings;
+DROP VIEW IF EXISTS incoming.warnings;
 CREATE OR REPLACE VIEW incoming.warnings AS
 	SELECT * FROM
 	(
@@ -78,9 +78,9 @@ CREATE OR REPLACE VIEW incoming.warnings AS
 			SELECT 
 				(array_agg(to_json(people_project.*)))[1] AS doc,
 				'incoming.people_project' AS table_name,
-				'multiple resource matches for ' || resource || ' count: ' || count(*) AS error
+				'multiple resource matches for ' || email || ' count: ' || count(*) AS error
 			FROM incoming.people_project
-			GROUP BY project_id, resource
+			GROUP BY project_id, email
 			HAVING count(*) > 1 
 		)
 	) AS all_errors
