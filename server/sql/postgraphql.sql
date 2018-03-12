@@ -31,7 +31,7 @@ $$
 	SELECT last_refresh FROM postgraphql.organization; 
 $$ LANGUAGE SQL;
 
-SELECT * FROM postgraphql.refresh_data();
+-- SELECT * FROM postgraphql.refresh_data();
 
 
 -- DROP FUNCTION postgraphql.refresh_data_conditional;z
