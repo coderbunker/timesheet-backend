@@ -39,9 +39,9 @@ python copy_files.py
 
     pg_ctl -D sqldatabase/ start
 
-### Start postgraphil server 
+### Start postgraphile server 
 
-    postgraphil -c $USER:localhost:5432/timesheet -s timedata
+    postgraphile -c $USER:localhost:5432/timesheet -s timedata -o
 
 ## Manually test the servers
 
@@ -53,4 +53,7 @@ python copy_files.py
 ### Manually query postgraphile server
 
     alias ql='curl -X POST -H "Content-Type: application/graphql" -d'
-    ql '{ allEntries { edges { node { projectName, resource } }}}' http://localhost:5000/graphql
+    ql '{ allEntries { edges { node { projectName, resource } }}}'
+    ql '{ allEntries(condition: {resource: "Ricky"}) { edges { node {
+	      projectName, resource }}}}' 
+    http://localhost:5000/graphql
