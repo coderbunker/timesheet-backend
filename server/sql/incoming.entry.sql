@@ -31,7 +31,7 @@ CREATE OR REPLACE VIEW incoming.entry AS
 				)::TIMESTAMP WITH TIME ZONE AS DATE,
 				incoming.convert_to_interval(ELEMENT ->> 'start') AS START,
 				incoming.convert_to_interval(ELEMENT ->> 'stop') AS stop,
-				COALESCE(element->> 'resource', element->> 'name')  AS resource,
+				trim(COALESCE(element->> 'resource', element->> 'name'))  AS resource,
 				id AS project_id,
 				ELEMENT->>'taskname' AS taskname,
 				ELEMENT->>'activity' AS activity
