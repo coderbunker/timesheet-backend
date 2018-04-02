@@ -9,20 +9,37 @@ CREATE OR REPLACE VIEW incoming.raw_people AS
 CREATE OR REPLACE VIEW incoming.people_project AS
 	SELECT
 		project_id,
-		profile.email,
+		incoming.search_profile(doc->>'resource') AS email,
+		(doc->>'resource') as resource,
 		-- todo: apply discount if available
 		incoming.extract_rate(doc->>'rate') AS project_rate,
 		incoming.extract_currency(doc->>'rate') AS currency
-	FROM incoming.raw_people LEFT JOIN incoming.profile ON (incoming.search_profile(doc->>'resource') = profile.email)
+	FROM incoming.raw_people
 	;
 
+DROP MATERIALIZED VIEW incoming.nickname_to_email;
+CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
+	SELECT resource, email
+	FROM incoming.people_project
+	WHERE resource IS NOT NULL
+	GROUP BY resource, email;
+
+SELECT * FROM incoming.nickname_to_email;
+
+SELECT * FROM incoming.profile;
 CREATE OR REPLACE VIEW incoming.people AS
 	SELECT
 		fullname,
-		email,
+		profile.email,
 		github,
 		altnames,
-		array_agg(DISTINCT doc->>'resource') AS nicknames
-	FROM incoming.raw_people INNER JOIN incoming.profile ON (incoming.search_profile(doc->>'resource') = profile.email)
-	GROUP BY profile.email, profile.fullname, profile.github, profile.altnames
+		nicknames
+	FROM
+		incoming.profile LEFT JOIN LATERAL (
+			SELECT array_agg(resource) AS nicknames
+			FROM incoming.nickname_to_email 
+			WHERE nickname_to_email.email = profile.email
+		) AS t ON TRUE
 	;
+	
+SELECT * FROM incoming.people WHERE nicknames IS NOT null;
