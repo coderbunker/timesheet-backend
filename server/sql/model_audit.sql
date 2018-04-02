@@ -40,13 +40,16 @@ $$
 BEGIN
 	EXECUTE format (
 		'CREATE TRIGGER %s AFTER INSERT ON %s.%s FOR EACH ROW EXECUTE PROCEDURE audit.insert_entity()', 
-		'insert_entity_' || table_name, schema_name, table_name);
+		'trigger_insert_entity_' || table_name, schema_name, table_name);
 	EXECUTE format (
 		'CREATE TRIGGER %s AFTER UPDATE ON %s.%s FOR EACH ROW EXECUTE PROCEDURE audit.update_entity()',  
-		'update_entity_' || table_name, schema_name, table_name);
+		'trigger_update_entity_' || table_name, schema_name, table_name);
 	EXECUTE format (
 		'CREATE TRIGGER %s AFTER UPDATE ON %s.%s FOR EACH ROW EXECUTE PROCEDURE audit.delete_entity()',  
-		'delete_entity_' || table_name, schema_name, table_name);
+		'trigger_delete_entity_' || table_name, schema_name, table_name);
+	RETURN NEXT 'trigger_insert_entity_' || table_name;
+	RETURN NEXT 'trigger_update_entity_' || table_name;
+	RETURN NEXT 'trigger_delete_entity_' || table_name;
 END;
 $$ LANGUAGE plpgsql;
 
