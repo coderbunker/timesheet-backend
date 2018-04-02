@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS model.person(
 	nicknames TEXT[],
 	github TEXT UNIQUE
 );
-SELECT audit.add_audit('model.person');
+SELECT audit.add_audit('model', 'person');
 
 CREATE TABLE IF NOT EXISTS model.account(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
