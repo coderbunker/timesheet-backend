@@ -50,7 +50,7 @@ The first two letters of the code are the two letters of the ISO 3166-1 alpha-2 
 is usually the initial of the currency itself. 
 $$;
 
-CREATE TABLE IF NOT EXISTS model.member(
+CREATE TABLE IF NOT EXISTS model.membership(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	person_id uuid REFERENCES model.person(id) NOT NULL,
@@ -65,13 +65,13 @@ CREATE TABLE IF NOT EXISTS model.task(
 
 CREATE TABLE IF NOT EXISTS model.entry(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	member_id uuid REFERENCES model.member(id),
+	membership_id uuid REFERENCES model.membership(id),
 	start_datetime timestamptz NOT NULL,
 	stop_datetime timestamptz NOT NULL,
 	task_id uuid REFERENCES model.task(id) NOT NULL,
 	activity TEXT,
 	reference TEXT,
-	CONSTRAINT unique_entry UNIQUE(member_id, start_datetime, stop_datetime) 
+	CONSTRAINT unique_entry UNIQUE(membership_id, start_datetime, stop_datetime) 
 );
 
 SELECT audit.add_audit(schemaname, tablename) FROM (
@@ -92,13 +92,13 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		entry.activity,
 		entry.reference
 		FROM model.entry 
-			INNER JOIN model.member ON entry.member_id = member.id
-			INNER JOIN model.person ON member.person_id = person.id
-			INNER JOIN model.project ON member.project_id = project.id
+			INNER JOIN model.membership ON entry.membership_id = membership.id
+			INNER JOIN model.person ON membership.person_id = person.id
+			INNER JOIN model.project ON membership.project_id = project.id
 			INNER JOIN model.task ON entry.task_id = task.id
 			INNER JOIN model.account ON project.account_id = account.id
 			INNER JOIN model.organization ON account.organization_id = organization.id
-			INNER JOIN model.iso4217 ON member.currency = iso4217.code
+			INNER JOIN model.iso4217 ON membership.currency = iso4217.code
 	;
 
 
@@ -115,7 +115,7 @@ DECLARE
 	entry model.entry;
 	task model.task;
 	project model.project;
-	member model.member;
+	membership model.membership;
 	ts model.timesheet;
 BEGIN
 	SELECT * INTO task FROM model.task t WHERE t.name = task_name;
@@ -126,12 +126,12 @@ BEGIN
 	IF project IS NULL THEN
 		RAISE EXCEPTION 'Nonexistent project --> %', project_name USING HINT = 'Create project';
 	END IF;
-	SELECT * INTO member
-		FROM model.member m
+	SELECT * INTO membership
+		FROM model.membership m
 			INNER JOIN model.person p ON p.id = m.person_id 
 		WHERE emails[1] = email AND m.project_id = project.id;
-	IF member IS NULL THEN
-		RAISE EXCEPTION 'Nonexistent member --> %', email USING HINT = 'Create member with this email';
+	IF membership IS NULL THEN
+		RAISE EXCEPTION 'Nonexistent membership --> %', email USING HINT = 'Create membership with this email';
 	END IF;
 
 	INSERT INTO model.entry(
@@ -140,14 +140,14 @@ BEGIN
 		activity, 
 		reference, 
 		task_id, 
-		member_id) 
+		membership_id) 
 	VALUES (
 		start_datetime,
    		stop_datetime,
    		activity,
    		reference,
    		task.id,
-   		member.id) 
+   		membership.id) 
 	RETURNING * INTO entry;
 
 	SELECT * INTO ts 
@@ -172,7 +172,7 @@ $$ LANGUAGE plpgsql;
 --		);
 --);
 
---CREATE OR REPLACE FUNCTION model.add_entry(member_id uuid, nickname TEXT, start_datetime timestamptz, stop_datetime timestamptz) AS
+--CREATE OR REPLACE FUNCTION model.add_entry(membership_id uuid, nickname TEXT, start_datetime timestamptz, stop_datetime timestamptz) AS
 --$$
 --
 --$$ LANGUAGE SQL;

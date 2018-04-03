@@ -37,9 +37,9 @@ $testvalue$
 	;
 $testvalue$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model_test.add_member1(project_id_ uuid, person_id_ uuid, hourly_rate_ NUMERIC DEFAULT 700, currency_ text DEFAULT 'RMB') RETURNS model.member AS 
+CREATE OR REPLACE FUNCTION model_test.add_membership1(project_id_ uuid, person_id_ uuid, hourly_rate_ NUMERIC DEFAULT 700, currency_ text DEFAULT 'RMB') RETURNS model.membership AS 
 $testvalue$
-	INSERT INTO model.member(project_id, person_id, hourly_rate, currency)
+	INSERT INTO model.membership(project_id, person_id, hourly_rate, currency)
 		VALUES(project_id_, person_id_, hourly_rate_, currency_)
 		RETURNING *;
 	;
@@ -54,14 +54,14 @@ $testvalue$
 $testvalue$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model_test.add_entry1(
-	member_id_ uuid, 
+	membership_id_ uuid, 
 	task_id_ uuid, 
 	start_datetime_ timestamptz DEFAULT (NOW()- '1 hour'::INTERVAL), 
 	stop_datetime_ timestamptz DEFAULT NOW()) 
 RETURNS model.entry AS 
 $testvalue$
-	INSERT INTO model.entry(member_id, task_id, start_datetime, stop_datetime)
-		VALUES(member_id_, task_id_, start_datetime_, stop_datetime_)
+	INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
+		VALUES(membership_id_, task_id_, start_datetime_, stop_datetime_)
 		RETURNING *;
 	;
 $testvalue$ LANGUAGE SQL;
@@ -149,7 +149,7 @@ DECLARE
 	person model.person;
 	account model.account;
 	project model.project;
-	member model.member;
+	membership model.membership;
 	task model.task;
 	entry model.entry;
 	organization model.organization;
@@ -158,9 +158,9 @@ BEGIN
 	SELECT * FROM model_test.add_person1() INTO person;
 	SELECT * FROM model_test.add_account1(organization.id) INTO account;
 	SELECT * FROM model_test.add_project1(account.id) INTO project;
-	SELECT * FROM model_test.add_member1(project.id, person.id) INTO member;
+	SELECT * FROM model_test.add_membership1(project.id, person.id) INTO membership;
 	SELECT * FROM model_test.add_task1() INTO task;
-	SELECT * FROM model_test.add_entry1(member.id, task.id) INTO entry;
+	SELECT * FROM model_test.add_entry1(membership.id, task.id) INTO entry;
 	RETURN QUERY SELECT * FROM results_eq(
 		$$ SELECT account_name, email FROM model.timesheet $$,
 		$$ VALUES ('ACCOUNT_NAME', 'rngadam@coderbunker.com') $$ 
@@ -174,7 +174,7 @@ DECLARE
 	person model.person;
 	account model.account;
 	project model.project;
-	member model.member;
+	membership model.membership;
 	task model.task;
 	entry model.entry;
 	organization model.organization;
@@ -184,7 +184,7 @@ BEGIN
 	SELECT * INTO account FROM model_test.add_account1(organization.id, 'Coderbunker');
 	SELECT * INTO project FROM model_test.add_project1(account.id, 'Coderbunker Internal');
 	SELECT * INTO person FROM model_test.add_person1('Ricky Ng-Adam');
-	SELECT * INTO MEMBER FROM model_test.add_member1(project.id, person.id);
+	SELECT * INTO membership FROM model_test.add_membership1(project.id, person.id);
 	SELECT * INTO task FROM model_test.add_task1('Planning');
 
 	SELECT * INTO timesheet FROM model.add_entry(
