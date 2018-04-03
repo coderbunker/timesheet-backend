@@ -3,12 +3,11 @@ CREATE SCHEMA IF NOT EXISTS model_test;
 
 CREATE OR REPLACE FUNCTION model_test.add_person1(name_ text DEFAULT 'Ricky Ng-Adam') RETURNS model.person AS 
 $testvalue$
-	INSERT INTO model.person(name, emails, nicknames, github)
+	INSERT INTO model.person(name, emails, properties)
 		VALUES(
 			name_,
-			'{"rngadam@coderbunker.com", "rngadam"}', 
-			'{"Ricky", "伍思力"}',
-			'rngadam')
+			'{"rngadam@coderbunker.com", "rngadam@gmail.com"}', 
+			$$ { "altnames":["Ricky", "伍思力"], "github": "rngadam" } $$)
 		RETURNING *;
 	;
 $testvalue$ LANGUAGE SQL;
@@ -69,7 +68,7 @@ $testvalue$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model_test.update_user1() RETURNS model.person AS 
 $testvalue$
-	UPDATE model.person SET nicknames = nicknames || '{kiki}' 
+	UPDATE model.person SET emails = emails || '{rngadam@yahoo.com}' 
 		WHERE emails[1] = 'rngadam@coderbunker.com'
 		RETURNING *;
 $testvalue$ LANGUAGE SQL;
@@ -193,12 +192,11 @@ BEGIN
 		NOW() - '1 HOUR'::INTERVAL,
 		NOW(),
 		'Planning',
-		'ACTIVITY', 
-		'REFERENCE'
+		$$ {"activity": "ACTIVITY", "reference": "REFERENCE"} $$
 		);
 		
 	RETURN query SELECT * FROM results_eq(
-		$$ SELECT account_name, email, activity FROM model.timesheet $$,
+		$$ SELECT account_name, email, properties->>'activity' FROM model.timesheet $$,
 		$$ VALUES ('Coderbunker', 'rngadam@coderbunker.com', 'ACTIVITY') $$
 	);
 END;

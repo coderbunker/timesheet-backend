@@ -2,32 +2,6 @@ DROP SCHEMA model CASCADE;
 
 CREATE SCHEMA IF NOT EXISTS model;
  
-CREATE TABLE IF NOT EXISTS model.person(
-	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	name TEXT,
-	emails TEXT[],
-	nicknames TEXT[],
-	github TEXT UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS model.organization(
-	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	name TEXT UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS model.account(
-	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	organization_id uuid REFERENCES model.organization(id) NOT NULL,
-	name TEXT UNIQUE,
-	legal_name TEXT UNIQUE
-);
-	
-CREATE TABLE IF NOT EXISTS model.project(
-	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	account_id uuid REFERENCES model.account(id) NOT NULL,
-	name TEXT UNIQUE 
-);
-
 CREATE TABLE IF NOT EXISTS model.iso4217(
 	code CHAR(3) PRIMARY KEY
 );
@@ -50,17 +24,47 @@ The first two letters of the code are the two letters of the ISO 3166-1 alpha-2 
 is usually the initial of the currency itself. 
 $$;
 
+CREATE TABLE IF NOT EXISTS model.person(
+	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	name TEXT,
+	emails TEXT[],
+	properties JSON
+);
+
+CREATE TABLE IF NOT EXISTS model.organization(
+	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	name TEXT UNIQUE,
+	properties JSON
+);
+
+CREATE TABLE IF NOT EXISTS model.account(
+	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	organization_id uuid REFERENCES model.organization(id) NOT NULL,
+	name TEXT UNIQUE,
+	properties JSON
+);
+	
+CREATE TABLE IF NOT EXISTS model.project(
+	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	account_id uuid REFERENCES model.account(id) NOT NULL,
+	name TEXT UNIQUE,
+	properties JSON
+);
+
 CREATE TABLE IF NOT EXISTS model.membership(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	person_id uuid REFERENCES model.person(id) NOT NULL,
 	currency CHAR(3) REFERENCES model.iso4217(code) NOT NULL,
-	hourly_rate NUMERIC
+	hourly_rate NUMERIC,
+	nickname TEXT,
+	properties JSON
 );
 
 CREATE TABLE IF NOT EXISTS model.task(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	name TEXT
+	name TEXT,
+	properties JSON
 );
 
 CREATE TABLE IF NOT EXISTS model.entry(
@@ -69,8 +73,7 @@ CREATE TABLE IF NOT EXISTS model.entry(
 	start_datetime timestamptz NOT NULL,
 	stop_datetime timestamptz NOT NULL,
 	task_id uuid REFERENCES model.task(id) NOT NULL,
-	activity TEXT,
-	reference TEXT,
+	properties JSON,
 	CONSTRAINT unique_entry UNIQUE(membership_id, start_datetime, stop_datetime) 
 );
 
@@ -89,8 +92,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		entry.stop_datetime,
 		emails[1] AS email,
 		task.name AS task_name,
-		entry.activity,
-		entry.reference
+		entry.properties
 		FROM model.entry 
 			INNER JOIN model.membership ON entry.membership_id = membership.id
 			INNER JOIN model.person ON membership.person_id = person.id
@@ -103,13 +105,12 @@ CREATE OR REPLACE VIEW model.timesheet AS
 
 
 CREATE OR REPLACE FUNCTION model.add_entry(
-	project_name text,
+	project_name TEXT,
 	email TEXT,
-	start_datetime timestamptz, 
-	stop_datetime timestamptz, 
-	task_name text, 
-	activity text, 
-	reference text) RETURNS model.timesheet AS
+	start_datetime TIMESTAMPTZ, 
+	stop_datetime TIMESTAMPTZ, 
+	task_name TEXT, 
+	properties JSON) RETURNS model.timesheet AS
 $$
 DECLARE
 	entry model.entry;
@@ -137,17 +138,15 @@ BEGIN
 	INSERT INTO model.entry(
 		start_datetime, 
 		stop_datetime, 
-		activity, 
-		reference, 
 		task_id, 
-		membership_id) 
+		membership_id,
+		properties) 
 	VALUES (
 		start_datetime,
    		stop_datetime,
-   		activity,
-   		reference,
    		task.id,
-   		membership.id) 
+   		membership.id,
+   		properties) 
 	RETURNING * INTO entry;
 
 	SELECT * INTO ts 
@@ -156,24 +155,3 @@ BEGIN
 	RETURN ts;
 END
 $$ LANGUAGE plpgsql;
-
---CREATE RULE timesheet_insert AS ON INSERT TO model.timesheet
---DO INSTEAD
---(
---	SELECT * FROM 
---		model.add_entry(
---			NEW.project_name,
---			NEW.email,
---			NEW.start_datetime,
---			NEW.stop_datetime,
---			NEW.task_name,
---			NEW.activity,
---			NEW.reference
---		);
---);
-
---CREATE OR REPLACE FUNCTION model.add_entry(membership_id uuid, nickname TEXT, start_datetime timestamptz, stop_datetime timestamptz) AS
---$$
---
---$$ LANGUAGE SQL;
-SELECT * FROM model.timesheet;
