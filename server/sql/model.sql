@@ -109,14 +109,14 @@ CREATE OR REPLACE FUNCTION model.add_entry(
 	stop_datetime timestamptz, 
 	task_name text, 
 	activity text, 
-	reference text) RETURNS model.entry AS
+	reference text) RETURNS model.timesheet AS
 $$
 DECLARE
 	entry model.entry;
 	task model.task;
 	project model.project;
 	member model.member;
-	timesheet model.timesheet;
+	ts model.timesheet;
 BEGIN
 	SELECT * INTO task FROM model.task t WHERE t.name = task_name;
 	IF task IS NULL THEN
@@ -134,36 +134,43 @@ BEGIN
 		RAISE EXCEPTION 'Nonexistent member --> %', email USING HINT = 'Create member with this email';
 	END IF;
 
-	INSERT INTO model.entry(start_datetime, stop_datetime, activity, reference, task_id, member_id) VALUES (
-	           start_datetime,
-	           stop_datetime,
-	           activity,
-	           reference,
-	           task.id,
-	           member.id) RETURNING * INTO entry;
+	INSERT INTO model.entry(
+		start_datetime, 
+		stop_datetime, 
+		activity, 
+		reference, 
+		task_id, 
+		member_id) 
+	VALUES (
+		start_datetime,
+   		stop_datetime,
+   		activity,
+   		reference,
+   		task.id,
+   		member.id) 
+	RETURNING * INTO entry;
 
-	RETURN entry;
+	SELECT * INTO ts 
+		FROM model.timesheet t WHERE t.id = entry.id;
 
---	SELECT * INTO timesheet 
---		FROM model.timesheet t WHERE t.id = entry.id;
---	RETURN timesheet;
+	RETURN ts;
 END
 $$ LANGUAGE plpgsql;
 
-CREATE RULE timesheet_insert AS ON INSERT TO model.timesheet
-DO INSTEAD
-(
-	SELECT * FROM 
-		model.add_entry(
-			NEW.project_name,
-			NEW.email,
-			NEW.start_datetime,
-			NEW.stop_datetime,
-			NEW.task_name,
-			NEW.activity,
-			NEW.reference
-		);
-);
+--CREATE RULE timesheet_insert AS ON INSERT TO model.timesheet
+--DO INSTEAD
+--(
+--	SELECT * FROM 
+--		model.add_entry(
+--			NEW.project_name,
+--			NEW.email,
+--			NEW.start_datetime,
+--			NEW.stop_datetime,
+--			NEW.task_name,
+--			NEW.activity,
+--			NEW.reference
+--		);
+--);
 
 --CREATE OR REPLACE FUNCTION model.add_entry(member_id uuid, nickname TEXT, start_datetime timestamptz, stop_datetime timestamptz) AS
 --$$

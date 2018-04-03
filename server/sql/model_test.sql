@@ -187,7 +187,7 @@ BEGIN
 	SELECT * INTO MEMBER FROM model_test.add_member1(project.id, person.id);
 	SELECT * INTO task FROM model_test.add_task1('Planning');
 
-	SELECT * INTO entry FROM model.add_entry(
+	SELECT * INTO timesheet FROM model.add_entry(
 		'Coderbunker Internal', 
 		'rngadam@coderbunker.com',
 		NOW() - '1 HOUR'::INTERVAL,
@@ -197,28 +197,6 @@ BEGIN
 		'REFERENCE'
 		);
 		
---	INSERT INTO model.timesheet(
---		organization_name,
---		account_name, 
---		project_name, 
---		start_datetime, 
---		stop_datetime, 
---		email,
---		task_name,
---		activity, 
---		reference) 
---		VALUES(
---			'Coderbunker Shanghai',
---			'Coderbunker',
---			'Coderbunker Internal',
---			NOW() - '1 HOUR'::INTERVAL,
---			NOW(),
---			'rngadam@coderbunker.com',
---			'Planning',
---			'ACTIVITY',
---			'http://www.coderbunker.com'
---		) RETURNING * INTO timesheet;
---
 	RETURN query SELECT * FROM results_eq(
 		$$ SELECT account_name, email, activity FROM model.timesheet $$,
 		$$ VALUES ('Coderbunker', 'rngadam@coderbunker.com', 'ACTIVITY') $$
