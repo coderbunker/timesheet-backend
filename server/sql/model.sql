@@ -1,5 +1,4 @@
-DROP SCHEMA model CASCADE;
-
+DROP SCHEMA IF EXISTS model CASCADE;
 CREATE SCHEMA IF NOT EXISTS model;
  
 CREATE TABLE IF NOT EXISTS model.iso4217(
@@ -24,18 +23,21 @@ The first two letters of the code are the two letters of the ISO 3166-1 alpha-2 
 is usually the initial of the currency itself. 
 $$;
 
-CREATE TABLE IF NOT EXISTS model.person(
-	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	name TEXT,
-	emails TEXT[],
-	properties JSON
-);
-
 CREATE TABLE IF NOT EXISTS model.organization(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	name TEXT UNIQUE,
 	properties JSON
 );
+
+DO $$ 
+ BEGIN
+	INSERT INTO model.organization(id, name, properties)
+		VALUES 
+			('46207d44-ddf3-4ecf-8c01-d88d56d56181', 'Coderbunker Shanghai', '{}'), 
+			('dffae778-dd06-46c1-a4ee-b7bfce34f71d', 'Coderbunker Singapore', '{}')
+	ON CONFLICT DO NOTHING;
+ END;
+$$;
 
 CREATE TABLE IF NOT EXISTS model.account(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -43,7 +45,14 @@ CREATE TABLE IF NOT EXISTS model.account(
 	name TEXT UNIQUE,
 	properties JSON
 );
-	
+
+CREATE TABLE IF NOT EXISTS model.person(
+	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	name TEXT,
+	emails TEXT[],
+	properties JSON
+);
+
 CREATE TABLE IF NOT EXISTS model.project(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	account_id uuid REFERENCES model.account(id) NOT NULL,
@@ -63,8 +72,10 @@ CREATE TABLE IF NOT EXISTS model.membership(
 
 CREATE TABLE IF NOT EXISTS model.task(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	project_id uuid REFERENCES model.project(id) NOT NULL,
 	name TEXT,
-	properties JSON
+	properties JSON,
+	CONSTRAINT unique_task_name_per_project UNIQUE (project_id, name)
 );
 
 CREATE TABLE IF NOT EXISTS model.entry(
@@ -78,10 +89,14 @@ CREATE TABLE IF NOT EXISTS model.entry(
 );
 
 SELECT audit.add_audit(schemaname, tablename) FROM (
-	SELECT schemaname, tablename FROM pg_catalog.pg_tables WHERE schemaname = 'model'
+	SELECT schemaname, tablename 
+		FROM pg_catalog.pg_tables 
+			LEFT JOIN pg_catalog.pg_trigger ON tgname = 'trigger_insert_entity_' || tablename
+		WHERE schemaname = 'model' AND tgname IS null
 ) t;
 
-DROP VIEW IF EXISTS model.timesheet;
+SELECT * FROM pg_catalog.pg_trigger;
+
 CREATE OR REPLACE VIEW model.timesheet AS
 	SELECT 
 		entry.id AS id,
@@ -97,7 +112,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 			INNER JOIN model.membership ON entry.membership_id = membership.id
 			INNER JOIN model.person ON membership.person_id = person.id
 			INNER JOIN model.project ON membership.project_id = project.id
-			INNER JOIN model.task ON entry.task_id = task.id
+			INNER JOIN model.task ON task.project_id = project.id
 			INNER JOIN model.account ON project.account_id = account.id
 			INNER JOIN model.organization ON account.organization_id = organization.id
 			INNER JOIN model.iso4217 ON membership.currency = iso4217.code
@@ -155,3 +170,70 @@ BEGIN
 	RETURN ts;
 END
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE VIEW model.project_config AS
+	SELECT 
+		project.id AS id,
+		project.name AS project_name,
+		max(organization.name) AS organization_name,
+		max(account.name) AS account_name,
+		array_agg(task.name) AS tasks,
+		array_agg(person.name || ' ' || COALESCE(membership.nickname, '')) AS members
+		FROM model.project 
+			INNER JOIN model.membership ON membership.project_id = project.id
+			INNER JOIN model.person ON membership.person_id = person.id
+			INNER JOIN model.task ON task.project_id = project.id
+			INNER JOIN model.account ON project.account_id = account.id
+			INNER JOIN model.organization ON account.organization_id = organization.id
+			INNER JOIN model.iso4217 ON membership.currency = iso4217.code
+		GROUP BY project.id
+	;
+
+CREATE OR REPLACE FUNCTION model.add_project_config(
+	project_name TEXT,
+	account_name TEXT,
+	organization_name TEXT,
+	tasks TEXT[], 
+	members uuid[], 
+	properties JSON) RETURNS model.project_config AS
+$$
+DECLARE
+	project model.project;
+	organization model.organization;
+	account	model.account;
+	person_id uuid;
+	task TEXT;
+    pc model.project_config;
+
+BEGIN
+	SELECT * FROM model.organization t WHERE t.name = organization_name INTO organization;
+	IF organization IS NULL THEN
+		INSERT INTO model.organization(name) VALUES(organization_name) RETURNING * INTO organization;
+	END IF;
+
+	SELECT * FROM model.account t WHERE t.name = account_name INTO account;
+	IF account IS NULL THEN
+		INSERT INTO model.account(name, organization_id) VALUES(account_name, organization.id)  RETURNING * INTO account;
+	END IF;
+
+	SELECT * FROM model.project t WHERE t.name = project_name INTO project;
+	IF project IS NULL THEN
+		INSERT INTO model.project(name, account_id) VALUES(project_name, account.id) RETURNING * INTO project;
+	END IF;
+	
+	FOREACH task IN ARRAY tasks
+	LOOP
+		INSERT INTO model.task(name, project_id) VALUES(task, project.id);
+	END LOOP;
+
+	FOREACH person_id IN ARRAY members
+	LOOP
+		-- todo need default rate from person?
+		INSERT INTO model.membership(person_id, project_id, hourly_rate, currency) VALUES(person_id, project.id, 700, 'RMB');
+	END LOOP;
+
+	SELECT * FROM model.project_config WHERE model.project_config.id = project.id INTO pc; 
+	RETURN pc;
+END; 
+$$ LANGUAGE PLPGSQL;

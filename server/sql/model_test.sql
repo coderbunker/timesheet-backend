@@ -1,4 +1,3 @@
-DROP SCHEMA model_test CASCADE;
 CREATE SCHEMA IF NOT EXISTS model_test;
 
 CREATE OR REPLACE FUNCTION model_test.add_person1(name_ text DEFAULT 'Ricky Ng-Adam') RETURNS model.person AS 
@@ -44,10 +43,10 @@ $testvalue$
 	;
 $testvalue$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model_test.add_task1(name_ text DEFAULT 'TASK_NAME') RETURNS model.task AS 
+CREATE OR REPLACE FUNCTION model_test.add_task1(project_id_ uuid, name_ text DEFAULT 'TASK_NAME') RETURNS model.task AS 
 $testvalue$
-	INSERT INTO model.task(name)
-		VALUES(name_)
+	INSERT INTO model.task(name, project_id)
+		VALUES(name_, project_id_)
 		RETURNING *;
 	;
 $testvalue$ LANGUAGE SQL;
@@ -108,7 +107,10 @@ $test_entity$
 			FROM audit.entity 
 			WHERE id IS NOT NULL AND created IS NOT NULL AND updated is NULL 
 		$$,
-		$$ VALUES ('model', 'person', CURRENT_USER::text) $$
+		$$ VALUES ('model', 'organization', CURRENT_USER::text),  
+			('model', 'organization', CURRENT_USER::text),
+			('model', 'person', CURRENT_USER::text) 
+			$$
 	);
 $test_entity$ LANGUAGE sql;
 
@@ -158,7 +160,7 @@ BEGIN
 	SELECT * FROM model_test.add_account1(organization.id) INTO account;
 	SELECT * FROM model_test.add_project1(account.id) INTO project;
 	SELECT * FROM model_test.add_membership1(project.id, person.id) INTO membership;
-	SELECT * FROM model_test.add_task1() INTO task;
+	SELECT * FROM model_test.add_task1(project.id) INTO task;
 	SELECT * FROM model_test.add_entry1(membership.id, task.id) INTO entry;
 	RETURN QUERY SELECT * FROM results_eq(
 		$$ SELECT account_name, email FROM model.timesheet $$,
@@ -179,12 +181,12 @@ DECLARE
 	organization model.organization;
 	timesheet model.timesheet;
 BEGIN
-	SELECT * INTO organization FROM model_test.add_organization1('Coderbunker Shanghai');
+	SELECT * INTO organization FROM model_test.add_organization1('Coderbunker Test');
 	SELECT * INTO account FROM model_test.add_account1(organization.id, 'Coderbunker');
 	SELECT * INTO project FROM model_test.add_project1(account.id, 'Coderbunker Internal');
 	SELECT * INTO person FROM model_test.add_person1('Ricky Ng-Adam');
 	SELECT * INTO membership FROM model_test.add_membership1(project.id, person.id);
-	SELECT * INTO task FROM model_test.add_task1('Planning');
+	SELECT * INTO task FROM model_test.add_task1(project.id, 'Planning');
 
 	SELECT * INTO timesheet FROM model.add_entry(
 		'Coderbunker Internal', 
@@ -202,5 +204,36 @@ BEGIN
 END;
 $test_entity$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION model_test.test_add_project_config() RETURNS SETOF TEXT AS 
+$test_entity$
+DECLARE
+	person model.person;
+	account model.account;
+	project model.project;
+	membership model.membership;
+	task model.task;
+	entry model.entry;
+	organization model.organization;
+	project_config model.project_config;
+BEGIN
+	SELECT * INTO person FROM model_test.add_person1('Ricky Ng-Adam');
+	SELECT * INTO person FROM model_test.add_person1('Frederic Bazin');
+	SELECT * INTO person FROM model_test.add_person1('Oscar Chan');
+
+	SELECT * INTO project_config FROM model.add_project_config(
+		'New Coderbunker Project', 
+		'New Coderbunker Customer',
+		'Coderbunker Munich',
+		$$ {'Planning', 'Development', 'Testing'} $$,
+		(SELECT array_agg(id) FROM model.person),
+		'{}'::JSON
+		);
+		
+	RETURN query SELECT * FROM results_eq(
+		$$ SELECT project_name, organization_name, account_name  FROM model.project_config $$,
+		$$ VALUES ('New Coderbunker Project', 'Coderbunker Munich', 'New Coderbunker Customer') $$
+	);
+END;
+$test_entity$ LANGUAGE plpgsql;
 SELECT * FROM runtests( 'model_test'::name);
 
