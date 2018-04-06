@@ -64,10 +64,17 @@ CREATE TABLE IF NOT EXISTS model.membership(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	person_id uuid REFERENCES model.person(id) NOT NULL,
-	currency CHAR(3) REFERENCES model.iso4217(code) NOT NULL,
-	hourly_rate NUMERIC,
-	nickname TEXT,
+	name TEXT,
 	properties JSON
+);
+
+CREATE TABLE IF NOT EXISTS model.rate(
+	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	membership_id uuid REFERENCES model.membership(id) NOT NULL,
+	rate NUMERIC NOT NULL, 
+	basis TEXT DEFAULT 'hourly' NOT NULL,
+	currency CHAR(3) REFERENCES model.iso4217(code) NOT NULL,
+	valid TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS model.task(
@@ -107,7 +114,9 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		entry.stop_datetime,
 		emails[1] AS email,
 		task.name AS task_name,
-		entry.properties
+		entry.properties,
+		rate.currency,
+		rate.rate
 		FROM model.entry 
 			INNER JOIN model.membership ON entry.membership_id = membership.id
 			INNER JOIN model.person ON membership.person_id = person.id
@@ -115,7 +124,8 @@ CREATE OR REPLACE VIEW model.timesheet AS
 			INNER JOIN model.task ON task.project_id = project.id
 			INNER JOIN model.account ON project.account_id = account.id
 			INNER JOIN model.organization ON account.organization_id = organization.id
-			INNER JOIN model.iso4217 ON membership.currency = iso4217.code
+			INNER JOIN model.rate ON membership.id = rate.membership_id
+			INNER JOIN model.iso4217 ON rate.currency = iso4217.code
 	;
 
 
@@ -179,14 +189,13 @@ CREATE OR REPLACE VIEW model.project_config AS
 		max(organization.name) AS organization_name,
 		max(account.name) AS account_name,
 		array_agg(task.name) AS tasks,
-		array_agg(person.name || ' ' || COALESCE(membership.nickname, '')) AS members
+		array_agg(person.name || ' ' || COALESCE(membership.name, '')) AS members
 		FROM model.project 
 			INNER JOIN model.membership ON membership.project_id = project.id
 			INNER JOIN model.person ON membership.person_id = person.id
 			INNER JOIN model.task ON task.project_id = project.id
 			INNER JOIN model.account ON project.account_id = account.id
 			INNER JOIN model.organization ON account.organization_id = organization.id
-			INNER JOIN model.iso4217 ON membership.currency = iso4217.code
 		GROUP BY project.id
 	;
 
@@ -202,6 +211,8 @@ DECLARE
 	project model.project;
 	organization model.organization;
 	account	model.account;
+	membership	model.membership;
+	person	model.person;
 	person_id uuid;
 	task TEXT;
     pc model.project_config;
@@ -229,8 +240,9 @@ BEGIN
 
 	FOREACH person_id IN ARRAY members
 	LOOP
-		-- todo need default rate from person?
-		INSERT INTO model.membership(person_id, project_id, hourly_rate, currency) VALUES(person_id, project.id, 700, 'RMB');
+		SELECT * FROM model.person t WHERE t.id = person_id INTO person;
+		INSERT INTO model.membership(person_id, project_id) VALUES(person_id, project.id) RETURNING * INTO membership;
+		INSERT INTO model.rate(membership_id, rate, currency) VALUES(membership.id, (person.properties->>'default_rate')::NUMERIC, person.properties->>'default_currency');
 	END LOOP;
 
 	SELECT * FROM model.project_config WHERE model.project_config.id = project.id INTO pc; 

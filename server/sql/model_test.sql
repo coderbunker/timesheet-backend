@@ -6,7 +6,7 @@ $testvalue$
 		VALUES(
 			name_,
 			'{"rngadam@coderbunker.com", "rngadam@gmail.com"}', 
-			$$ { "altnames":["Ricky", "伍思力"], "github": "rngadam" } $$)
+			$$ { "altnames":["Ricky", "伍思力"], "github": "rngadam", "default_rate": 700, "default_currency": "RMB" } $$)
 		RETURNING *;
 	;
 $testvalue$ LANGUAGE SQL;
@@ -35,13 +35,21 @@ $testvalue$
 	;
 $testvalue$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model_test.add_membership1(project_id_ uuid, person_id_ uuid, hourly_rate_ NUMERIC DEFAULT 700, currency_ text DEFAULT 'RMB') RETURNS model.membership AS 
+CREATE OR REPLACE FUNCTION model_test.add_membership1(project_id_ uuid, person_id_ uuid, rate_ NUMERIC DEFAULT 700, currency_ text DEFAULT 'RMB') RETURNS model.membership AS 
 $testvalue$
-	INSERT INTO model.membership(project_id, person_id, hourly_rate, currency)
-		VALUES(project_id_, person_id_, hourly_rate_, currency_)
-		RETURNING *;
+DECLARE
+	membership model.membership;
+BEGIN
+	INSERT INTO model.membership(project_id, person_id)
+		VALUES(project_id_, person_id_)
+		RETURNING * INTO membership
 	;
-$testvalue$ LANGUAGE SQL;
+	INSERT INTO model.rate(membership_id, rate, currency)
+		VALUES(membership.id, rate_, currency_)
+	;
+	RETURN membership;
+END;
+$testvalue$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION model_test.add_task1(project_id_ uuid, name_ text DEFAULT 'TASK_NAME') RETURNS model.task AS 
 $testvalue$
