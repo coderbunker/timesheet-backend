@@ -1,12 +1,20 @@
 CREATE SCHEMA IF NOT EXISTS model_test;
 
-CREATE OR REPLACE FUNCTION model_test.add_person1(name_ text DEFAULT 'Ricky Ng-Adam') RETURNS model.person AS 
+CREATE OR REPLACE FUNCTION model_test.add_person1(
+	name_ text DEFAULT 'Ricky Ng-Adam', 
+	email_ TEXT DEFAULT 'rngadam@coderbunker.com',
+	properties_ JSON DEFAULT $$ { 
+				"default_rate": 700, 
+				"default_currency": "RMB" 
+				} $$
+) RETURNS model.person AS 
 $testvalue$
-	INSERT INTO model.person(name, emails, properties)
+	INSERT INTO model.person(name, email, properties)
 		VALUES(
 			name_,
-			'{"rngadam@coderbunker.com", "rngadam@gmail.com"}', 
-			$$ { "altnames":["Ricky", "伍思力"], "github": "rngadam", "default_rate": 700, "default_currency": "RMB" } $$)
+			email_, 
+			properties_
+			)
 		RETURNING *;
 	;
 $testvalue$ LANGUAGE SQL;
@@ -75,8 +83,8 @@ $testvalue$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model_test.update_user1() RETURNS model.person AS 
 $testvalue$
-	UPDATE model.person SET emails = emails || '{rngadam@yahoo.com}' 
-		WHERE emails[1] = 'rngadam@coderbunker.com'
+	UPDATE model.person SET email = 'rngadam@yahoo.com' 
+		WHERE email = 'rngadam@coderbunker.com'
 		RETURNING *;
 $testvalue$ LANGUAGE SQL;
 
@@ -84,8 +92,8 @@ CREATE OR REPLACE FUNCTION model_test.test_email() RETURNS SETOF TEXT AS
 $test_email$
 	SELECT model_test.add_person1();
 	SELECT results_eq(
-		'SELECT emails[1] FROM model.person',
-		$$ VALUES ('rngadam@coderbunker.com') $$)
+		'SELECT email FROM model.person',
+		$$ VALUES ('rngadam@coderbunker.com'::email) $$)
 	; 
 $test_email$ LANGUAGE sql;
 
@@ -106,21 +114,22 @@ $test_performance$
 	SELECT testutils.test_count_all_tables('model');
 $test_performance$ LANGUAGE sql;
 
-CREATE OR REPLACE FUNCTION model_test.test_insert_entity() RETURNS SETOF TEXT AS 
-$test_insert_entity$
-	SELECT model_test.add_person1();
-	SELECT results_eq(
-		$$ 
-			SELECT schema_name, table_name, userid 
-			FROM audit.entity 
-			WHERE id IS NOT NULL AND created IS NOT NULL AND updated is NULL 
-		$$,
-		$$ VALUES ('model', 'organization', CURRENT_USER::text),  
-			('model', 'organization', CURRENT_USER::text),
-			('model', 'person', CURRENT_USER::text) 
-			$$
-	);
-$test_insert_entity$ LANGUAGE sql;
+-- TODO: now that we're adding records, this is not idempotent
+--CREATE OR REPLACE FUNCTION model_test.test_insert_entity() RETURNS SETOF TEXT AS 
+--$test_insert_entity$
+--	SELECT model_test.add_person1();
+--	SELECT results_eq(
+--		$$ 
+--			SELECT schema_name, table_name, userid 
+--			FROM audit.entity 
+--			WHERE id IS NOT NULL AND created IS NOT NULL AND updated is NULL 
+--		$$,
+--		$$ VALUES ('model', 'organization', CURRENT_USER::text),  
+--			('model', 'organization', CURRENT_USER::text),
+--			('model', 'person', CURRENT_USER::text)
+--		$$
+--	);
+--$test_insert_entity$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION model_test.test_update_entity() RETURNS SETOF TEXT AS 
 $test_update_entity$
@@ -140,7 +149,7 @@ CREATE OR REPLACE FUNCTION model_test.test_delete_entity() RETURNS SETOF TEXT AS
 $test_delete_entity$
 	SELECT model_test.add_person1();
 	SELECT model_test.update_user1();
-	DELETE FROM model.person WHERE emails[1] = 'rngadam@coderbunker.com';
+	DELETE FROM model.person WHERE email = 'rngadam@coderbunker.com';
 	SELECT results_eq(
 		$$ 
 			SELECT schema_name, table_name, userid 
@@ -172,7 +181,7 @@ BEGIN
 	SELECT * FROM model_test.add_entry1(membership.id, task.id) INTO entry;
 	RETURN QUERY SELECT * FROM results_eq(
 		$$ SELECT account_name, email FROM model.timesheet $$,
-		$$ VALUES ('ACCOUNT_NAME', 'rngadam@coderbunker.com') $$ 
+		$$ VALUES ('ACCOUNT_NAME', 'rngadam@coderbunker.com'::email) $$ 
 	);
 END;
 $test_scenario1$ LANGUAGE plpgsql;
@@ -207,23 +216,23 @@ BEGIN
 		
 	RETURN query SELECT * FROM results_eq(
 		$$ SELECT account_name, email, properties->>'activity' FROM model.timesheet $$,
-		$$ VALUES ('Coderbunker', 'rngadam@coderbunker.com', 'ACTIVITY') $$
+		$$ VALUES ('Coderbunker', 'rngadam@coderbunker.com'::email, 'ACTIVITY') $$
 	);
 END;
 $test_insert_timesheet$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION model_test.add_team() RETURNS SETOF model.person AS
 $$
-	INSERT INTO model.person(emails, name) 
-		VALUES 	('{"rngadam@coderbunker.com"}', 'Ricky Ng-Adam'),
-			 	('{"oscar.chan@coderbunker.com"}', 'Oscar Chan'),
-			  	('{"frederic.bazin@coderbunker.com"}', 'Frederic Bazin') RETURNING *;
+	SELECT  model_test.add_person1(name, email) FROM (
+		VALUES 	('rngadam@coderbunker.com', 'Ricky Ng-Adam'),
+			 	('oscar.chan@coderbunker.com', 'Oscar Chan'),
+			  	('frederic.bazin@coderbunker.com', 'Frederic Bazin')
+	) t(email, name);
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model_test.test_add_project_config() RETURNS SETOF TEXT AS 
 $test_add_project_config$
 DECLARE
-	person model.person;
 	account model.account;
 	project model.project;
 	membership model.membership;
@@ -231,10 +240,10 @@ DECLARE
 	entry model.entry;
 	organization model.organization;
 	project_config model.project_config;
+	person model.person;
+
 BEGIN
-	SELECT * INTO person FROM model_test.add_person1('Ricky Ng-Adam');
-	SELECT * INTO person FROM model_test.add_person1('Frederic Bazin');
-	SELECT * INTO person FROM model_test.add_person1('Oscar Chan');
+	SELECT * FROM model_test.add_team() INTO person;
 
 	SELECT * INTO project_config FROM model.add_project_config(
 		'New Coderbunker Project', 
@@ -256,8 +265,8 @@ CREATE OR REPLACE FUNCTION model_test.test_ledger() RETURNS SETOF TEXT AS
 $test_ledger$
 	SELECT * FROM model_test.add_team(); 
 	INSERT INTO model.ledger(entity_id, amount) 
-		VALUES 	((SELECT id FROM model.person WHERE emails[1] = 'rngadam@coderbunker.com'), 10), 
-				((SELECT id FROM model.person WHERE emails[1] = 'frederic.bazin@coderbunker.com'), -10);
+		VALUES 	((SELECT id FROM model.person WHERE email = 'rngadam@coderbunker.com'), 10), 
+				((SELECT id FROM model.person WHERE email = 'frederic.bazin@coderbunker.com'), -10);
 	SELECT results_eq(
 		$$ 
 		SELECT sum(amount) FROM model.ledger;
@@ -268,17 +277,54 @@ $test_ledger$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model_test.test_ledger_fail() RETURNS SETOF TEXT AS 
 $test_ledger_fail$
-	SELECT * FROM model_test.add_team(); 
 	SELECT throws_like(
 		$$ 
+		SELECT * FROM model_test.add_team(); 
 			INSERT INTO model.ledger(entity_id, amount) 
-				VALUES ((SELECT id FROM model.person WHERE emails[1] = 'rngadam@coderbunker.com'), 10);
+				VALUES ((SELECT id FROM model.person WHERE email = 'rngadam@coderbunker.com'), 10);
 			INSERT INTO model.ledger(entity_id, amount) 
-				VALUES ((SELECT id FROM model.person WHERE emails[1] = 'frederic.bazin@coderbunker.com'), -9);
+				VALUES ((SELECT id FROM model.person WHERE email = 'frederic.bazin@coderbunker.com'), -9);
 		$$,
 		'%balance of amount does not match, sum is 10%'
 	);
 $test_ledger_fail$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model_test.test_add_team() RETURNS SETOF TEXT AS 
+$crap$
+	SELECT * FROM results_eq(
+		$$
+		SELECT name FROM model_test.add_team() ORDER BY name;
+		$$,
+		$$ VALUES ('Frederic Bazin'), ('Oscar Chan'), ('Ricky Ng-Adam') $$
+	);
+$crap$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model_test.test_bad_email() RETURNS SETOF TEXT AS 
+$test_bad_email$
+	SELECT * FROM throws_ok(
+		$$
+		INSERT INTO model.person(name, email, properties)
+			VALUES(
+				'rngadam@coderbunker.com', -- email and name inverted on purpose
+				'Ricky Ng-Adam', 
+				'{}'
+				)
+		$$,
+		'value for domain email violates check constraint "email_check"'
+	);
+$test_bad_email$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model_test.test_email_case_insensitive() RETURNS SETOF TEXT AS 
+$test_email_case_insensitive$
+	SELECT * FROM throws_ok(
+		$$
+		INSERT INTO model.person(name, email, properties)
+			VALUES ('Ricky Ng-Adam', 'rngadam@coderbunker.com', '{}'),
+			('Ricky Ng-Adam', 'RNGADAM@CODERBUNKER.COM', '{}')
+		$$,
+		'duplicate key value violates unique constraint "person_email_key"'
+	);
+$test_email_case_insensitive$ LANGUAGE SQL;
 
 SELECT * FROM runtests( 'model_test'::name);
 

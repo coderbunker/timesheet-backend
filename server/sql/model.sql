@@ -1,6 +1,11 @@
 DROP SCHEMA IF EXISTS model CASCADE;
 CREATE SCHEMA IF NOT EXISTS model;
  
+CREATE EXTENSION IF NOT EXISTS citext;
+DROP DOMAIN email;
+CREATE DOMAIN email AS citext
+  CHECK ( value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
+
 CREATE TABLE IF NOT EXISTS model.iso4217(
 	code CHAR(3) PRIMARY KEY
 );
@@ -49,9 +54,12 @@ CREATE TABLE IF NOT EXISTS model.account(
 CREATE TABLE IF NOT EXISTS model.person(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	name TEXT,
-	emails TEXT[],
+	email email UNIQUE,
 	properties JSON DEFAULT '{}' NOT NULL
 );
+
+-- create unique index person_unique_lower_email_idx on model.person (lower(email));
+
 
 CREATE TABLE IF NOT EXISTS model.ledger(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -137,7 +145,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		account.name AS account_name,
 		entry.start_datetime,
 		entry.stop_datetime,
-		emails[1] AS email,
+		email,
 		task.name AS task_name,
 		entry.properties,
 		rate.currency,
@@ -156,7 +164,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 
 CREATE OR REPLACE FUNCTION model.add_entry(
 	project_name TEXT,
-	email TEXT,
+	email_ TEXT,
 	start_datetime TIMESTAMPTZ, 
 	stop_datetime TIMESTAMPTZ, 
 	task_name TEXT, 
@@ -180,9 +188,9 @@ BEGIN
 	SELECT * INTO membership
 		FROM model.membership m
 			INNER JOIN model.person p ON p.id = m.person_id 
-		WHERE emails[1] = email AND m.project_id = project.id;
+		WHERE p.email = email_ AND m.project_id = project.id;
 	IF membership IS NULL THEN
-		RAISE EXCEPTION 'Nonexistent membership --> %', email USING HINT = 'Create membership with this email';
+		RAISE EXCEPTION 'Nonexistent membership --> %', email_ USING HINT = 'Create membership with this email';
 	END IF;
 
 	INSERT INTO model.entry(
