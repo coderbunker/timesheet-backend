@@ -26,7 +26,7 @@ $$;
 CREATE TABLE IF NOT EXISTS model.organization(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	name TEXT UNIQUE,
-	properties JSON
+	properties JSON DEFAULT '{}' NOT NULL
 );
 
 DO $$ 
@@ -43,19 +43,19 @@ CREATE TABLE IF NOT EXISTS model.account(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	organization_id uuid REFERENCES model.organization(id) NOT NULL,
 	name TEXT UNIQUE,
-	properties JSON
+	properties JSON DEFAULT '{}' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS model.person(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	name TEXT,
 	emails TEXT[],
-	properties JSON
+	properties JSON DEFAULT '{}' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS model.ledger(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	account uuid NOT NULL,
+	entity_id uuid REFERENCES audit.entity(id) NOT NULL,
 	amount NUMERIC NOT NULL,
 	recorded TIMESTAMPTZ DEFAULT NOW()
 );
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS model.project(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	account_id uuid REFERENCES model.account(id) NOT NULL,
 	name TEXT UNIQUE,
-	properties JSON
+	properties JSON DEFAULT '{}' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS model.membership(
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS model.membership(
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	person_id uuid REFERENCES model.person(id) NOT NULL,
 	name TEXT,
-	properties JSON
+	properties JSON DEFAULT '{}' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS model.rate(
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS model.task(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	name TEXT,
-	properties JSON,
+	properties JSON DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_task_name_per_project UNIQUE (project_id, name)
 );
 
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS model.entry(
 	start_datetime timestamptz NOT NULL,
 	stop_datetime timestamptz NOT NULL,
 	task_id uuid REFERENCES model.task(id) NOT NULL,
-	properties JSON,
+	properties JSON DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_entry UNIQUE(membership_id, start_datetime, stop_datetime) 
 );
 

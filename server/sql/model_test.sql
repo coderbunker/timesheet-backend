@@ -107,7 +107,7 @@ $test_performance$
 $test_performance$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION model_test.test_insert_entity() RETURNS SETOF TEXT AS 
-$test_entity$
+$test_insert_entity$
 	SELECT model_test.add_person1();
 	SELECT results_eq(
 		$$ 
@@ -120,10 +120,10 @@ $test_entity$
 			('model', 'person', CURRENT_USER::text) 
 			$$
 	);
-$test_entity$ LANGUAGE sql;
+$test_insert_entity$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION model_test.test_update_entity() RETURNS SETOF TEXT AS 
-$test_entity$
+$test_update_entity$
 	SELECT model_test.add_person1();
 	SELECT model_test.update_user1();
 	SELECT results_eq(
@@ -134,10 +134,10 @@ $test_entity$
 		$$,
 		$$ VALUES ('model', 'person', CURRENT_USER::text) $$
 	);
-$test_entity$ LANGUAGE sql;
+$test_update_entity$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION model_test.test_delete_entity() RETURNS SETOF TEXT AS 
-$test_entity$
+$test_delete_entity$
 	SELECT model_test.add_person1();
 	SELECT model_test.update_user1();
 	DELETE FROM model.person WHERE emails[1] = 'rngadam@coderbunker.com';
@@ -149,11 +149,11 @@ $test_entity$
 		$$,
 		$$ VALUES ('model', 'person', CURRENT_USER::text) $$
 	);
-$test_entity$ LANGUAGE sql;
+$test_delete_entity$ LANGUAGE sql;
 
 
 CREATE OR REPLACE FUNCTION model_test.test_scenario1() RETURNS SETOF TEXT AS 
-$test_entity$
+$test_scenario1$
 DECLARE
 	person model.person;
 	account model.account;
@@ -175,10 +175,10 @@ BEGIN
 		$$ VALUES ('ACCOUNT_NAME', 'rngadam@coderbunker.com') $$ 
 	);
 END;
-$test_entity$ LANGUAGE plpgsql;
+$test_scenario1$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION model_test.test_insert_timesheet() RETURNS SETOF TEXT AS 
-$test_entity$
+$test_insert_timesheet$
 DECLARE
 	person model.person;
 	account model.account;
@@ -210,10 +210,18 @@ BEGIN
 		$$ VALUES ('Coderbunker', 'rngadam@coderbunker.com', 'ACTIVITY') $$
 	);
 END;
-$test_entity$ LANGUAGE plpgsql;
+$test_insert_timesheet$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION model_test.add_team() RETURNS SETOF model.person AS
+$$
+	INSERT INTO model.person(emails, name) 
+		VALUES 	('{"rngadam@coderbunker.com"}', 'Ricky Ng-Adam'),
+			 	('{"oscar.chan@coderbunker.com"}', 'Oscar Chan'),
+			  	('{"frederic.bazin@coderbunker.com"}', 'Frederic Bazin') RETURNING *;
+$$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model_test.test_add_project_config() RETURNS SETOF TEXT AS 
-$test_entity$
+$test_add_project_config$
 DECLARE
 	person model.person;
 	account model.account;
@@ -242,27 +250,31 @@ BEGIN
 		$$ VALUES ('New Coderbunker Project', 'Coderbunker Munich', 'New Coderbunker Customer') $$
 	);
 END;
-$test_entity$ LANGUAGE plpgsql;
+$test_add_project_config$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION model_test.test_ledger() RETURNS SETOF TEXT AS 
-$test_entity$
-	INSERT INTO model.ledger(account, amount) 
-		VALUES 	('92cb7b78-cd66-4995-8e81-74c000942294', 10), 
-				('b6c290d0-2b6a-47ee-8036-291f681ac785', -10);
+$test_ledger$
+	SELECT * FROM model_test.add_team(); 
+	INSERT INTO model.ledger(entity_id, amount) 
+		VALUES 	((SELECT id FROM model.person WHERE emails[1] = 'rngadam@coderbunker.com'), 10), 
+				((SELECT id FROM model.person WHERE emails[1] = 'frederic.bazin@coderbunker.com'), -10);
 	SELECT results_eq(
 		$$ 
 		SELECT sum(amount) FROM model.ledger;
 		$$,
 		$$ VALUES (0::NUMERIC) $$
 	);
-$test_entity$ LANGUAGE SQL;
+$test_ledger$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model_test.test_ledger_fail() RETURNS SETOF TEXT AS 
 $test_ledger_fail$
+	SELECT * FROM model_test.add_team(); 
 	SELECT throws_like(
 		$$ 
-			INSERT INTO model.ledger(account, amount) VALUES ('92cb7b78-cd66-4995-8e81-74c000942294', 10);
-			INSERT INTO model.ledger(account, amount) VALUES ('b6c290d0-2b6a-47ee-8036-291f681ac785', -9);
+			INSERT INTO model.ledger(entity_id, amount) 
+				VALUES ((SELECT id FROM model.person WHERE emails[1] = 'rngadam@coderbunker.com'), 10);
+			INSERT INTO model.ledger(entity_id, amount) 
+				VALUES ((SELECT id FROM model.person WHERE emails[1] = 'frederic.bazin@coderbunker.com'), -9);
 		$$,
 		'%balance of amount does not match, sum is 10%'
 	);
