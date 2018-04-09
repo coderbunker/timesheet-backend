@@ -53,6 +53,31 @@ CREATE TABLE IF NOT EXISTS model.person(
 	properties JSON
 );
 
+CREATE TABLE IF NOT EXISTS model.ledger(
+	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+	account uuid NOT NULL,
+	amount NUMERIC NOT NULL,
+	recorded TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE OR REPLACE FUNCTION model.check_double_entry_balance() RETURNS TRIGGER AS
+$$
+DECLARE
+	balance NUMERIC;
+BEGIN
+	SELECT SUM(amount) FROM model.ledger INTO balance;
+	IF balance <> 0 THEN
+		RAISE EXCEPTION 'balance of amount does not match, sum is %', balance;
+	END IF;
+	RETURN NEW;
+END 
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS check_double_entry_balance_trigger ON model.ledger;
+CREATE  TRIGGER check_double_entry_balance_trigger
+AFTER INSERT OR UPDATE OR DELETE ON  model.ledger
+FOR EACH STATEMENT EXECUTE PROCEDURE model.check_double_entry_balance();
+
 CREATE TABLE IF NOT EXISTS model.project(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	account_id uuid REFERENCES model.account(id) NOT NULL,

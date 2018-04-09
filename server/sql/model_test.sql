@@ -243,5 +243,30 @@ BEGIN
 	);
 END;
 $test_entity$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION model_test.test_ledger() RETURNS SETOF TEXT AS 
+$test_entity$
+	INSERT INTO model.ledger(account, amount) 
+		VALUES 	('92cb7b78-cd66-4995-8e81-74c000942294', 10), 
+				('b6c290d0-2b6a-47ee-8036-291f681ac785', -10);
+	SELECT results_eq(
+		$$ 
+		SELECT sum(amount) FROM model.ledger;
+		$$,
+		$$ VALUES (0::NUMERIC) $$
+	);
+$test_entity$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model_test.test_ledger_fail() RETURNS SETOF TEXT AS 
+$test_ledger_fail$
+	SELECT throws_like(
+		$$ 
+			INSERT INTO model.ledger(account, amount) VALUES ('92cb7b78-cd66-4995-8e81-74c000942294', 10);
+			INSERT INTO model.ledger(account, amount) VALUES ('b6c290d0-2b6a-47ee-8036-291f681ac785', -9);
+		$$,
+		'%balance of amount does not match, sum is 10%'
+	);
+$test_ledger_fail$ LANGUAGE SQL;
+
 SELECT * FROM runtests( 'model_test'::name);
 
