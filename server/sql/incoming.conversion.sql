@@ -44,7 +44,7 @@ $func$
 DECLARE
 	return_value text;
 BEGIN
-	SELECT (regexp_matches($1, '[^0-9\.]'))[1] INTO return_value;
+	SELECT (regexp_matches($1, '([^0-9\.]*)'))[1] INTO return_value;
 	RETURN return_value;
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;

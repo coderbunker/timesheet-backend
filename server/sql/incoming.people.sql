@@ -1,7 +1,8 @@
 CREATE EXTENSION IF NOT EXISTS unaccent;
+
 CREATE OR REPLACE VIEW incoming.raw_people AS
 	SELECT
-		json_array_elements((doc#>'{sheets, Balance, data}')::json) AS doc,
+		jsonb_array_elements((doc#>'{sheets, Balance, data}')::jsonb) AS doc,
 		id AS project_id
 	FROM incoming.snapshot
 	;
@@ -17,7 +18,7 @@ CREATE OR REPLACE VIEW incoming.people_project AS
 	FROM incoming.raw_people
 	;
 
-DROP MATERIALIZED VIEW incoming.nickname_to_email;
+DROP MATERIALIZED VIEW IF EXISTS incoming.nickname_to_email;
 CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
 	SELECT resource, email
 	FROM incoming.people_project
@@ -26,7 +27,6 @@ CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
 
 SELECT * FROM incoming.nickname_to_email;
 
-SELECT * FROM incoming.profile;
 CREATE OR REPLACE VIEW incoming.people AS
 	SELECT
 		fullname,

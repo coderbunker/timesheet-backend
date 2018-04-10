@@ -1,6 +1,6 @@
 CREATE OR REPLACE VIEW incoming.profile_raw AS
 	SELECT
-		json_array_elements((doc#>'{data}')::json) AS freelancer
+		jsonb_array_elements((doc#>'{data}')::jsonb) AS freelancer
 	FROM
 		incoming.snapshot
 	WHERE doc->>'apptype' = 'Slides' AND doc->>'category' = 'Freelancers'
@@ -16,7 +16,7 @@ CREATE OR REPLACE VIEW incoming.profile AS
 		freelancer->>'rate' AS rate,
 		freelancer->>'rate' AS rate_currency,
 		freelancer->>'keywords' AS keywords,
-		trim_array((freelancer->>'altnames')::json) AS altnames
+		trim_array((freelancer->>'altnames')::jsonb) AS altnames
 	FROM
 		incoming.profile_raw;
 

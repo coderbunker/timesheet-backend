@@ -2,7 +2,7 @@ DROP SCHEMA IF EXISTS model CASCADE;
 CREATE SCHEMA IF NOT EXISTS model;
  
 CREATE EXTENSION IF NOT EXISTS citext;
-DROP DOMAIN email;
+DROP DOMAIN IF EXISTS email;
 CREATE DOMAIN email AS citext
   CHECK ( value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
 
@@ -31,7 +31,7 @@ $$;
 CREATE TABLE IF NOT EXISTS model.organization(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	name TEXT UNIQUE,
-	properties JSON DEFAULT '{}' NOT NULL
+	properties JSONB DEFAULT '{}' NOT NULL
 );
 
 DO $$ 
@@ -48,18 +48,17 @@ CREATE TABLE IF NOT EXISTS model.account(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	organization_id uuid REFERENCES model.organization(id) NOT NULL,
 	name TEXT UNIQUE,
-	properties JSON DEFAULT '{}' NOT NULL
+	properties JSONB DEFAULT '{}' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS model.person(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	name TEXT,
 	email email UNIQUE,
-	properties JSON DEFAULT '{}' NOT NULL
+	properties JSONB DEFAULT '{}' NOT NULL
 );
 
 -- create unique index person_unique_lower_email_idx on model.person (lower(email));
-
 
 CREATE TABLE IF NOT EXISTS model.ledger(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -90,7 +89,7 @@ CREATE TABLE IF NOT EXISTS model.project(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	account_id uuid REFERENCES model.account(id) NOT NULL,
 	name TEXT UNIQUE,
-	properties JSON DEFAULT '{}' NOT NULL
+	properties JSONB DEFAULT '{}' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS model.membership(
@@ -98,7 +97,7 @@ CREATE TABLE IF NOT EXISTS model.membership(
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	person_id uuid REFERENCES model.person(id) NOT NULL,
 	name TEXT,
-	properties JSON DEFAULT '{}' NOT NULL
+	properties JSONB DEFAULT '{}' NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS model.rate(
@@ -114,7 +113,7 @@ CREATE TABLE IF NOT EXISTS model.task(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	name TEXT,
-	properties JSON DEFAULT '{}' NOT NULL,
+	properties JSONB DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_task_name_per_project UNIQUE (project_id, name)
 );
 
@@ -124,7 +123,7 @@ CREATE TABLE IF NOT EXISTS model.entry(
 	start_datetime timestamptz NOT NULL,
 	stop_datetime timestamptz NOT NULL,
 	task_id uuid REFERENCES model.task(id) NOT NULL,
-	properties JSON DEFAULT '{}' NOT NULL,
+	properties JSONB DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_entry UNIQUE(membership_id, start_datetime, stop_datetime) 
 );
 
@@ -168,7 +167,7 @@ CREATE OR REPLACE FUNCTION model.add_entry(
 	start_datetime TIMESTAMPTZ, 
 	stop_datetime TIMESTAMPTZ, 
 	task_name TEXT, 
-	properties JSON) RETURNS model.timesheet AS
+	properties JSONB) RETURNS model.timesheet AS
 $$
 DECLARE
 	entry model.entry;
@@ -238,7 +237,7 @@ CREATE OR REPLACE FUNCTION model.add_project_config(
 	organization_name TEXT,
 	tasks TEXT[], 
 	members uuid[], 
-	properties JSON) RETURNS model.project_config AS
+	properties JSONB) RETURNS model.project_config AS
 $$
 DECLARE
 	project model.project;
@@ -274,8 +273,11 @@ BEGIN
 	FOREACH person_id IN ARRAY members
 	LOOP
 		SELECT * FROM model.person t WHERE t.id = person_id INTO person;
-		INSERT INTO model.membership(person_id, project_id) VALUES(person_id, project.id) RETURNING * INTO membership;
-		INSERT INTO model.rate(membership_id, rate, currency) VALUES(membership.id, (person.properties->>'default_rate')::NUMERIC, person.properties->>'default_currency');
+		INSERT INTO model.membership(person_id, project_id) 
+			VALUES(person_id, project.id) 
+			RETURNING * INTO membership;
+		INSERT INTO model.rate(membership_id, rate, currency) 
+			VALUES(membership.id, (person.properties->>'default_rate')::NUMERIC, person.properties->>'default_currency');
 	END LOOP;
 
 	SELECT * FROM model.project_config WHERE model.project_config.id = project.id INTO pc; 

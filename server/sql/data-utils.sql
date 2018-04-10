@@ -11,6 +11,11 @@ CREATE OR REPLACE FUNCTION trim_array(json) RETURNS text[] AS
 $$
 	SELECT array_agg(trim(altname)) FROM json_array_elements_text($1) AS altname
 $$ LANGUAGE SQL IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION trim_array(jsonb) RETURNS text[] AS
+$$
+	SELECT array_agg(trim(altname)) FROM jsonb_array_elements_text($1) AS altname
+$$ LANGUAGE SQL IMMUTABLE;
 -- SELECT trim_array('["Sam Evers", " SamE"]') -> { "Sam Evers", "SamE" }
 
 CREATE OR REPLACE FUNCTION to_month_label(timestamptz) RETURNS text AS
