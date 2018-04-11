@@ -156,7 +156,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 			INNER JOIN model.membership ON entry.membership_id = membership.id
 			INNER JOIN model.person ON membership.person_id = person.id
 			INNER JOIN model.project ON membership.project_id = project.id
-			INNER JOIN model.task ON task.project_id = project.id
+			INNER JOIN model.task ON entry.task_id = task.id
 			INNER JOIN model.account ON project.account_id = account.id
 			INNER JOIN model.organization ON account.organization_id = organization.id
 			INNER JOIN model.rate ON membership.id = rate.membership_id
