@@ -124,9 +124,7 @@ INSERT INTO model.membership(project_id, person_id, name, properties) SELECT * F
 		GROUP BY project_id, person_id, resource
 ) converted
 ON CONFLICT(project_id, name) 
-	DO UPDATE SET properties = EXCLUDED.properties
-	WHERE membership.properties->>'docid' = EXCLUDED.properties->>'docid'
-	AND membership.properties != EXCLUDED.properties
+	DO NOTHING
 ;
 
 INSERT INTO model.rate(membership_id, rate, currency, basis, valid) SELECT * FROM (
@@ -156,5 +154,44 @@ ON CONFLICT(membership_id, basis)
 	DO NOTHING
 ;
 
+INSERT INTO model.task(project_id, name) SELECT * FROM (
+	WITH tasks AS (
+		SELECT 
+			DISTINCT(project_id, taskname),
+			project_id, 
+			taskname
+		FROM incoming.entry 
+		WHERE 
+			taskname IS NOT NULL 
+			AND length(trim(taskname)) > 0
+			AND lower(taskname) != 'Deposit'
+		GROUP BY project_id, taskname
+	) 
+	SELECT 
+		model.project.id AS project_id, 
+		taskname AS name 
+	FROM tasks 
+		INNER JOIN model.project 
+			ON tasks.project_id = model.project.properties->>'docid'
+) converted
+ON CONFLICT(project_id, name)
+	DO NOTHING
+;
 
-SELECT * FROM model.rate;
+INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime) 
+	SELECT membership.id AS membership_id, task.id AS task_id, start_datetime, stop_datetime 
+	FROM incoming.entry 
+		INNER JOIN incoming.project 
+			ON project.id = entry.project_id
+		INNER JOIN incoming.people_project 
+			ON  project.id = people_project.project_id
+		INNER JOIN model.project
+			ON model.project.properties->>'docid' =  people_project.project_id
+		INNER JOIN model.membership 
+			ON people_project.resource = membership.name AND membership.project_id = model.project.id
+		INNER JOIN model.task
+			ON task.project_id = model.project.id
+			AND task.name = taskname
+ON CONFLICT(membership_id, start_datetime, stop_datetime)
+	DO NOTHING
+;

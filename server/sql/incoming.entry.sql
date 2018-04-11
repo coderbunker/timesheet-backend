@@ -40,5 +40,6 @@ CREATE OR REPLACE VIEW incoming.entry AS
 				(length(ELEMENT->>'resource') > 0 OR length(ELEMENT->>'name') > 0) AND
 				length(ELEMENT->>'date') > 0 
 		) AS converted
+	WHERE start IS NOT NULL AND stop IS NOT NULL  
 	ORDER BY start_datetime
 	;
