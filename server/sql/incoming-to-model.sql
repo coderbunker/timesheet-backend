@@ -97,3 +97,64 @@ ON CONFLICT(name)
 	WHERE project.properties->>'docid' = EXCLUDED.properties->>'docid'
 	AND project.properties != EXCLUDED.properties
 ;
+
+INSERT INTO model.membership(project_id, person_id, name, properties) SELECT * FROM (
+	WITH properties AS (
+		SELECT 
+			resource,
+			person.id AS person_id,
+			project.id AS project_id,
+			ARRAY[
+				'email',
+				'docid'
+			] AS names, 
+			array[
+				to_jsonb(person.email), 
+				to_jsonb(people_project.project_id)
+			] AS values
+		FROM incoming.people_project
+			LEFT JOIN model.person ON people_project.email = person.email
+			LEFT JOIN model.project ON people_project.project_id = project.properties->>'docid'
+		WHERE project.id IS NOT NULL AND person.id IS NOT NULL
+	)
+	SELECT project_id, person_id, resource AS name, jsonb_object_agg(pname, pvalue) AS properties
+		FROM properties 
+			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue) ON TRUE
+		WHERE pvalue IS NOT NULL 
+		GROUP BY project_id, person_id, resource
+) converted
+ON CONFLICT(project_id, name) 
+	DO UPDATE SET properties = EXCLUDED.properties
+	WHERE membership.properties->>'docid' = EXCLUDED.properties->>'docid'
+	AND membership.properties != EXCLUDED.properties
+;
+
+INSERT INTO model.rate(membership_id, rate, currency, basis, valid) SELECT * FROM (
+	WITH project_rate_validity AS (
+		-- TODO: need to manage validity period
+		SELECT project_id, resource, min(COALESCE(start_datetime, now())) AS start_datetime
+			FROM incoming.entry
+			GROUP BY project_id, resource
+			HAVING min(start_datetime) IS NOT NULL
+	)
+	SELECT 
+		membership.id AS membership_id, 
+		project_rate AS rate, 
+		'RMB' AS currency, -- TODO: get it from default_currency
+		'hourly' AS basis, 
+		start_datetime AS valid
+	FROM model.membership 
+		-- TODO: warn on missing entries
+		INNER JOIN incoming.people_project 
+			ON membership.properties->>'docid' = people_project.project_id 
+				AND membership.name = people_project.resource
+		INNER JOIN project_rate_validity 
+			ON membership.properties->>'docid' = project_rate_validity.project_id 
+				AND membership.name = project_rate_validity.resource
+) converted
+ON CONFLICT(membership_id, basis)
+	DO NOTHING
+;
+
+
+SELECT * FROM model.rate;

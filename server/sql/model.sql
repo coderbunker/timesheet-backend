@@ -97,8 +97,10 @@ CREATE TABLE IF NOT EXISTS model.membership(
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	person_id uuid REFERENCES model.person(id) NOT NULL,
 	name TEXT,
-	properties JSONB DEFAULT '{}' NOT NULL
+	properties JSONB DEFAULT '{}' NOT NULL,
+	CONSTRAINT unique_resource_name_per_project UNIQUE (project_id, name)
 );
+
 
 CREATE TABLE IF NOT EXISTS model.rate(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -106,7 +108,8 @@ CREATE TABLE IF NOT EXISTS model.rate(
 	rate NUMERIC NOT NULL, 
 	basis TEXT DEFAULT 'hourly' NOT NULL,
 	currency CHAR(3) REFERENCES model.iso4217(code) NOT NULL,
-	valid TIMESTAMPTZ DEFAULT NOW()
+	valid TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+	CONSTRAINT unique_rate_per_resource_per_project UNIQUE (membership_id, basis)
 );
 
 CREATE TABLE IF NOT EXISTS model.task(
