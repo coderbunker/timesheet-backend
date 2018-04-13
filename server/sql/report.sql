@@ -23,7 +23,7 @@ CREATE OR REPLACE VIEW report.organization AS
 	SELECT 
 		timesheet.organization_name AS orgname,
 		timesheet_summary.since,
-		timesheet_summary.activity,	≈
+		timesheet_summary.activity,
 		person_summary.count AS people_count,
 		project_summary.count AS project_count,
 		account_summary.count AS ongoing_project_count,

@@ -15,8 +15,6 @@
 \ir incoming.people.sql
 
 -- reports
-\ir report.people.sql
-\ir report.organization.sql
 \ir incoming.warnings.sql
 
 -- postgraphql interface

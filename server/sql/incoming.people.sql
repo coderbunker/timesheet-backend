@@ -1,5 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
+DROP VIEW incoming.raw_people CASCADE;
 CREATE OR REPLACE VIEW incoming.raw_people AS
 	SELECT
 		jsonb_array_elements((doc#>'{sheets, Balance, data}')::jsonb) AS doc,
