@@ -23,19 +23,48 @@ CREATE OR REPLACE VIEW incoming.warnings AS
 			SELECT
 				to_json(entry.*) AS doc,
 				'incoming.entry' AS table_name,
+				'no task name given' AS error
+			FROM incoming.entry
+			WHERE taskname IS NULL
+		)
+		UNION ALL
+		(
+			SELECT
+				to_json(entry.*) AS doc,
+				'incoming.entry' AS table_name,
+				'no activity name given' AS error
+			FROM incoming.entry
+			WHERE taskname IS NULL
+		)
+		UNION ALL
+		(
+			SELECT
+				format('{"project_id": "%s"}', project_id)::json AS doc,
+				'incoming.entry' AS table_name,
+				'taskname is on average longer than activity - reversed?' AS error
+			FROM incoming.entry
+			WHERE activity IS NOT NULL AND taskname IS NOT NULL
+			GROUP BY project_id
+			HAVING avg(length(taskname)) > avg(length(activity))
+		)
+		UNION ALL
+		(
+			SELECT
+				to_json(entry.*) AS doc,
+				'incoming.entry' AS table_name,
 				'resource is null or length 0' AS error
 			FROM incoming.entry
 			WHERE entry.resource IS NULL OR LENGTH(entry.resource) = 0
 		)
---		UNION ALL
---		(
---			SELECT
---				to_json(entry.*) AS doc,
---				'incoming.entry' AS table_name,
---				'resource does not match anything in people' AS error
---			FROM incoming.entry LEFT JOIN incoming.people ON(entry.resource = people.resource)
---			WHERE people.fullname IS NULL
---		)
+		UNION ALL
+		(
+			SELECT
+				to_json(entry.*) AS doc,
+				'incoming.entry' AS table_name,
+				'resource does not match anything in people' AS error
+			FROM incoming.entry LEFT JOIN incoming.people ON(entry.resource = ANY(people.nicknames))
+			WHERE people.fullname IS NULL
+		)
 		UNION ALL
 		(
 			SELECT
@@ -77,12 +106,11 @@ CREATE OR REPLACE VIEW incoming.warnings AS
 			SELECT
 				(array_agg(to_json(people_project.*)))[1] AS doc,
 				'incoming.people_project' AS table_name,
-				'multiple resource matches for ' || email || ' count: ' || count(*) AS error
+				format('multiple resource matches for resource " %s" email "%s" count "%s"', resource, email, count(*)) AS error
 			FROM incoming.people_project
-			GROUP BY project_id, email
+			GROUP BY project_id, email, resource
 			HAVING count(*) > 1
 		)
 	) AS all_errors
 	;
 
--- SELECT * FROM incoming.warnings;

@@ -30,7 +30,6 @@ CREATE OR REPLACE VIEW report.duplicate_entries AS
 	ORDER BY resource, project_name
 ;
 
-
 CREATE OR REPLACE VIEW report.summary_person AS
 	SELECT
 		round(extract(HOUR FROM sum(duration)))::integer AS total_hours,
