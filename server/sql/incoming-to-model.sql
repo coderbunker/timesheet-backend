@@ -178,20 +178,25 @@ ON CONFLICT(project_id, name)
 	DO NOTHING
 ;
 
+WITH incoming_timesheet AS (
+	SELECT entry.*
+		FROM incoming.entry
+			INNER JOIN incoming.project 
+				ON project.id = entry.project_id
+			INNER JOIN incoming.people_project 
+				ON  incoming.project.id = people_project.project_id AND people_project.resource = entry.resource			
+)
 INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime) 
 	SELECT membership.id AS membership_id, task.id AS task_id, start_datetime, stop_datetime 
-	FROM incoming.entry 
-		INNER JOIN incoming.project 
-			ON project.id = entry.project_id
-		INNER JOIN incoming.people_project 
-			ON  project.id = people_project.project_id
+	FROM incoming_timesheet
 		INNER JOIN model.project
-			ON model.project.properties->>'docid' =  people_project.project_id
+			ON model.project.properties->>'docid' =  incoming_timesheet.project_id
 		INNER JOIN model.membership 
-			ON people_project.resource = membership.name AND membership.project_id = model.project.id
+			ON incoming_timesheet.resource = membership.name AND membership.project_id = model.project.id
 		INNER JOIN model.task
 			ON task.project_id = model.project.id
 			AND task.name = taskname
 ON CONFLICT(membership_id, start_datetime, stop_datetime)
 	DO NOTHING
 ;
+

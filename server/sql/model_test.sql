@@ -170,8 +170,8 @@ BEGIN
 	SELECT * FROM model_test.add_task1(project.id) INTO task;
 	SELECT * FROM model_test.add_entry1(membership.id, task.id) INTO entry;
 	RETURN QUERY SELECT * FROM results_eq(
-		$$ SELECT account_name, email FROM model.timesheet $$,
-		$$ VALUES ('ACCOUNT_NAME', 'ritchie.kernighan@coderbunker.com'::email) $$ 
+		format($$ SELECT account_name, email FROM model.timesheet WHERE id = '%s'; $$, entry.id),
+		$$ VALUES ('ACCOUNT_NAME', 'ritchie.kernighan@coderbunker.com'::email); $$ 
 	);
 END;
 $test_scenario1$ LANGUAGE plpgsql;
@@ -205,7 +205,9 @@ BEGIN
 		);
 		
 	RETURN query SELECT * FROM results_eq(
-		$$ SELECT account_name, email, properties->>'activity' FROM model.timesheet $$,
+		format($$ 
+			SELECT account_name, email, properties->>'activity' FROM model.timesheet WHERE id = '%s';
+		$$, timesheet.id),
 		$$ VALUES ('Coderbunker', 'ritchie.kernighan@coderbunker.com'::email, 'ACTIVITY') $$
 	);
 END;
@@ -245,8 +247,12 @@ BEGIN
 	);
 		
 	RETURN query SELECT * FROM results_eq(
-		$$ SELECT project_name, organization_name, account_name  FROM model.project_config $$,
-		$$ VALUES ('New Coderbunker Project', 'Coderbunker Munich', 'New Coderbunker Customer') $$
+		format($$ 
+			SELECT project_name, organization_name, account_name 
+			FROM model.project_config 
+			WHERE project_config.id = '%s'; 
+		$$, project_config.id),
+		$$ VALUES ('New Coderbunker Project', 'Coderbunker Munich', 'New Coderbunker Customer'); $$
 	);
 END;
 $test_add_project_config$ LANGUAGE plpgsql;
@@ -261,7 +267,7 @@ $test_ledger$
 		$$ 
 		SELECT sum(amount) FROM model.ledger;
 		$$,
-		$$ VALUES (0::NUMERIC) $$
+		$$ VALUES (0::NUMERIC); $$
 	);
 $test_ledger$ LANGUAGE SQL;
 

@@ -18,14 +18,12 @@ CREATE OR REPLACE VIEW incoming.people_project AS
 	FROM incoming.raw_people
 	;
 
-DROP MATERIALIZED VIEW IF EXISTS incoming.nickname_to_email;
+DROP MATERIALIZED VIEW IF EXISTS incoming.nickname_to_email CASCADE;
 CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
 	SELECT resource, email
 	FROM incoming.people_project
 	WHERE resource IS NOT NULL
 	GROUP BY resource, email;
-
-SELECT * FROM incoming.nickname_to_email;
 
 CREATE OR REPLACE VIEW incoming.people AS
 	SELECT
@@ -41,5 +39,3 @@ CREATE OR REPLACE VIEW incoming.people AS
 			WHERE nickname_to_email.email = profile.email
 		) AS t ON TRUE
 	;
-	
-SELECT * FROM incoming.people WHERE nicknames IS NOT null;

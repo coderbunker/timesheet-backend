@@ -1,11 +1,6 @@
-DROP SCHEMA IF EXISTS model CASCADE;
+-- DROP SCHEMA IF EXISTS model CASCADE;
 CREATE SCHEMA IF NOT EXISTS model;
  
-CREATE EXTENSION IF NOT EXISTS citext;
-DROP DOMAIN IF EXISTS email;
-CREATE DOMAIN email AS citext
-  CHECK ( value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
-
 CREATE TABLE IF NOT EXISTS model.iso4217(
 	code CHAR(3) PRIMARY KEY
 );
@@ -57,8 +52,6 @@ CREATE TABLE IF NOT EXISTS model.person(
 	email email UNIQUE,
 	properties JSONB DEFAULT '{}' NOT NULL
 );
-
--- create unique index person_unique_lower_email_idx on model.person (lower(email));
 
 CREATE TABLE IF NOT EXISTS model.ledger(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -137,84 +130,35 @@ SELECT audit.add_audit(schemaname, tablename) FROM (
 		WHERE schemaname = 'model' AND tgname IS null
 ) t;
 
-SELECT * FROM pg_catalog.pg_trigger;
-
 CREATE OR REPLACE VIEW model.timesheet AS
 	SELECT 
 		entry.id AS id,
+		project.id AS project_id,
+		membership.id AS membership_id,
+		account.id AS account_id,
+		organization.id AS organization_id,
 		organization.name AS organization_name,
 		project.name AS project_name,
 		account.name AS account_name,
-		entry.start_datetime,
-		entry.stop_datetime,
-		email,
+		person.name AS person_name,
+		membership.name AS membership_name,
+		entry.start_datetime AS start_datetime,
+		entry.stop_datetime AS stop_datetime,
+		person.email AS email,
 		task.name AS task_name,
-		entry.properties,
-		rate.currency,
-		rate.rate
-		FROM model.entry 
-			INNER JOIN model.membership ON entry.membership_id = membership.id
-			INNER JOIN model.person ON membership.person_id = person.id
-			INNER JOIN model.project ON membership.project_id = project.id
-			INNER JOIN model.task ON entry.task_id = task.id
-			INNER JOIN model.account ON project.account_id = account.id
-			INNER JOIN model.organization ON account.organization_id = organization.id
-			INNER JOIN model.rate ON membership.id = rate.membership_id
-			INNER JOIN model.iso4217 ON rate.currency = iso4217.code
+		entry.properties AS properties,
+		rate.currency AS currency,
+		rate.rate AS rate
+	FROM model.entry 
+		INNER JOIN model.membership ON entry.membership_id = membership.id
+		INNER JOIN model.task ON entry.task_id = task.id
+		INNER JOIN model.person ON membership.person_id = person.id
+		INNER JOIN model.project ON membership.project_id = project.id
+		INNER JOIN model.account ON project.account_id = account.id
+		INNER JOIN model.organization ON account.organization_id = organization.id
+		INNER JOIN model.rate ON membership.id = rate.membership_id
+		INNER JOIN model.iso4217 ON rate.currency = iso4217.code
 	;
-
-
-CREATE OR REPLACE FUNCTION model.add_entry(
-	project_name TEXT,
-	email_ TEXT,
-	start_datetime TIMESTAMPTZ, 
-	stop_datetime TIMESTAMPTZ, 
-	task_name TEXT, 
-	properties JSONB) RETURNS model.timesheet AS
-$$
-DECLARE
-	entry model.entry;
-	task model.task;
-	project model.project;
-	membership model.membership;
-	ts model.timesheet;
-BEGIN
-	SELECT * INTO task FROM model.task t WHERE t.name = task_name;
-	IF task IS NULL THEN
-		RAISE EXCEPTION 'Nonexistent task --> %', task_name USING HINT = 'Create task';
-	END IF;
-	SELECT * INTO project FROM model.project WHERE name = project_name;
-	IF project IS NULL THEN
-		RAISE EXCEPTION 'Nonexistent project --> %', project_name USING HINT = 'Create project';
-	END IF;
-	SELECT * INTO membership
-		FROM model.membership m
-			INNER JOIN model.person p ON p.id = m.person_id 
-		WHERE p.email = email_ AND m.project_id = project.id;
-	IF membership IS NULL THEN
-		RAISE EXCEPTION 'Nonexistent membership --> %', email_ USING HINT = 'Create membership with this email';
-	END IF;
-
-	INSERT INTO model.entry(
-		start_datetime, 
-		stop_datetime, 
-		task_id, 
-		membership_id,
-		properties) 
-	VALUES (
-		start_datetime,
-   		stop_datetime,
-   		task.id,
-   		membership.id,
-   		properties) 
-	RETURNING * INTO entry;
-
-	SELECT * INTO ts 
-		FROM model.timesheet t WHERE t.id = entry.id;
-
-	RETURN ts;
-END
-$$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE VIEW model.project_config AS
@@ -233,57 +177,3 @@ CREATE OR REPLACE VIEW model.project_config AS
 			INNER JOIN model.organization ON account.organization_id = organization.id
 		GROUP BY project.id
 	;
-
-CREATE OR REPLACE FUNCTION model.add_project_config(
-	project_name TEXT,
-	account_name TEXT,
-	organization_name TEXT,
-	tasks TEXT[], 
-	members uuid[], 
-	properties JSONB) RETURNS model.project_config AS
-$$
-DECLARE
-	project model.project;
-	organization model.organization;
-	account	model.account;
-	membership	model.membership;
-	person	model.person;
-	person_id uuid;
-	task TEXT;
-    pc model.project_config;
-
-BEGIN
-	SELECT * FROM model.organization t WHERE t.name = organization_name INTO organization;
-	IF organization IS NULL THEN
-		INSERT INTO model.organization(name) VALUES(organization_name) RETURNING * INTO organization;
-	END IF;
-
-	SELECT * FROM model.account t WHERE t.name = account_name INTO account;
-	IF account IS NULL THEN
-		INSERT INTO model.account(name, organization_id) VALUES(account_name, organization.id)  RETURNING * INTO account;
-	END IF;
-
-	SELECT * FROM model.project t WHERE t.name = project_name INTO project;
-	IF project IS NULL THEN
-		INSERT INTO model.project(name, account_id) VALUES(project_name, account.id) RETURNING * INTO project;
-	END IF;
-	
-	FOREACH task IN ARRAY tasks
-	LOOP
-		INSERT INTO model.task(name, project_id) VALUES(task, project.id);
-	END LOOP;
-
-	FOREACH person_id IN ARRAY members
-	LOOP
-		SELECT * FROM model.person t WHERE t.id = person_id INTO person;
-		INSERT INTO model.membership(person_id, project_id) 
-			VALUES(person_id, project.id) 
-			RETURNING * INTO membership;
-		INSERT INTO model.rate(membership_id, rate, currency) 
-			VALUES(membership.id, (person.properties->>'default_rate')::NUMERIC, person.properties->>'default_currency');
-	END LOOP;
-
-	SELECT * FROM model.project_config WHERE model.project_config.id = project.id INTO pc; 
-	RETURN pc;
-END; 
-$$ LANGUAGE PLPGSQL;

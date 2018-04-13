@@ -27,7 +27,8 @@ CREATE OR REPLACE VIEW report.duplicate_entries AS
 	FROM report.entry_people_project
 	GROUP BY email, project_id, start_datetime, stop_datetime
 	HAVING COUNT(*) > 1
-	ORDER BY resource, project_name;
+	ORDER BY resource, project_name
+;
 
 
 CREATE OR REPLACE VIEW report.summary_person AS
