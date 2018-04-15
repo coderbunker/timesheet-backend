@@ -16,7 +16,8 @@ CREATE OR REPLACE VIEW report.organization AS
 	), timesheet_summary AS (
 		SELECT 
 			min(start_datetime) AS since,
-			EXTRACT(hour FROM sum(stop_datetime-start_datetime)) AS total_hours,
+			extract(HOUR FROM sum(duration)) AS total_hours,
+			sum(total) AS total_gross,
 			age(now(), min(start_datetime))::text AS activity
 		FROM model.timesheet
 	)
@@ -27,8 +28,9 @@ CREATE OR REPLACE VIEW report.organization AS
 		person_summary.count AS people_count,
 		project_summary.count AS project_count,
 		account_summary.count AS ongoing_project_count,
-		timesheet_summary.total_hours::integer AS total_hours,
-		((timesheet_summary.total_hours)/168)::integer AS total_eng_months
+		timesheet_summary.total_hours AS total_hours,
+		((timesheet_summary.total_hours)/168)::integer AS total_eng_months,	
+		timesheet_summary.total_gross
 	FROM 
 		model.timesheet, 
 		person_summary,
@@ -44,9 +46,10 @@ CREATE OR REPLACE VIEW report.project AS
 		project_name,
 		organization_name,
 		count(*) entry_count,
-		sum(stop_datetime-start_datetime) AS total_entry,
-		avg(stop_datetime-start_datetime) AS avg_entry,
-		max(stop_datetime-start_datetime) AS max_entry,
+		sum(duration) AS total_entry,
+		avg(duration) AS avg_entry,
+		min(duration) AS min_entry,
+		max(duration) AS max_entry,
 		count(distinct(email)) AS persons
 	FROM model.timesheet
 	GROUP BY project_id, project_name, organization_name

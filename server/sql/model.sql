@@ -123,7 +123,8 @@ CREATE TABLE IF NOT EXISTS model.entry(
 	task_id uuid REFERENCES model.task(id) NOT NULL,
 	properties JSONB DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_entry UNIQUE(membership_id, start_datetime, stop_datetime), 
-	CONSTRAINT start_before_stop CHECK(start_datetime < stop_datetime)
+	CONSTRAINT start_before_stop CHECK(start_datetime < stop_datetime),
+	CONSTRAINT maximum_duration CHECK((stop_datetime - start_datetime) < INTERVAL '14 hours')
 );
 
 SELECT audit.add_audit(schemaname, tablename) FROM (
@@ -132,6 +133,12 @@ SELECT audit.add_audit(schemaname, tablename) FROM (
 			LEFT JOIN pg_catalog.pg_trigger ON tgname = 'trigger_insert_entity_' || tablename
 		WHERE schemaname = 'model' AND tgname IS null
 ) t;
+
+
+CREATE OR REPLACE FUNCTION model.convert_numeric_hours(i INTERVAL) RETURNS NUMERIC AS
+$$
+	SELECT (EXTRACT(HOUR FROM i) + (EXTRACT(MINUTE FROM i)/60))::NUMERIC
+$$ LANGUAGE SQL IMMUTABLE;
 
 CREATE OR REPLACE VIEW model.timesheet AS
 	SELECT 
@@ -153,7 +160,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		rate.currency AS currency,
 		rate.rate AS rate,
 		(stop_datetime-start_datetime) AS duration,
-		EXTRACT(HOUR FROM (stop_datetime-start_datetime)) * rate AS total
+		model.convert_numeric_hours(stop_datetime-start_datetime) * rate AS total
 	FROM model.entry 
 		INNER JOIN model.membership ON entry.membership_id = membership.id
 		INNER JOIN model.task ON entry.task_id = task.id

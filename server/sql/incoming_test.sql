@@ -25,7 +25,6 @@ $test_convert_stop$ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION incoming_test.test_no_entry_with_stop_before_start() RETURNS SETOF TEXT AS 
 $test_no_entry_with_stop_before_start$
 BEGIN
-	
 	RETURN QUERY SELECT is_empty($$
 			SELECT * FROM incoming.entry WHERE start > stop;
 		$$

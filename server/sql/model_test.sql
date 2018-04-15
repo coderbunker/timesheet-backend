@@ -400,6 +400,50 @@ BEGIN
 END;
 $test_email_case_insensitive$ LANGUAGE PLPGSQL;
 
+
+CREATE OR REPLACE FUNCTION model_test.test_cannot_add_excessive_duration() RETURNS SETOF TEXT AS 
+$test_email_case_insensitive$
+DECLARE
+	project_config model.project_config;
+BEGIN
+	
+	SELECT * FROM model_test.add_project_config1() INTO project_config;
+	RETURN QUERY SELECT throws_like(format($$
+		INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
+			VALUES(
+				'%s', 
+				'%s', 
+				NOW() - INTERVAL '14 hour',
+				NOW()
+		);
+		$$, project_config.membership_ids[1], project_config.task_ids[1]), 
+		'%violates check constraint "maximum_duration"%'
+	);
+END;
+$test_email_case_insensitive$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION model_test.test_cannot_add_negative_duration() RETURNS SETOF TEXT AS 
+$test_email_case_insensitive$
+BEGIN
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '30 minutes')); $$,
+		$$ VALUES(0.5) $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '15 minutes')); $$,
+		$$ VALUES(0.25) $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '10 minutes')); $$,
+		$$ VALUES(0.166666666666667) $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '1 hour 10 minutes')); $$,
+		$$ VALUES(1.16666666666667) $$
+	);
+END;
+$test_email_case_insensitive$ LANGUAGE PLPGSQL;
+
 SELECT * FROM runtests( 'model_test'::name);
 
 
