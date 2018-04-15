@@ -423,7 +423,7 @@ END;
 $test_email_case_insensitive$ LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE FUNCTION model_test.test_cannot_add_negative_duration() RETURNS SETOF TEXT AS 
-$test_email_case_insensitive$
+$test_cannot_add_negative_duration$
 BEGIN
 	RETURN QUERY SELECT results_eq(
 		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '30 minutes')); $$,
@@ -442,7 +442,7 @@ BEGIN
 		$$ VALUES(1.16666666666667) $$
 	);
 END;
-$test_email_case_insensitive$ LANGUAGE PLPGSQL;
+$test_cannot_add_negative_duration$ LANGUAGE PLPGSQL;
 
 SELECT * FROM runtests( 'model_test'::name);
 
