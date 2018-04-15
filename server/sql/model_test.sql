@@ -222,18 +222,11 @@ $$
 	) t(email, name);
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model_test.test_add_project_config() RETURNS SETOF TEXT AS 
+CREATE OR REPLACE FUNCTION model_test.add_project_config1() RETURNS model.project_config AS 
 $test_add_project_config$
 DECLARE
-	account model.account;
-	project model.project;
-	membership model.membership;
-	task model.task;
-	entry model.entry;
-	organization model.organization;
 	project_config model.project_config;
 	person model.person;
-
 BEGIN
 	SELECT * FROM model_test.add_team() INTO person;
 
@@ -245,6 +238,18 @@ BEGIN
 		(SELECT array_agg(id) FROM model.person WHERE name IN ('Ritchie Kernighan', 'Stephen Wozniak', 'Bill Gates')),
 		'{"codename": "project doom"}'::JSONB
 	);
+
+	RETURN project_config;
+END;
+$test_add_project_config$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION model_test.test_add_project_config() RETURNS SETOF TEXT AS 
+$test_add_project_config$
+DECLARE
+	project_config model.project_config;
+BEGIN
+
+	SELECT * FROM model_test.add_project_config1() INTO project_config;
 		
 	RETURN query SELECT * FROM results_eq(
 		format($$ 
@@ -261,18 +266,8 @@ CREATE OR REPLACE FUNCTION model_test.test_entry_update_updates_result() RETURNS
 $test_entry_update_updates_result$
 DECLARE
 	project_config model.project_config;
-	person model.person;
 BEGIN
-	SELECT * FROM model_test.add_team() INTO person;
-
-	SELECT * INTO project_config FROM model.add_project_config(
-		'New Coderbunker Project', 
-		'New Coderbunker Customer',
-		'Coderbunker Munich',
-		$$ {'Planning', 'Development', 'Testing'} $$,
-		(SELECT array_agg(id) FROM model.person WHERE name IN ('Ritchie Kernighan', 'Stephen Wozniak', 'Bill Gates')),
-		'{"codename": "project moon laser"}'::JSONB
-	);
+	SELECT * FROM model_test.add_project_config1() INTO project_config;
 		
 	RETURN query SELECT * FROM is_empty(
 		format($$ 
@@ -365,8 +360,47 @@ $test_email_case_insensitive$
 	);
 $test_email_case_insensitive$ LANGUAGE SQL;
 
-SELECT * FROM runtests( 'model_test'::name);
+CREATE OR REPLACE FUNCTION model_test.test_views_tables_performance() RETURNS SETOF TEXT AS 
+$test_email_case_insensitive$
+BEGIN
+	RETURN QUERY SELECT performs_ok(
+		format('SELECT * FROM "%s"."%s";', schemaname, objectname),
+		1000,
+		format('check that %s.%s is fast enough (less than 1s)', schemaname, objectname)
+		) FROM (
+			SELECT schemaname, tablename AS objectname 
+				FROM pg_catalog.pg_tables 
+				WHERE schemaname = 'model' OR schemaname = 'report'
+			UNION ALL
+				SELECT schemaname, viewname AS objectname 
+					FROM pg_catalog.pg_views
+					WHERE schemaname = 'model' OR schemaname = 'report'
+		) t;
+END;
+$test_email_case_insensitive$ LANGUAGE PLPGSQL;
 
+CREATE OR REPLACE FUNCTION model_test.test_cannot_add_negative_duration() RETURNS SETOF TEXT AS 
+$test_email_case_insensitive$
+DECLARE
+	project_config model.project_config;
+BEGIN
+	
+	SELECT * FROM model_test.add_project_config1() INTO project_config;
+	RETURN QUERY SELECT throws_like(format($$
+		INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
+			VALUES(
+				'%s', 
+				'%s', 
+				NOW(),
+				NOW() - INTERVAL '1 hour'
+		);
+		$$, project_config.membership_ids[1], project_config.task_ids[1]), 
+		'%violates check constraint "start_before_stop"%'
+	);
+END;
+$test_email_case_insensitive$ LANGUAGE PLPGSQL;
+
+SELECT * FROM runtests( 'model_test'::name);
 
 
 

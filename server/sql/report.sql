@@ -31,8 +31,8 @@ CREATE OR REPLACE VIEW report.organization AS
 		((timesheet_summary.total_hours)/168)::integer AS total_eng_months
 	FROM 
 		model.timesheet, 
-		person_summary, 
-		project_summary, 
+		person_summary,
+		project_summary,
 		account_summary, 
 		timesheet_summary
 	LIMIT 1

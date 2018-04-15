@@ -15,7 +15,7 @@ CREATE OR REPLACE VIEW incoming.raw_entry AS
 CREATE OR REPLACE VIEW incoming.entry AS
 	SELECT
 		DATE + START AS start_datetime,
-		DATE + stop AS stop_datetime,
+		DATE + incoming.convert_stop(START, stop) AS stop_datetime,
 		START,
 		incoming.convert_stop(START, stop) AS stop,
 		incoming.convert_stop(START, stop) - START AS duration,
@@ -38,8 +38,9 @@ CREATE OR REPLACE VIEW incoming.entry AS
 			FROM incoming.raw_entry AS ELEMENT
 			WHERE
 				(length(ELEMENT->>'resource') > 0 OR length(ELEMENT->>'name') > 0) AND
-				length(ELEMENT->>'date') > 0 
+				length(ELEMENT->>'date') > 0
 		) AS converted
 	WHERE start IS NOT NULL AND stop IS NOT NULL  
+	AND start <> stop
 	ORDER BY start_datetime
 	;

@@ -122,7 +122,8 @@ CREATE TABLE IF NOT EXISTS model.entry(
 	stop_datetime timestamptz NOT NULL,
 	task_id uuid REFERENCES model.task(id) NOT NULL,
 	properties JSONB DEFAULT '{}' NOT NULL,
-	CONSTRAINT unique_entry UNIQUE(membership_id, start_datetime, stop_datetime) 
+	CONSTRAINT unique_entry UNIQUE(membership_id, start_datetime, stop_datetime), 
+	CONSTRAINT start_before_stop CHECK(start_datetime < stop_datetime)
 );
 
 SELECT audit.add_audit(schemaname, tablename) FROM (
@@ -150,7 +151,9 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		task.name AS task_name,
 		entry.properties AS properties,
 		rate.currency AS currency,
-		rate.rate AS rate
+		rate.rate AS rate,
+		(stop_datetime-start_datetime) AS duration,
+		EXTRACT(HOUR FROM (stop_datetime-start_datetime)) * rate AS total
 	FROM model.entry 
 		INNER JOIN model.membership ON entry.membership_id = membership.id
 		INNER JOIN model.task ON entry.task_id = task.id
