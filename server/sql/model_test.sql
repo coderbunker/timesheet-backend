@@ -257,6 +257,49 @@ BEGIN
 END;
 $test_add_project_config$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION model_test.test_entry_update_updates_result() RETURNS SETOF TEXT AS 
+$test_entry_update_updates_result$
+DECLARE
+	project_config model.project_config;
+	person model.person;
+BEGIN
+	SELECT * FROM model_test.add_team() INTO person;
+
+	SELECT * INTO project_config FROM model.add_project_config(
+		'New Coderbunker Project', 
+		'New Coderbunker Customer',
+		'Coderbunker Munich',
+		$$ {'Planning', 'Development', 'Testing'} $$,
+		(SELECT array_agg(id) FROM model.person WHERE name IN ('Ritchie Kernighan', 'Stephen Wozniak', 'Bill Gates')),
+		'{"codename": "project moon laser"}'::JSONB
+	);
+		
+	RETURN query SELECT * FROM is_empty(
+		format($$ 
+			SELECT total_entry 
+			FROM report.project 
+			WHERE project_id = '%s'; 
+		$$, project_config.id)
+	);
+	
+	INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
+		VALUES(
+			project_config.membership_ids[1], 
+			project_config.task_ids[1], 
+			NOW() - INTERVAL '1 hour', 
+			NOW());
+	
+	RETURN query SELECT * FROM results_eq(
+		format($$ 
+			SELECT total_entry 
+			FROM report.project 
+			WHERE project_id = '%s'; 
+		$$, project_config.id),
+		$$ VALUES (INTERVAL '1 hour'); $$
+	);
+END;
+$test_entry_update_updates_result$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION model_test.test_ledger() RETURNS SETOF TEXT AS 
 $test_ledger$
 	SELECT * FROM model_test.add_team(); 

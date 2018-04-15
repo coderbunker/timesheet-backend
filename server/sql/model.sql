@@ -55,9 +55,11 @@ CREATE TABLE IF NOT EXISTS model.person(
 
 CREATE TABLE IF NOT EXISTS model.ledger(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	entity_id uuid REFERENCES audit.entity(id) NOT NULL,
+	source_id uuid REFERENCES audit.entity(id) NOT NULL,
+	destination_id uuid REFERENCES audit.entity(id) NOT NULL,
 	amount NUMERIC NOT NULL,
-	recorded TIMESTAMPTZ DEFAULT NOW()
+	recorded TIMESTAMPTZ DEFAULT NOW(),
+	properties JSONB DEFAULT '{}' NOT NULL
 );
 
 CREATE OR REPLACE FUNCTION model.check_double_entry_balance() RETURNS TRIGGER AS
@@ -167,8 +169,10 @@ CREATE OR REPLACE VIEW model.project_config AS
 		project.name AS project_name,
 		max(organization.name) AS organization_name,
 		max(account.name) AS account_name,
-		array_agg(task.name) AS tasks,
-		array_agg(person.name || ' ' || COALESCE(membership.name, '')) AS members
+		array_agg(DISTINCT(task.name)) AS tasks,
+		array_agg(DISTINCT(person.name)) AS members,
+		array_agg(DISTINCT(membership.id)) AS membership_ids,
+		array_agg(DISTINCT(task.id)) AS task_ids
 		FROM model.project 
 			INNER JOIN model.membership ON membership.project_id = project.id
 			INNER JOIN model.person ON membership.person_id = person.id
@@ -176,4 +180,4 @@ CREATE OR REPLACE VIEW model.project_config AS
 			INNER JOIN model.account ON project.account_id = account.id
 			INNER JOIN model.organization ON account.organization_id = organization.id
 		GROUP BY project.id
-	;
+		;

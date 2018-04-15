@@ -42,12 +42,13 @@ CREATE OR REPLACE VIEW report.project AS
 	SELECT 
 		project_id,
 		project_name,
+		organization_name,
 		count(*) entry_count,
-		sum(stop_datetime-start_datetime) AS total_hours,
+		sum(stop_datetime-start_datetime) AS total_entry,
 		avg(stop_datetime-start_datetime) AS avg_entry,
 		max(stop_datetime-start_datetime) AS max_entry,
 		count(distinct(email)) AS persons
 	FROM model.timesheet
-	GROUP BY project_id, project_name
-	ORDER BY total_hours DESC
+	GROUP BY project_id, project_name, organization_name
+	ORDER BY total_entry DESC
 	;
