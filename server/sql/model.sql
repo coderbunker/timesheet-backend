@@ -141,6 +141,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		membership.id AS membership_id,
 		account.id AS account_id,
 		organization.id AS organization_id,
+		person.id AS person_id,
 		organization.name AS organization_name,
 		project.name AS project_name,
 		account.name AS account_name,
