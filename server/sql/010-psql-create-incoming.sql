@@ -1,6 +1,6 @@
 -- reusable function logic
+\ir utils.sql
 \ir business-logic.sql
-\ir data-utils.sql
 \ir incoming.conversion.sql
 
 -- snapshot api and store

@@ -1,5 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS report;
 
+DROP VIEW IF EXISTS report.organization;
 CREATE OR REPLACE VIEW report.organization AS
 	WITH person_summary AS (
 		SELECT 
@@ -40,18 +41,20 @@ CREATE OR REPLACE VIEW report.organization AS
 	LIMIT 1
 	;
 
+DROP VIEW IF EXISTS report.project;
 CREATE OR REPLACE VIEW report.project AS
 	SELECT 
 		project_id,
 		project_name,
 		organization_name,
 		count(*) entry_count,
-		sum(duration) AS total_entry,
-		avg(duration) AS avg_entry,
-		min(duration) AS min_entry,
-		max(duration) AS max_entry,
+		round(utils.to_numeric_hours(sum(duration)), 2) AS total_entry_hours,
+		round(utils.to_numeric_hours(avg(duration)), 2) AS avg_entry_hours,
+		round(utils.to_numeric_hours(min(duration)), 2) AS min_entry_hours,
+		round(utils.to_numeric_hours(max(duration)), 2) AS max_entry_hours,
+		round(sum(total), 2) AS total_gross,
 		count(distinct(email)) AS persons
 	FROM model.timesheet
 	GROUP BY project_id, project_name, organization_name
-	ORDER BY total_entry DESC
+	ORDER BY total_gross DESC
 	;

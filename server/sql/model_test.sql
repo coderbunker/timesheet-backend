@@ -271,7 +271,7 @@ BEGIN
 		
 	RETURN query SELECT * FROM is_empty(
 		format($$ 
-			SELECT total_entry 
+			SELECT total_entry_hours
 			FROM report.project 
 			WHERE project_id = '%s'; 
 		$$, project_config.id)
@@ -286,11 +286,11 @@ BEGIN
 	
 	RETURN query SELECT * FROM results_eq(
 		format($$ 
-			SELECT total_entry 
+			SELECT total_entry_hours
 			FROM report.project 
 			WHERE project_id = '%s'; 
 		$$, project_config.id),
-		$$ VALUES (INTERVAL '1 hour'); $$
+		$$ VALUES (1.0); $$
 	);
 END;
 $test_entry_update_updates_result$ LANGUAGE plpgsql;
@@ -402,7 +402,7 @@ $test_email_case_insensitive$ LANGUAGE PLPGSQL;
 
 
 CREATE OR REPLACE FUNCTION model_test.test_cannot_add_excessive_duration() RETURNS SETOF TEXT AS 
-$test_email_case_insensitive$
+$test_cannot_add_excessive_duration$
 DECLARE
 	project_config model.project_config;
 BEGIN
@@ -420,29 +420,7 @@ BEGIN
 		'%violates check constraint "maximum_duration"%'
 	);
 END;
-$test_email_case_insensitive$ LANGUAGE PLPGSQL;
-
-CREATE OR REPLACE FUNCTION model_test.test_cannot_add_negative_duration() RETURNS SETOF TEXT AS 
-$test_cannot_add_negative_duration$
-BEGIN
-	RETURN QUERY SELECT results_eq(
-		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '30 minutes')); $$,
-		$$ VALUES(0.5) $$
-	);
-	RETURN QUERY SELECT results_eq(
-		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '15 minutes')); $$,
-		$$ VALUES(0.25) $$
-	);
-	RETURN QUERY SELECT results_eq(
-		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '10 minutes')); $$,
-		$$ VALUES(0.166666666666667) $$
-	);
-	RETURN QUERY SELECT results_eq(
-		$$ SELECT model.convert_numeric_hours(now() - (now() - INTERVAL '1 hour 10 minutes')); $$,
-		$$ VALUES(1.16666666666667) $$
-	);
-END;
-$test_cannot_add_negative_duration$ LANGUAGE PLPGSQL;
+$test_cannot_add_excessive_duration$ LANGUAGE PLPGSQL;
 
 SELECT * FROM runtests( 'model_test'::name);
 

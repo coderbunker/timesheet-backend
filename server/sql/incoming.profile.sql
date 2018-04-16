@@ -16,7 +16,7 @@ CREATE OR REPLACE VIEW incoming.profile AS
 		freelancer->>'rate' AS rate,
 		freelancer->>'rate' AS rate_currency,
 		freelancer->>'keywords' AS keywords,
-		trim_array((freelancer->>'altnames')::jsonb) AS altnames
+		utils.trim_array((freelancer->>'altnames')::jsonb) AS altnames
 	FROM
 		incoming.profile_raw;
 

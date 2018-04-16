@@ -134,12 +134,6 @@ SELECT audit.add_audit(schemaname, tablename) FROM (
 		WHERE schemaname = 'model' AND tgname IS null
 ) t;
 
-
-CREATE OR REPLACE FUNCTION model.convert_numeric_hours(i INTERVAL) RETURNS NUMERIC AS
-$$
-	SELECT (EXTRACT(HOUR FROM i) + (EXTRACT(MINUTE FROM i)/60))::NUMERIC
-$$ LANGUAGE SQL IMMUTABLE;
-
 CREATE OR REPLACE VIEW model.timesheet AS
 	SELECT 
 		entry.id AS id,
@@ -160,7 +154,7 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		rate.currency AS currency,
 		rate.rate AS rate,
 		(stop_datetime-start_datetime) AS duration,
-		model.convert_numeric_hours(stop_datetime-start_datetime) * rate AS total
+		utils.to_numeric_hours(stop_datetime-start_datetime) * rate AS total
 	FROM model.entry 
 		INNER JOIN model.membership ON entry.membership_id = membership.id
 		INNER JOIN model.task ON entry.task_id = task.id
