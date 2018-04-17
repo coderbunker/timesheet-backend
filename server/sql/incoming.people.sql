@@ -13,7 +13,7 @@ CREATE OR REPLACE VIEW incoming.people_project AS
 		project_id,
 		incoming.search_profile(doc->>'resource') AS email,
 		(doc->>'resource') as resource,
-		-- todo: apply discount if available
+		incoming.extract_percentage(doc->>'ratediscount')  AS project_rate_discount,
 		incoming.extract_rate(doc->>'rate') AS project_rate,
 		incoming.extract_currency(doc->>'rate') AS currency
 	FROM incoming.raw_people

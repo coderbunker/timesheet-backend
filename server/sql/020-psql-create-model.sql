@@ -7,4 +7,3 @@
 \ir model.add_project_config.sql
 
 \ir testutils.sql
-\ir model_test.sql

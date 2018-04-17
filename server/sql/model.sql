@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS model.membership(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	project_id uuid REFERENCES model.project(id) NOT NULL,
 	person_id uuid REFERENCES model.person(id) NOT NULL,
-	name TEXT,
+	name TEXT NOT NULL,
 	properties JSONB DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_resource_name_per_project UNIQUE (project_id, name)
 );
@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS model.rate(
 	membership_id uuid REFERENCES model.membership(id) NOT NULL,
 	rate NUMERIC NOT NULL, 
 	basis TEXT DEFAULT 'hourly' NOT NULL,
+	discount NUMERIC DEFAULT 0.0 NOT NULL, 
 	currency CHAR(3) REFERENCES model.iso4217(code) NOT NULL,
 	valid TIMESTAMPTZ DEFAULT NOW() NOT NULL,
 	CONSTRAINT unique_rate_per_resource_per_project UNIQUE (membership_id, basis)
@@ -155,7 +156,8 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		rate.currency AS currency,
 		rate.rate AS rate,
 		(stop_datetime-start_datetime) AS duration,
-		utils.to_numeric_hours(stop_datetime-start_datetime) * rate AS total
+		utils.to_numeric_hours(stop_datetime-start_datetime) * (rate*(1-COALESCE(discount, 0))) AS total,
+		utils.to_numeric_hours(stop_datetime-start_datetime) * (rate*COALESCE(discount, 0)) AS total_discount
 	FROM model.entry 
 		INNER JOIN model.membership ON entry.membership_id = membership.id
 		INNER JOIN model.task ON entry.task_id = task.id

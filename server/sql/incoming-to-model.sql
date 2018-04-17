@@ -127,7 +127,7 @@ ON CONFLICT(project_id, name)
 	DO NOTHING
 ;
 
-INSERT INTO model.rate(membership_id, rate, currency, basis, valid) SELECT * FROM (
+INSERT INTO model.rate(membership_id, rate, discount, currency, basis, valid) SELECT * FROM (
 	WITH project_rate_validity AS (
 		-- TODO: need to manage validity period
 		SELECT project_id, resource, min(COALESCE(start_datetime, now())) AS start_datetime
@@ -137,7 +137,8 @@ INSERT INTO model.rate(membership_id, rate, currency, basis, valid) SELECT * FRO
 	)
 	SELECT 
 		membership.id AS membership_id, 
-		project_rate AS rate, 
+		project_rate AS rate,
+		COALESCE(people_project.project_rate_discount, 0.0)::NUMERIC AS discount,
 		'RMB' AS currency, -- TODO: get it from default_currency
 		'hourly' AS basis, 
 		start_datetime AS valid
@@ -151,7 +152,10 @@ INSERT INTO model.rate(membership_id, rate, currency, basis, valid) SELECT * FRO
 				AND membership.name = project_rate_validity.resource
 ) converted
 ON CONFLICT(membership_id, basis)
-	DO NOTHING
+	DO UPDATE SET discount = EXCLUDED.discount
+	WHERE rate.membership_id = EXCLUDED.membership_id 
+		AND rate.basis = EXCLUDED.basis
+		AND rate.discount != EXCLUDED.discount
 ;
 
 INSERT INTO model.task(project_id, name) SELECT * FROM (
@@ -187,6 +191,7 @@ WITH incoming_timesheet AS (
 				ON  incoming.project.id = people_project.project_id AND people_project.resource = entry.resource
 		-- some entries are for accounting purposes
 		WHERE start_datetime IS NOT NULL AND stop_datetime IS NOT NULL 
+			AND (stop_datetime - start_datetime) < INTERVAL '14 hours'
 )
 INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime) 
 	SELECT membership.id AS membership_id, task.id AS task_id, start_datetime, stop_datetime 

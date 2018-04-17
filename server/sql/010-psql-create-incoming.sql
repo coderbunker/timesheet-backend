@@ -1,4 +1,5 @@
 -- reusable function logic
+\ir safecast.sql
 \ir utils.sql
 \ir business-logic.sql
 \ir incoming.conversion.sql
@@ -16,7 +17,4 @@
 
 -- reports
 \ir incoming.warnings.sql
-
--- postgraphql interface
-\ir postgraphql.sql
 

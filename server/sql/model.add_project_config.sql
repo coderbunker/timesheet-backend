@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION model.add_project_config(
 	tasks TEXT[], 
 	members uuid[], 
 	properties JSONB) RETURNS model.project_config AS
-$$
+$add_project_config$
 DECLARE
 	project model.project;
 	organization model.organization;
@@ -39,8 +39,8 @@ BEGIN
 	FOREACH person_id IN ARRAY members
 	LOOP
 		SELECT * FROM model.person t WHERE t.id = person_id INTO person;
-		INSERT INTO model.membership(person_id, project_id) 
-			VALUES(person_id, project.id) 
+		INSERT INTO model.membership(person_id, project_id, name) 
+			VALUES(person_id, project.id, person.name) 
 			RETURNING * INTO membership;
 		INSERT INTO model.rate(membership_id, rate, currency) 
 			VALUES(membership.id, (person.properties->>'default_rate')::NUMERIC, person.properties->>'default_currency');
@@ -49,4 +49,4 @@ BEGIN
 	SELECT * FROM model.project_config WHERE model.project_config.id = project.id INTO pc; 
 	RETURN pc;
 END; 
-$$ LANGUAGE PLPGSQL;
+$add_project_config$ LANGUAGE PLPGSQL;

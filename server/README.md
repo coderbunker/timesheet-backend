@@ -74,19 +74,20 @@ Pushing the local database:
 heroku pg:push timesheet postgresql-rigid-65921 --app coderbunker-timesheet
 ```
 
-Puling the Heroku database locally and making a copy before changing the pulled version:
+Puling the Heroku database locally and making a copy before changing the pulled version
+(adjust date):
 
 ```bash
 heroku pg:pull postgresql-rigid-65921 heroku-timesheet --app coderbunker-timesheet
-psql -e 'CREATE DATABASE "heroku-timesheet-20180413" TEMPLATE "heroku-timesheet";'
+psql -c 'CREATE DATABASE "heroku-timesheet-20180416" TEMPLATE "heroku-timesheet";' postgres
 ```
+
 
 Restarting the dyno (to load changes to the database for example)
 
 ```bash
 heroku restart -a coderbunker-timesheet
 ```
-
 ## Manage Domain
 
 ### CNAME Setup for Heroku app

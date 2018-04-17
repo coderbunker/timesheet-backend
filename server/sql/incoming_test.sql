@@ -31,4 +31,32 @@ BEGIN
 	);
 END;
 $test_no_entry_with_stop_before_start$ LANGUAGE PLPGSQL;
+
+
+CREATE OR REPLACE FUNCTION incoming_test.test_extract_percentage() RETURNS SETOF TEXT AS 
+$test$
+BEGIN
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_percentage('100%'); $$, 
+		$$ VALUES(1.0::NUMERIC); $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_percentage('0%'); $$, 
+		$$ VALUES(0.0::NUMERIC); $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_percentage('0'); $$, 
+		$$ VALUES(0.0::NUMERIC); $$
+	);
+--	RETURN QUERY SELECT is(
+--		$$ SELECT incoming.extract_percentage('%'); $$,
+--		NULL::NUMERIC
+--	);
+--	RETURN QUERY SELECT is(
+--		$$ SELECT incoming.extract_percentage(''); $$,
+--		NULL::NUMERIC
+	);
+END;
+$test$ LANGUAGE PLPGSQL;
+
 SELECT * FROM runtests( 'incoming_test'::name);

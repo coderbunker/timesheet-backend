@@ -50,8 +50,8 @@ $testvalue$
 DECLARE
 	membership model.membership;
 BEGIN
-	INSERT INTO model.membership(project_id, person_id)
-		VALUES(project_id_, person_id_)
+	INSERT INTO model.membership(project_id, person_id, name)
+		VALUES(project_id_, person_id_, '')
 		RETURNING * INTO membership
 	;
 	INSERT INTO model.rate(membership_id, rate, currency)
@@ -298,9 +298,9 @@ $test_entry_update_updates_result$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION model_test.test_ledger() RETURNS SETOF TEXT AS 
 $test_ledger$
 	SELECT * FROM model_test.add_team(); 
-	INSERT INTO model.ledger(entity_id, amount) 
-		VALUES 	((SELECT id FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com'), 10), 
-				((SELECT id FROM model.person WHERE email = 'stephen.wozniak@coderbunker.com'), -10);
+	INSERT INTO model.ledger(source_id, destination_id, amount) 
+		VALUES 	('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com'), 10), 
+				('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'stephen.wozniak@coderbunker.com'), -10);
 	SELECT results_eq(
 		$$ 
 		SELECT sum(amount) FROM model.ledger;
