@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS pgtap;
-
 CREATE SCHEMA IF NOT EXISTS testutils;
 
 CREATE OR REPLACE FUNCTION testutils.test_count_all_views(

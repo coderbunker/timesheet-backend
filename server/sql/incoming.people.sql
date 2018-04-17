@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS unaccent;
-
 DROP VIEW incoming.raw_people CASCADE;
 CREATE OR REPLACE VIEW incoming.raw_people AS
 	SELECT

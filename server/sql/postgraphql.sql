@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
 CREATE SCHEMA IF NOT EXISTS postgraphql;
 
 DROP MATERIALIZED VIEW IF EXISTS postgraphql.people_month_gross;

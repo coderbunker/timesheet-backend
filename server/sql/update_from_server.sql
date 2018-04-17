@@ -1,6 +1,4 @@
 -- TODO: almost work but fails on ROLE missing failure
-CREATE EXTENSION IF NOT EXISTS postgres_fdw;
-
 CREATE OR REPLACE FUNCTION update_from_server(connection_url TEXT) RETURNS void AS
 $update_from_server$
 DECLARE
