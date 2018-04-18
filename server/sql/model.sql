@@ -29,16 +29,6 @@ CREATE TABLE IF NOT EXISTS model.organization(
 	properties JSONB DEFAULT '{}' NOT NULL
 );
 
-DO $$ 
- BEGIN
-	INSERT INTO model.organization(id, name, properties)
-		VALUES 
-			('46207d44-ddf3-4ecf-8c01-d88d56d56181', 'Coderbunker Shanghai', '{}'), 
-			('dffae778-dd06-46c1-a4ee-b7bfce34f71d', 'Coderbunker Singapore', '{}')
-	ON CONFLICT DO NOTHING;
- END;
-$$;
-
 CREATE TABLE IF NOT EXISTS model.account(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	organization_id uuid REFERENCES model.organization(id) NOT NULL,
@@ -77,8 +67,8 @@ $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS check_double_entry_balance_trigger ON model.ledger;
 CREATE  TRIGGER check_double_entry_balance_trigger
-AFTER INSERT OR UPDATE OR DELETE ON  model.ledger
-FOR EACH STATEMENT EXECUTE PROCEDURE model.check_double_entry_balance();
+	AFTER INSERT OR UPDATE OR DELETE ON  model.ledger
+	FOR EACH STATEMENT EXECUTE PROCEDURE model.check_double_entry_balance();
 
 CREATE TABLE IF NOT EXISTS model.project(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
