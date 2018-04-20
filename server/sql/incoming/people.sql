@@ -1,4 +1,3 @@
-DROP VIEW incoming.raw_people CASCADE;
 CREATE OR REPLACE VIEW incoming.raw_people AS
 	SELECT
 		jsonb_array_elements((doc#>'{sheets, Balance, data}')::jsonb) AS doc,
@@ -34,7 +33,7 @@ CREATE OR REPLACE VIEW incoming.people AS
 	FROM
 		incoming.profile LEFT JOIN LATERAL (
 			SELECT array_agg(resource) AS nicknames
-			FROM incoming.nickname_to_email 
+			FROM incoming.nickname_to_email
 			WHERE nickname_to_email.email = profile.email
 		) AS t ON TRUE
 	;

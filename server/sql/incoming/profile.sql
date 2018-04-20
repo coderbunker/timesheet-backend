@@ -14,7 +14,6 @@ CREATE OR REPLACE VIEW incoming.profile AS
 		freelancer->>'wechat' AS wechat,
 		freelancer->>'status' AS status,
 		freelancer->>'rate' AS rate,
-		freelancer->>'rate' AS rate_currency,
 		freelancer->>'keywords' AS keywords,
 		utils.trim_array((freelancer->>'altnames')::jsonb) AS altnames
 	FROM

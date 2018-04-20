@@ -1,3 +1,5 @@
-\ir utils_test.sql
-\ir incoming_test.sql
-\ir model_test.sql
+\ir test/utils.sql
+\ir test/incoming.sql
+\ir test/model.sql
+
+SELECT * FROM runtests('test'::name)

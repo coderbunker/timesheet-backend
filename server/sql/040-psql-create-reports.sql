@@ -1,2 +1,1 @@
-\ir report.incoming.sql
-\ir report.sql
+\ir report/report.sql
