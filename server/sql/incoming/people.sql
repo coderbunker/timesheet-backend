@@ -12,7 +12,8 @@ CREATE OR REPLACE VIEW incoming.people_project AS
 		(doc->>'resource') as resource,
 		incoming.extract_percentage(doc->>'ratediscount')  AS project_rate_discount,
 		incoming.extract_rate(doc->>'rate') AS project_rate,
-		incoming.extract_currency(doc->>'rate') AS currency
+		incoming.extract_currency(doc->>'rate') AS currency,
+		NULLIF(trim(doc->>'calendar'), '') AS calendar
 	FROM incoming.raw_people
 	;
 
@@ -36,4 +37,14 @@ CREATE OR REPLACE VIEW incoming.people AS
 			FROM incoming.nickname_to_email
 			WHERE nickname_to_email.email = profile.email
 		) AS t ON TRUE
+	;
+	
+CREATE OR REPLACE VIEW incoming.people_project_calendar AS
+	SELECT 
+		resource,
+		email,
+		project_id,
+		(regexp_match(calendar, '.*src=([[a-z0-9\.]*)'))[1] || '@group.calendar.google.com'  AS calendar_id
+	FROM incoming.people_project 
+	WHERE calendar IS NOT NULL
 	;

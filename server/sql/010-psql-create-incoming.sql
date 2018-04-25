@@ -18,6 +18,10 @@
 \ir incoming/entry.sql
 \ir incoming/people.sql
 
+-- with calendar inputs
+\ir incoming/entry_calendar.sql
+\ir incoming/entry_union.sql
+
 -- reports
 \ir incoming/warnings.sql
 

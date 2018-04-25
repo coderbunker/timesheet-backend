@@ -16,7 +16,7 @@ CREATE OR REPLACE VIEW incoming.warnings AS
 				'incoming.entry' AS table_name,
 				'time entry is negative' AS error
 			FROM incoming.entry
-			WHERE EXTRACT(EPOCH FROM duration) < 0
+			WHERE EXTRACT(EPOCH FROM (stop_datetime-start_datetime)) < 0
 		)
 		UNION ALL
 		(
@@ -99,7 +99,25 @@ CREATE OR REPLACE VIEW incoming.warnings AS
 				'incoming.entry' AS table_name,
 				'duration is negative' AS error
 			FROM incoming.entry
-			WHERE EXTRACT (epoch FROM duration) < 0
+			WHERE EXTRACT (epoch FROM (stop_datetime-start_datetime)) < 0
+		)
+		UNION ALL
+		(
+			SELECT
+				to_json(entry.*) AS doc,
+				'incoming.entry' AS table_name,
+				'start_datetime or stop_datetime in future' AS error
+			FROM incoming.entry
+			WHERE start_datetime >= NOW() OR stop_datetime >= NOW()
+		)
+		UNION ALL
+		(
+			SELECT
+				to_json(entry_calendar.*) AS doc,
+				'incoming.entry_calendar' AS table_name,
+				'start_datetime or stop_datetime in future' AS error
+			FROM incoming.entry_calendar
+			WHERE start_datetime >= NOW() OR stop_datetime >= NOW()
 		)
 		UNION ALL
 		(

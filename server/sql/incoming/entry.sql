@@ -16,9 +16,9 @@ CREATE OR REPLACE VIEW incoming.entry AS
 	SELECT
 		DATE + START AS start_datetime,
 		DATE + incoming.convert_stop(START, stop) AS stop_datetime,
-		START,
-		incoming.convert_stop(START, stop) AS stop,
-		incoming.convert_stop(START, stop) - START AS duration,
+		-- START,
+		-- incoming.convert_stop(START, stop) AS stop,
+		-- incoming.convert_stop(START, stop) - START AS duration,
 		resource,
 		project_id,
 		taskname,

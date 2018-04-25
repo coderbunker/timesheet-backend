@@ -23,7 +23,7 @@ CREATE OR REPLACE FUNCTION test.test_incoming_no_entry_with_stop_before_start() 
 $test_no_entry_with_stop_before_start$
 BEGIN
 	RETURN QUERY SELECT is_empty($$
-			SELECT * FROM incoming.entry WHERE start > stop;
+			SELECT * FROM incoming.entry WHERE start_datetime > stop_datetime;
 		$$
 	);
 END;

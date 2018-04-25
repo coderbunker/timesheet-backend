@@ -48,7 +48,7 @@ BEGIN
 		FROM incoming.profile
 		WHERE altnames @> array[ $1 ];
 
-	IF return_email IS NULL THEN
+	IF NOT FOUND THEN
 		SELECT
 			email INTO return_email
 			FROM incoming.profile_textsearch, plainto_tsquery(incoming.f_unaccent($1)) query
@@ -56,8 +56,15 @@ BEGIN
 			ORDER BY ts_rank_cd(textsearch, query) DESC
 			LIMIT 1;
 	END IF;
+
+	IF NOT FOUND THEN
+		SELECT 
+			email INTO return_email
+			FROM incoming.profile
+			WHERE fullname ILIKE '%' || $1 || '%'
+			LIMIT 1;
+	END IF;
+
 	RETURN return_email;
 END
 $func$ LANGUAGE plpgsql IMMUTABLE;
--- TEST CASE
--- SELECT incoming.search_profile('SamE');

@@ -7,3 +7,12 @@ CREATE TABLE IF NOT EXISTS incoming.snapshot (
 WITH (
 	OIDS=FALSE
 ) ;
+
+CREATE OR REPLACE VIEW incoming.snapshot_gsuite AS
+	SELECT 
+		doc->>'name' AS name, 
+		doc->>'apptype' AS apptype,
+		doc->>'category' AS category,
+		ts AS last_update
+	FROM incoming.snapshot
+	ORDER BY ts DESC;
