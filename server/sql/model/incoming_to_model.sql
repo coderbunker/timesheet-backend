@@ -230,6 +230,3 @@ CREATE TRIGGER model_update
     AFTER INSERT OR UPDATE ON incoming.snapshot
     FOR EACH STATEMENT
     EXECUTE PROCEDURE model.convert_incoming_to_model_trigger();
-
-
--- SELECT * FROM model.convert_incoming_to_model();
