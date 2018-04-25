@@ -10,7 +10,7 @@
             }
             throw new Error('not a date')
         }
-        fetch('https://data.coderbunker.com/graphql', {
+        fetch('/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

@@ -6,20 +6,14 @@
 		doc->>'name' AS name
 	FROM
 		incoming.snapshot
-	WHERE 
-		doc->>'apptype' = 'Spreadsheet' 
+	WHERE
+		doc->>'apptype' = 'Spreadsheet'
 		AND doc->>'category' = 'Leads & Opportunities'
 		;
-		
-SELECT * FROM incoming.raw_account;
-
-CREATE TYPE account_status AS ENUM ('Ongoing', 'Stopped');
-
-DROP VIEW incoming.account;
 
 CREATE OR REPLACE VIEW incoming.account AS
 	SELECT
-		(ELEMENT->>'status')::account_status AS status,
+		(ELEMENT->>'status') AS status,
 		ELEMENT->>'client' AS client,
 		ELEMENT->>'projectsummary' AS summary,
 		(regexp_matches(ELEMENT->>'timesheet' , '([A-Za-z0-9_-]{44})'))[1]  AS project_id,
@@ -27,10 +21,7 @@ CREATE OR REPLACE VIEW incoming.account AS
 		ELEMENT->>'legalname' AS legal_name
 	FROM incoming.raw_account AS ELEMENT
 	WHERE
-		length(ELEMENT->>'status') > 0 AND 
+		length(ELEMENT->>'status') > 0 AND
 		length(ELEMENT->>'client') > 0 AND
-		length(ELEMENT->>'projectsummary') > 0 
+		length(ELEMENT->>'projectsummary') > 0
 	;
-
-SELECT *
-FROM incoming.account JOIN incoming.project ON (account.project_id = project.id) ;
