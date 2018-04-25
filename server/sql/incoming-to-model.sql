@@ -1,3 +1,5 @@
+CREATE OR REPLACE FUNCTION model.convert_incoming_to_model() RETURNS SETOF model.entry AS
+$convert_incoming_to_model$
 INSERT INTO model.person(name, email, properties) SELECT * FROM (
 	WITH properties AS (
 		SELECT 
@@ -210,5 +212,24 @@ INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
 			AND task.name = taskname
 ON CONFLICT(membership_id, start_datetime, stop_datetime)
 	DO NOTHING
+RETURNING *
 ;
+$convert_incoming_to_model$ LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION model.convert_incoming_to_model_trigger() RETURNS trigger AS
+$$
+BEGIN
+	PERFORM model.convert_incoming_to_model();
+	RETURN NEW;
+END;
+$$ LANGUAGE PLPGSQL;
+
+DROP TRIGGER IF EXISTS model_update ON incoming.snapshot;
+
+CREATE TRIGGER model_update
+    AFTER INSERT OR UPDATE ON incoming.snapshot
+    FOR EACH STATEMENT
+    EXECUTE PROCEDURE model.convert_incoming_to_model_trigger();
+
+
+-- SELECT * FROM model.convert_incoming_to_model();

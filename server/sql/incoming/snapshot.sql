@@ -16,3 +16,5 @@ CREATE OR REPLACE VIEW incoming.snapshot_gsuite AS
 		ts AS last_update
 	FROM incoming.snapshot
 	ORDER BY ts DESC;
+	
+
