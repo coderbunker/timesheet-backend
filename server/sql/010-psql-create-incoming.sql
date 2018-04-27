@@ -17,6 +17,7 @@
 \ir incoming/profile.sql
 \ir incoming/entry.sql
 \ir incoming/people.sql
+\ir incoming/transfer.sql
 
 -- with calendar inputs
 \ir incoming/entry_calendar.sql
@@ -24,4 +25,7 @@
 
 -- reports
 \ir incoming/warnings.sql
+
+-- import facilities
+\ir incoming/update_from_server.sql
 

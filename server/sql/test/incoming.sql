@@ -45,13 +45,44 @@ BEGIN
 		$$ SELECT incoming.extract_percentage('0'); $$,
 		$$ VALUES(0.0::NUMERIC); $$
 	);
---	RETURN QUERY SELECT is(
---		$$ SELECT incoming.extract_percentage('%'); $$,
---		NULL::NUMERIC
---	);
---	RETURN QUERY SELECT is(
---		$$ SELECT incoming.extract_percentage(''); $$,
---		NULL::NUMERIC
---	);
 END;
 $test$ LANGUAGE PLPGSQL;
+
+
+CREATE OR REPLACE FUNCTION test.test_incoming_extract_rate() RETURNS SETOF TEXT AS
+$test$
+BEGIN
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_rate('0'); $$,
+		$$ VALUES(0::NUMERIC); $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_rate('10.10'); $$,
+		$$ VALUES(10.10::NUMERIC); $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_rate('¥40,000.00'); $$,
+		$$ VALUES(40000.0::NUMERIC); $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_rate('-¥700.00'); $$,
+		$$ VALUES(-700.0::NUMERIC); $$
+	);
+END;
+$test$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION test.test_incoming_extract_currency() RETURNS SETOF TEXT AS
+$test$
+BEGIN
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_currency('¥40,000.00'); $$,
+		$$ VALUES('¥'); $$
+	);
+	RETURN QUERY SELECT results_eq(
+		$$ SELECT incoming.extract_currency('$700.00'); $$,
+		$$ VALUES('$'); $$
+	);
+END;
+$test$ LANGUAGE PLPGSQL;
+
+SELECT * FROM runtests('test'::name, 'test_incoming');

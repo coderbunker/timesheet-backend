@@ -50,7 +50,8 @@ BEGIN
 	RETURN QUERY INSERT INTO incoming.snapshot 
 		SELECT remote.* 
 			FROM foreign_incoming_snapshot remote
-			INNER JOIN incoming.snapshot ON (snapshot.id = remote.id AND snapshot.ts < remote.ts)
+				LEFT JOIN incoming.snapshot ON (snapshot.id = remote.id)
+			WHERE snapshot.ts IS NULL OR (snapshot.ts < remote.ts)
 	ON CONFLICT(id)
 		DO UPDATE SET doc = EXCLUDED.doc, ts = EXCLUDED.ts WHERE snapshot.id = EXCLUDED.id
 	RETURNING *

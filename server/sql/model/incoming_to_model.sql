@@ -4,7 +4,7 @@ INSERT INTO model.person(name, email, properties) SELECT * FROM (
 	WITH properties AS (
 		SELECT 
 			people.fullname AS name,
-			safe_cast(incoming.profile.email, null::email) AS email,
+			safe_cast(incoming.profile.email, null::model.email) AS email,
 			ARRAY[
 				'wechat', 
 				'github', 

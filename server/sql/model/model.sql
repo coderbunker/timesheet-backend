@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS model.organization(
 
 CREATE TABLE IF NOT EXISTS model.account(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	organization_id uuid REFERENCES model.organization(id) NOT NULL,
+	organization_id uuid REFERENCES model.organization(id) ON DELETE CASCADE NOT NULL,
 	name TEXT UNIQUE,
 	properties JSONB DEFAULT '{}' NOT NULL
 );
@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS model.person(
 
 CREATE TABLE IF NOT EXISTS model.ledger(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	source_id uuid REFERENCES audit.entity(id) NOT NULL,
-	destination_id uuid REFERENCES audit.entity(id) NOT NULL,
+	source_id uuid REFERENCES audit.entity(id) ON DELETE CASCADE NOT NULL,
+	destination_id uuid REFERENCES audit.entity(id) ON DELETE CASCADE NOT NULL,
 	amount NUMERIC NOT NULL,
 	recorded TIMESTAMPTZ DEFAULT NOW(),
 	properties JSONB DEFAULT '{}' NOT NULL
@@ -72,15 +72,24 @@ CREATE  TRIGGER check_double_entry_balance_trigger
 
 CREATE TABLE IF NOT EXISTS model.project(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	account_id uuid REFERENCES model.account(id) NOT NULL,
+	account_id uuid REFERENCES model.account(id) ON DELETE CASCADE NOT NULL,
 	name TEXT UNIQUE,
 	properties JSONB DEFAULT '{}' NOT NULL
 );
 
+DO $$
+	BEGIN
+		PERFORM * FROM pg_catalog.pg_indexes WHERE indexname = 'unique_docid_per_project_idx';
+		IF NOT FOUND THEN
+			CREATE UNIQUE INDEX unique_docid_per_project_idx ON model.project((properties->>'docid'));
+		END IF;
+	END;
+$$ LANGUAGE PLPGSQL;
+
 CREATE TABLE IF NOT EXISTS model.membership(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	project_id uuid REFERENCES model.project(id) NOT NULL,
-	person_id uuid REFERENCES model.person(id) NOT NULL,
+	project_id uuid REFERENCES model.project(id) ON DELETE CASCADE NOT NULL,
+	person_id uuid REFERENCES model.person(id) ON DELETE CASCADE NOT NULL,
 	name TEXT NOT NULL,
 	properties JSONB DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_resource_name_per_project UNIQUE (project_id, name)
@@ -89,7 +98,7 @@ CREATE TABLE IF NOT EXISTS model.membership(
 
 CREATE TABLE IF NOT EXISTS model.rate(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	membership_id uuid REFERENCES model.membership(id) NOT NULL,
+	membership_id uuid REFERENCES model.membership(id) ON DELETE CASCADE NOT NULL,
 	rate NUMERIC NOT NULL,
 	basis TEXT DEFAULT 'hourly' NOT NULL,
 	discount NUMERIC DEFAULT 0.0 NOT NULL,
@@ -100,7 +109,7 @@ CREATE TABLE IF NOT EXISTS model.rate(
 
 CREATE TABLE IF NOT EXISTS model.task(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	project_id uuid REFERENCES model.project(id) NOT NULL,
+	project_id uuid REFERENCES model.project(id) ON DELETE CASCADE NOT NULL,
 	name TEXT,
 	properties JSONB DEFAULT '{}' NOT NULL,
 	CONSTRAINT unique_task_name_per_project UNIQUE (project_id, name)
@@ -108,7 +117,7 @@ CREATE TABLE IF NOT EXISTS model.task(
 
 CREATE TABLE IF NOT EXISTS model.entry(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	membership_id uuid REFERENCES model.membership(id),
+	membership_id uuid REFERENCES model.membership(id) ON DELETE CASCADE NOT NULL,
 	start_datetime timestamptz NOT NULL,
 	stop_datetime timestamptz NOT NULL,
 	task_id uuid REFERENCES model.task(id) NOT NULL,

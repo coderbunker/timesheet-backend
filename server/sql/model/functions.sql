@@ -35,10 +35,10 @@ $testvalue$
 	;
 $testvalue$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model.add_project(account_id_ uuid, name_ text DEFAULT 'PROJECT_NAME') RETURNS model.project AS 
+CREATE OR REPLACE FUNCTION model.add_project(account_id_ uuid, name_ text DEFAULT 'PROJECT_NAME', docid_ TEXT DEFAULT 'e3b6c540-5570-4111-b468-34169254115a') RETURNS model.project AS 
 $testvalue$
-	INSERT INTO model.project(name, account_id)
-		VALUES(name_, account_id_)
+	INSERT INTO model.project(name, account_id, properties)
+		VALUES(name_, account_id_, format('{"docid": "%s"}', docid_)::jsonb)
 		RETURNING *;
 	;
 $testvalue$ LANGUAGE SQL;
@@ -87,3 +87,25 @@ $testvalue$
 		WHERE email = 'ritchie.kernighan@coderbunker.com'
 		RETURNING *;
 $testvalue$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION model.scenario1() RETURNS SETOF TEXT AS
+$scenario1$
+DECLARE
+	person model.person;
+	account model.account;
+	project model.project;
+	membership model.membership;
+	task model.task;
+	entry model.entry;
+	organization model.organization;
+BEGIN
+	SELECT * FROM model.add_organization() INTO organization;
+	SELECT * FROM model.add_person() INTO person;
+	SELECT * FROM model.add_account(organization.id) INTO account;
+	SELECT * FROM model.add_project(account.id) INTO project;
+	SELECT * FROM model.add_membership(project.id, person.id) INTO membership;
+	SELECT * FROM model.add_task(project.id) INTO task;
+	SELECT * FROM model.add_entry(membership.id, task.id) INTO entry;
+END;
+$scenario1$ LANGUAGE plpgsql;

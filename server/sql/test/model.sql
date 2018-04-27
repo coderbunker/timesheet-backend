@@ -81,7 +81,7 @@ BEGIN
 	SELECT * FROM model.add_entry(membership.id, task.id) INTO entry;
 	RETURN QUERY SELECT * FROM results_eq(
 		format($$ SELECT account_name, email FROM model.timesheet WHERE id = '%s'; $$, entry.id),
-		$$ VALUES ('ACCOUNT_NAME', 'ritchie.kernighan@coderbunker.com'::email); $$
+		$$ VALUES ('ACCOUNT_NAME', 'ritchie.kernighan@coderbunker.com'::model.email); $$
 	);
 END;
 $test_scenario1$ LANGUAGE plpgsql;
@@ -118,7 +118,7 @@ BEGIN
 		format($$
 			SELECT account_name, email, properties->>'activity' FROM model.timesheet WHERE id = '%s';
 		$$, timesheet.id),
-		$$ VALUES ('Coderbunker', 'ritchie.kernighan@coderbunker.com'::email, 'ACTIVITY') $$
+		$$ VALUES ('Coderbunker', 'ritchie.kernighan@coderbunker.com'::model.email, 'ACTIVITY') $$
 	);
 END;
 $test_insert_timesheet$ LANGUAGE plpgsql;
@@ -245,7 +245,7 @@ $crap$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION test.test_model_bad_email() RETURNS SETOF TEXT AS
 $test_bad_email$
-	SELECT * FROM throws_ok(
+	SELECT * FROM throws_like(
 		$$
 		INSERT INTO model.person(name, email, properties)
 			VALUES(
@@ -254,7 +254,7 @@ $test_bad_email$
 				'{"default_rate": 700, "default_currency": "RMB"}'::JSONB
 				)
 		$$,
-		'value for domain email violates check constraint "email_check"'
+		'value for domain model.email violates check constraint "email_check"'
 	);
 $test_bad_email$ LANGUAGE SQL;
 
@@ -365,3 +365,20 @@ BEGIN
 	);
 END;
 $test_cannot_add_entry_in_the_future$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION test.test_model_cannot_add_project_with_duplicate_docid() RETURNS SETOF TEXT AS
+$test_model_cannot_add_project_with_duplicate_docid$
+DECLARE
+	project model.project;
+	account model.account;
+BEGIN
+	PERFORM model.scenario1();
+	SELECT * INTO account FROM model.account LIMIT 1;
+	SELECT * INTO project FROM model.add_project(account.id, 'Lasercannon Project', 'doc1');
+	RETURN QUERY SELECT throws_like(format($$
+		SELECT * INTO project FROM model.add_project('%s', 'LasercannonProject', 'doc1');
+		$$, account.id),
+		'duplicate key value violates unique constraint "unique_docid_per_project_idx"'
+	);
+END;
+$test_model_cannot_add_project_with_duplicate_docid$ LANGUAGE PLPGSQL;

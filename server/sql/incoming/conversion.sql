@@ -26,17 +26,15 @@ END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION incoming.extract_rate(text)
-  RETURNS float AS
+  RETURNS NUMERIC AS
 $func$
 DECLARE
-	return_value FLOAT;
+	return_value NUMERIC;
 BEGIN
-	SELECT ((regexp_matches($1, '[0-9]*\.?[0-9]'))[1])::float INTO return_value;
+	SELECT safe_cast(regexp_replace($1, '[^0-9\-\.]', '', 'g'), NULL::NUMERIC) INTO return_value;
 	RETURN return_value;
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
-
--- TESTCASE: SELECT incoming.extract_rate('600');
 
 CREATE OR REPLACE FUNCTION incoming.extract_currency(text)
   RETURNS text AS
