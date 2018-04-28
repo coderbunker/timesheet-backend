@@ -15,11 +15,13 @@ DECLARE
 	membership model.membership;
 	task model.task;
 	entry model.entry;
-	organization model.organization;
+	customer model.organization;
+	vendor model.organization;
 BEGIN
-	SELECT * FROM model.add_organization() INTO organization;
+	SELECT * FROM model.add_organization('VENDOR') INTO vendor;
+	SELECT * FROM model.add_organization('CUSTOMER') INTO customer;
 	SELECT * FROM model.add_person() INTO person;
-	SELECT * FROM model.add_account(organization.id) INTO account;
+	SELECT * FROM model.add_account(customer.id, vendor.id) INTO account;
 	SELECT * FROM model.add_project(account.id) INTO project;
 	SELECT * FROM model.add_membership(project.id, person.id) INTO membership;
 	SELECT * FROM model.add_task(project.id) INTO task;
@@ -40,24 +42,26 @@ DECLARE
 	membership model.membership;
 	task model.task;
 	entry model.entry;
-	organization model.organization;
+	customer model.organization;
+	vendor model.organization;
 	timesheet model.timesheet;
 BEGIN
-	SELECT * INTO organization FROM model.add_organization('Coderbunker Test');
-	SELECT * INTO account FROM model.add_account(organization.id, 'Coderbunker');
+	SELECT * INTO customer FROM model.add_organization('Coderbunker Test');
+	SELECT * INTO vendor FROM model.add_organization('Coderbunker Test Customer');
+	SELECT * INTO account FROM model.add_account(customer.id, vendor.id, 'Coderbunker');
 	SELECT * INTO project FROM model.add_project(account.id, 'Coderbunker Internal');
 	SELECT * INTO person FROM model.add_person('Ritchie Kernighan');
 	SELECT * INTO membership FROM model.add_membership(project.id, person.id);
 	SELECT * INTO task FROM model.add_task(project.id, 'Planning');
 
 	SELECT * INTO timesheet FROM model.add_entry(
-		'Coderbunker Internal',
-		'ritchie.kernighan@coderbunker.com',
-		NOW() - '1 HOUR'::INTERVAL,
-		NOW(),
-		'Planning',
-		$$ {"activity": "ACTIVITY", "reference": "REFERENCE"} $$
-		);
+		'Coderbunker Internal'::TEXT,
+		'ritchie.kernighan@coderbunker.com'::TEXT,
+		(NOW() - '1 HOUR'::INTERVAL)::timestamptz,
+		NOW()::timestamptz,
+		'Planning'::TEXT,
+		($$ {"activity": "ACTIVITY", "reference": "REFERENCE"} $$)::jsonb
+	);
 
 	RETURN query SELECT * FROM results_eq(
 		format($$
@@ -108,7 +112,7 @@ BEGIN
 
 	RETURN query SELECT * FROM results_eq(
 		format($$
-			SELECT project_name, organization_name, account_name
+			SELECT project_name, vendor_name, account_name
 			FROM model.project_config
 			WHERE project_config.id = '%s';
 		$$, project_config.id),

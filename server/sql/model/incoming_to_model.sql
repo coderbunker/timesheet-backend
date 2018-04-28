@@ -40,11 +40,15 @@ ON CONFLICT(email)
 	AND person.properties != EXCLUDED.properties
 ;
 
-WITH organization AS (
-	SELECT id AS organization_id FROM model.organization WHERE name = 'Coderbunker Shanghai'
-),  properties AS (
+WITH vendor AS (
+	SELECT id
+		FROM model.organization WHERE name = 'Coderbunker Shanghai'
+), customer AS (
+	SELECT id, name
+		FROM model.organization
+), properties AS (
 		SELECT 
-			client AS name,
+			client AS customer_name,
 			ARRAY[
 				'status', 
 				'summary', 
@@ -59,13 +63,13 @@ WITH organization AS (
 			] AS values
 		FROM incoming.account 
 	)
-INSERT INTO model.account(name, organization_id, properties)  
-	SELECT name, organization.organization_id, jsonb_object_agg(pname, pvalue) AS properties
-		FROM organization, properties 
+INSERT INTO model.account(name, customer_id, vendor_id, properties)  
+	SELECT customer_name, customer.id, vendor.id, jsonb_object_agg(pname, pvalue) AS properties
+		FROM vendor, customer, properties 
 			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue) 
 			ON TRUE
-		WHERE pvalue IS NOT null
-		GROUP BY name, organization.organization_id
+		WHERE pvalue IS NOT NULL AND customer.name = customer_name
+		GROUP BY customer_name, customer.id, vendor.id
 ON CONFLICT(name) 
 	DO UPDATE SET properties = EXCLUDED.properties
 	WHERE account.name = EXCLUDED.name

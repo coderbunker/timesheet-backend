@@ -49,11 +49,11 @@ BEGIN
 		EXECUTE format($$
 			CREATE TABLE IF NOT EXISTS %s.entity(
 				id uuid PRIMARY KEY,
-				table_name TEXT,
+				table_name TEXT NOT NULL,
 				created TIMESTAMPTZ DEFAULT now() NOT NULL,
 				updated TIMESTAMPTZ,
 				deleted TIMESTAMPTZ,
-				userid TEXT
+				userid TEXT ) NOT NULL
 			); $$, schema_name);
 	END IF;
 

@@ -115,9 +115,11 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		project.id AS project_id,
 		membership.id AS membership_id,
 		account.id AS account_id,
-		organization.id AS organization_id,
+		customer.id AS customer_id,
+		vendor.id AS vendor_id,
 		person.id AS person_id,
-		organization.name AS organization_name,
+		customer.name AS customer_name,
+		vendor.name AS vendor_name,
 		project.name AS project_name,
 		account.name AS account_name,
 		person.name AS person_name,
@@ -138,7 +140,8 @@ CREATE OR REPLACE VIEW model.timesheet AS
 		INNER JOIN model.person ON membership.person_id = person.id
 		INNER JOIN model.project ON membership.project_id = project.id
 		INNER JOIN model.account ON project.account_id = account.id
-		INNER JOIN model.organization ON account.organization_id = organization.id
+		INNER JOIN model.organization AS vendor ON account.vendor_id = vendor.id
+		INNER JOIN model.organization AS customer ON account.customer_id = customer.id
 		INNER JOIN model.rate ON membership.id = rate.membership_id
 		INNER JOIN model.iso4217 ON rate.currency = iso4217.code
 	;
@@ -148,7 +151,8 @@ CREATE OR REPLACE VIEW model.project_config AS
 	SELECT
 		project.id AS id,
 		project.name AS project_name,
-		max(organization.name) AS organization_name,
+		max(customer.name) AS customer_name,
+		max(vendor.name) AS vendor_name,
 		max(account.name) AS account_name,
 		array_agg(DISTINCT(task.name)) AS tasks,
 		array_agg(DISTINCT(person.name)) AS members,
@@ -159,6 +163,7 @@ CREATE OR REPLACE VIEW model.project_config AS
 			INNER JOIN model.person ON membership.person_id = person.id
 			INNER JOIN model.task ON task.project_id = project.id
 			INNER JOIN model.account ON project.account_id = account.id
-			INNER JOIN model.organization ON account.organization_id = organization.id
+			INNER JOIN model.organization AS customer ON account.customer_id = customer.id
+			INNER JOIN model.organization AS vendor ON account.vendor_id = vendor.id
 		GROUP BY project.id
 		;

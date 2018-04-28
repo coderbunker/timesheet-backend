@@ -19,7 +19,11 @@ $testvalue$
 	;
 $testvalue$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model.add_organization(name_ text DEFAULT 'ORGANIZATION_NAME') RETURNS model.organization AS 
+CREATE OR REPLACE FUNCTION model.unique_name(TEXT) RETURNS text AS $$
+	SELECT $1 || NOW() || random()
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.add_organization(name_ text DEFAULT model.unique_name('ORGANIZATION_NAME')) RETURNS model.organization AS 
 $testvalue$
 	INSERT INTO model.organization(name)
 		VALUES(name_)
@@ -27,10 +31,10 @@ $testvalue$
 	;
 $testvalue$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model.add_account(organization_id_ uuid, name_ text DEFAULT 'ACCOUNT_NAME') RETURNS model.account AS 
+CREATE OR REPLACE FUNCTION model.add_account(customer uuid, vendor uuid, name_ text DEFAULT 'ACCOUNT_NAME') RETURNS model.account AS 
 $testvalue$
-	INSERT INTO model.account(organization_id, name)
-		VALUES(organization_id_, name_)
+	INSERT INTO model.account(customer_id, vendor_id, name)
+		VALUES(customer, vendor, name_)
 		RETURNING *;
 	;
 $testvalue$ LANGUAGE SQL;
@@ -98,11 +102,13 @@ DECLARE
 	membership model.membership;
 	task model.task;
 	entry model.entry;
-	organization model.organization;
+	customer model.organization;
+	vendor model.organization;
 BEGIN
-	SELECT * FROM model.add_organization() INTO organization;
+	SELECT * FROM model.add_organization() INTO customer;
+	SELECT * FROM model.add_organization() INTO vendor;
 	SELECT * FROM model.add_person() INTO person;
-	SELECT * FROM model.add_account(organization.id) INTO account;
+	SELECT * FROM model.add_account(customer.id, vendor.id) INTO account;
 	SELECT * FROM model.add_project(account.id) INTO project;
 	SELECT * FROM model.add_membership(project.id, person.id) INTO membership;
 	SELECT * FROM model.add_task(project.id) INTO task;

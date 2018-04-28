@@ -72,3 +72,4 @@ BEGIN
     RETURN return_value;
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
+
