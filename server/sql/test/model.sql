@@ -6,61 +6,6 @@ $test_performance$
 	SELECT test.count_all_tables('model');
 $test_performance$ LANGUAGE sql;
 
-CREATE OR REPLACE FUNCTION test.test_model_insert_entity() RETURNS SETOF TEXT AS
-$test_insert_entity$
-DECLARE
-	person model.person;
-BEGIN
-	SELECT * FROM model.add_person() INTO person;
-	RETURN QUERY SELECT results_eq(
-		format($$
-			SELECT schema_name, table_name, userid
-			FROM audit.entity
-			WHERE id = '%s' AND created IS NOT NULL AND updated is NULL
-		$$, person.id),
-		$$ VALUES ('model', 'person', CURRENT_USER::text) $$
-	);
-END;
-$test_insert_entity$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION test.test_model_update_entity() RETURNS SETOF TEXT AS
-$test_update_entity$
-DECLARE
-	person model.person;
-BEGIN
-	PERFORM model.add_person();
-	SELECT * FROM model.update_user() INTO person;
-	RETURN QUERY SELECT results_eq(
-		format($query$
-			SELECT schema_name, table_name, userid
-			FROM audit.entity
-			WHERE id = '%s' AND updated is NOT NULL;
-		$query$, person.id),
-		$expected$ VALUES ('model', 'person', CURRENT_USER::text) $expected$
-	);
-END;
-$test_update_entity$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION test.test_model_delete_entity() RETURNS SETOF TEXT AS
-$test_delete_entity$
-DECLARE
-	person model.person;
-BEGIN
-	PERFORM model.add_person();
-	SELECT * FROM model.update_user() INTO person;
-	DELETE FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com';
-	RETURN QUERY SELECT results_eq(
-		format($$
-			SELECT schema_name, table_name, userid
-			FROM audit.entity
-			WHERE id = '%s' AND updated is NOT NULL AND deleted IS NOT NULL
-		$$, person.id),
-		$$ VALUES ('model', 'person', CURRENT_USER::text) $$
-	);
-END;
-$test_delete_entity$ LANGUAGE plpgsql;
-
-
 CREATE OR REPLACE FUNCTION test.test_model_scenario1() RETURNS SETOF TEXT AS
 $test_scenario1$
 DECLARE
@@ -186,7 +131,7 @@ BEGIN
 			WHERE project_id = '%s';
 		$$, project_config.id)
 	);
-
+ 
 	INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
 		VALUES(
 			project_config.membership_ids[1],
@@ -205,33 +150,6 @@ BEGIN
 END;
 $test_entry_update_updates_result$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION test.test_model_ledger() RETURNS SETOF TEXT AS
-$test_ledger$
-	SELECT * FROM model.add_team();
-	INSERT INTO model.ledger(source_id, destination_id, amount)
-		VALUES 	('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com'), 10),
-				('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'stephen.wozniak@coderbunker.com'), -10);
-	SELECT results_eq(
-		$$
-		SELECT sum(amount) FROM model.ledger;
-		$$,
-		$$ VALUES (0::NUMERIC); $$
-	);
-$test_ledger$ LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION test.test_model_ledger_fail() RETURNS SETOF TEXT AS
-$test_ledger_fail$
-	SELECT throws_like(
-		$$
-		SELECT * FROM model.add_team();
-			INSERT INTO model.ledger(source_id, destination_id, amount)
-				VALUES ('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com'), 10);
-			INSERT INTO model.ledger(entity_id, amount)
-				VALUES ('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'stephen.wozniak@coderbunker.com'), -9);
-		$$,
-		'%balance of amount does not match, sum is 10%'
-	);
-$test_ledger_fail$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION test.test_model_add_team() RETURNS SETOF TEXT AS
 $crap$

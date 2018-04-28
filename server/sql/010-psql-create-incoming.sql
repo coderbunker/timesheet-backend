@@ -28,4 +28,3 @@
 
 -- import facilities
 \ir incoming/update_from_server.sql
-
