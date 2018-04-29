@@ -84,5 +84,3 @@ BEGIN
 	);
 END;
 $test$ LANGUAGE PLPGSQL;
-
-SELECT * FROM runtests('test'::name, 'test_incoming');

@@ -86,3 +86,9 @@ CREATE OR REPLACE VIEW report.person AS
 	GROUP BY person_id, person_name
 	ORDER BY total_gross DESC
 	;
+	
+--DROP VIEW IF EXISTS report.balance CASCADE;
+--CREATE OR REPLACE VIEW report.balance AS
+	SELECT * 
+		FROM model.account 
+			INNER JOIN model.ledger ON (account.id = ledger.target_id);

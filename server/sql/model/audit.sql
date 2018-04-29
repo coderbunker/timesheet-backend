@@ -6,10 +6,13 @@ BEGIN
 	IF TG_TABLE_NAME = 'entity' THEN
 		RETURN NEW;
 	END IF;
-	EXECUTE format($$
+	EXECUTE format($XXX$
 		INSERT INTO "%s".entity(id, table_name, userid) 
-			VALUES ('%s', '%s', '%s');
-	$$, TG_TABLE_SCHEMA, NEW.id, TG_TABLE_NAME, user);
+			VALUES ('%s', '%s', '%s')
+		 ON CONFLICT(id) DO 
+			UPDATE SET updated = NOW() WHERE entity.id = '%s'
+		;
+	$XXX$, TG_TABLE_SCHEMA, NEW.id, TG_TABLE_NAME, USER, NEW.id);
 	RETURN NEW;
 END;
 $insert_entity$ LANGUAGE plpgsql;
@@ -43,18 +46,17 @@ $delete_entity$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION audit.add_audit(schema_name TEXT, table_name TEXT) RETURNS SETOF TEXT AS
 $add_audit$
 BEGIN
-	
 	PERFORM * FROM pg_catalog.pg_tables WHERE tablename = 'entity' AND schemaname = schema_name;
 	IF NOT FOUND THEN
-		EXECUTE format($$
+		EXECUTE format($xxx$
 			CREATE TABLE IF NOT EXISTS %s.entity(
 				id uuid PRIMARY KEY,
 				table_name TEXT NOT NULL,
 				created TIMESTAMPTZ DEFAULT now() NOT NULL,
 				updated TIMESTAMPTZ,
 				deleted TIMESTAMPTZ,
-				userid TEXT ) NOT NULL
-			); $$, schema_name);
+				userid TEXT NOT NULL
+			); $xxx$, schema_name);
 	END IF;
 
 	EXECUTE format (
@@ -71,3 +73,19 @@ BEGIN
 	RETURN NEXT 'trigger_delete_entity_' || table_name;
 END;
 $add_audit$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION audit.get_name(_id uuid) RETURNS record AS
+$get_name$
+DECLARE
+	_table_name TEXT;
+	ret RECORD;
+BEGIN
+	SELECT table_name INTO _table_name FROM model.entity WHERE entity.id = _id;
+	EXECUTE format($$
+		SELECT '%s', "name" FROM model.%s WHERE id = '%s'
+	$$, _table_name, _table_name, _id)  INTO ret;
+	RETURN ret;
+END;
+$get_name$ LANGUAGE plpgsql;
+
+-- SELECT a,b FROM audit.get_name('c17b4725-51c3-4f72-8b15-e14af04b656f'::uuid) AS (a text, b text)
