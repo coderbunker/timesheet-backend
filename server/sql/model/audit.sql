@@ -74,16 +74,28 @@ BEGIN
 END;
 $add_audit$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION audit.get_name(_id uuid) RETURNS record AS
+CREATE OR REPLACE FUNCTION audit.get_name(_id uuid) RETURNS text AS
 $get_name$
 DECLARE
 	_table_name TEXT;
-	ret RECORD;
+	ret TEXT;
 BEGIN
-	SELECT table_name INTO _table_name FROM model.entity WHERE entity.id = _id;
+		
+	IF _id IS NULL THEN
+		RETURN NULL;
+	END IF;
+
+	SELECT table_name 
+		INTO _table_name 
+		FROM model.entity 
+		WHERE entity.id = _id;
+	IF NOT FOUND THEN 
+		RAISE EXCEPTION 'No entity found for %', _id;
+	END IF;
+
 	EXECUTE format($$
-		SELECT '%s', "name" FROM model.%s WHERE id = '%s'
-	$$, _table_name, _table_name, _id)  INTO ret;
+		SELECT name FROM model."%s" WHERE id = '%s' LIMIT 1
+	$$, _table_name, _id)  INTO ret;
 	RETURN ret;
 END;
 $get_name$ LANGUAGE plpgsql;

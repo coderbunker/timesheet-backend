@@ -25,46 +25,106 @@ BEGIN
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION model.bootstrap(source_id uuid, target_id uuid, amount NUMERIC, currency TEXT, recorded TIMESTAMPTZ) RETURNS SETOF model.ledger AS
+CREATE OR REPLACE FUNCTION model.bootstrap(_source_id uuid, _target_id uuid, _amount NUMERIC, _currency TEXT, _recorded TIMESTAMPTZ) RETURNS SETOF model.ledger AS
 $bootstrap$
-	INSERT INTO model.ledger(source_id, target_id, amount, currency, recorded) 
-		VALUES(NULL, source_id, amount, currency, recorded) RETURNING *;
-	INSERT INTO model.ledger(source_id, target_id, amount, currency, recorded) 
-		VALUES(source_id, target_id, amount, currency, recorded) RETURNING *;
-$bootstrap$ LANGUAGE SQL;
+BEGIN
+	PERFORM * 
+		FROM model.ledger 
+		WHERE 
+			source_id = _source_id AND 
+			target_id = _target_id AND 
+			amount = _amount AND
+			currency = _currency AND 
+			recorded = _recorded
+	;
+	IF FOUND THEN
+		RETURN next NULL;
+	ELSE 
+		RETURN QUERY INSERT INTO model.ledger(source_id, target_id, amount, currency, recorded) 
+			VALUES(NULL, _source_id, _amount, _currency, _recorded) RETURNING *;
+		RETURN QUERY INSERT INTO model.ledger(source_id, target_id, amount, currency, recorded) 
+			VALUES(_source_id, _target_id, _amount, _currency, _recorded) RETURNING *;
+	END IF;
+END;
+$bootstrap$ LANGUAGE PLPGSQL;
 
-TRUNCATE model.ledger;
+CREATE OR REPLACE FUNCTION model.import_transfer() RETURNS SETOF model.ledger AS
+$import_transfer$
 SELECT * FROM (
 	SELECT model.bootstrap(customer_id, account_id, amount, model.symbol_to_currency(currency), transfer_datetime)
 		FROM incoming.transfer
 			INNER JOIN model.project ON (properties->>'docid' = project_id)
 			INNER JOIN model.account ON (account_id = account.id)
 ) AS b;
+$import_transfer$ LANGUAGE SQL;
 
-CREATE OR REPLACE VIEW model.balance AS
-	SELECT * FROM (
-		WITH outgoing AS (
+CREATE OR REPLACE FUNCTION model.create_transaction(_source_id uuid, _target_id uuid, _amount NUMERIC, _currency TEXT, _recorded TIMESTAMPTZ) RETURNS model.ledger AS
+$create_transaction$
+DECLARE
+	ledger model.ledger;
+BEGIN
+	PERFORM * 
+		FROM model.ledger 
+		WHERE 
+			source_id = _source_id AND 
+			target_id = _target_id AND 
+			amount = _amount AND
+			currency = _currency AND 
+			recorded = _recorded
+	;
+	IF FOUND THEN
+		RETURN NULL::model.ledger;
+	END IF;
+
+	PERFORM * FROM model.balance 
+		WHERE id = _source_id AND 
+			account_balance >= _amount;
+	IF NOT FOUND THEN 
+		RAISE EXCEPTION 'Insufficient found in % for % % -> %', _source_id, _amount, _currency, _target_id;
+	END IF;
+
+	INSERT INTO model."ledger"(source_id, target_id, amount, currency, recorded)
+		VALUES(_source_id, '5acd2fb5-5546-4421-adb2-8fd4cbd618f2', _amount*0.1, _currency, _recorded) RETURNING * INTO ledger;
+
+	INSERT INTO model."ledger"(source_id, target_id, amount, currency, recorded)
+		VALUES(_source_id, _target_id, _amount*0.9, _currency, _recorded) RETURNING * INTO ledger;
+	RETURN ledger;
+
+END;
+$create_transaction$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION model.process_payouts() RETURNS void AS
+$process_payouts$
+BEGIN
+	 PERFORM model.create_transaction(t.account_id, t.person_id, t.total, t.currency, t.recorded) FROM (
+		WITH person_entry AS (
 			SELECT 
-				source_id AS id, 
-				SUM(-amount) AS balance,
-				currency
-				FROM model.ledger 
-				WHERE source_id IS NOT NULL
-				GROUP BY source_id, currency
-		), incoming AS (
-			SELECT target_id AS id, 
-				SUM(amount) AS balance,
-				currency
-				FROM model.ledger 
-				GROUP BY target_id, currency
+				EXTRACT(YEAR FROM stop_datetime)::INTEGER year_group, 
+				EXTRACT(MONTH FROM stop_datetime)::INTEGER AS month_group, 
+				person_id,
+				account_id,
+				total, 
+				currency 
+			FROM model.timesheet
+		), current_month AS(
+			SELECT 
+				EXTRACT(YEAR FROM NOW())::INTEGER current_year, 
+				EXTRACT(MONTH FROM NOW())::INTEGER AS current_month
 		)
 		SELECT 
-			COALESCE(incoming.id, outgoing.id) AS id,
-			COALESCE(incoming.balance, 0) AS inflows,
-			COALESCE(outgoing.balance, 0) AS outflows,
-			COALESCE(incoming.currency, outgoing.currency) AS currency,
-			COALESCE(outgoing.balance, 0) + incoming.balance AS account_balance 
-			FROM incoming 
-				LEFT JOIN outgoing ON incoming.id = outgoing.id
-	) b NATURAL JOIN model.entity
+			person_id, 
+			account_id,
+			sum(total) AS total,
+			currency,
+			format('%s-%s-01', year_group, month_group)::TIMESTAMPTZ AS recorded
+		FROM person_entry, current_month
+		WHERE 
+			year_group <= current_year AND 
+			month_group < current_month
+		GROUP BY person_id, account_id, year_group, month_group, currency
+		ORDER BY year_group, month_group
+		) t
+	WHERE total > 0
 	;
+END;
+$process_payouts$ LANGUAGE PLPGSQL;
