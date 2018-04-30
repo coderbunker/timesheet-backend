@@ -26,5 +26,3 @@ BEGIN
 	);
 END;
 $test_api_snapshot_ok$ LANGUAGE PLPGSQL;
-
-	SELECT snapshot_json('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}');

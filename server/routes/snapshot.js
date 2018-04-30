@@ -31,7 +31,7 @@ router.post('/snapshot', async (req, res) => {
         req.body.id,
         JSON.stringify(req.body.doc)
       ])
-  var json = JSON.stringify(rows);
+  var json = JSON.stringify(rows[0].snapshot_json);
   res.writeHead(200, {'content-type':'application/json', 'content-length': Buffer.byteLength(json)});
   res.end(json);
 });
