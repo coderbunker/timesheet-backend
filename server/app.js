@@ -8,7 +8,7 @@ const { postgraphile } = require("postgraphile");
 const app = express()
 
 app.use(postgraphile(
-    process.env.DATABASE_URL || "postgres://localhost/",
+    process.env.DATABASE_URL || "postgres://localhost/heroku-timesheet",
     "postgraphql",
     {
         dynamicJson: true,

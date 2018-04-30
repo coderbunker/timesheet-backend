@@ -1,3 +1,4 @@
+\ir test/api.sql
 \ir test/test.utils.sql
 \ir test/utils.sql
 \ir test/incoming.sql

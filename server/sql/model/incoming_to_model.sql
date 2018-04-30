@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION model.convert_incoming_to_model() RETURNS SETOF model.entry AS
+CREATE OR REPLACE FUNCTION model.convert_incoming_to_model(_id TEXT) RETURNS SETOF model.entry AS
 $convert_incoming_to_model$
 INSERT INTO model.person(name, email, properties) SELECT * FROM (
 	WITH properties AS (
@@ -62,6 +62,7 @@ WITH vendor AS (
 				to_jsonb(legal_name)
 			] AS values
 		FROM incoming.account 
+		WHERE project_id = _id
 	)
 INSERT INTO model.account(name, customer_id, vendor_id, properties)  
 	SELECT customer_name, customer.id, vendor.id, jsonb_object_agg(pname, pvalue) AS properties
@@ -90,6 +91,7 @@ INSERT INTO model.project(name, properties, account_id) SELECT * FROM (
 				to_jsonb(last_update)
 			] AS values
 		FROM incoming.project 
+			WHERE id = _id
 	)
 	SELECT project_name AS name, jsonb_object_agg(pname, pvalue) AS properties, account.id AS account_id
 		FROM properties 
@@ -121,7 +123,10 @@ INSERT INTO model.membership(project_id, person_id, name, properties) SELECT * F
 		FROM incoming.people_project
 			LEFT JOIN model.person ON people_project.email = person.email
 			LEFT JOIN model.project ON people_project.project_id = project.properties->>'docid'
-		WHERE project.id IS NOT NULL AND person.id IS NOT NULL
+		WHERE 
+			project.id IS NOT NULL AND 
+			person.id IS NOT NULL AND 
+			people_project.project_id = _id
 	)
 	SELECT project_id, person_id, resource AS name, jsonb_object_agg(pname, pvalue) AS properties
 		FROM properties 
@@ -138,6 +143,7 @@ INSERT INTO model.rate(membership_id, rate, discount, currency, basis, valid) SE
 		-- TODO: need to manage validity period
 		SELECT project_id, resource, min(COALESCE(start_datetime, now())) AS start_datetime
 			FROM incoming.entry
+			WHERE project_id = _id
 			GROUP BY project_id, resource
 			HAVING min(start_datetime) IS NOT NULL
 	)
@@ -156,6 +162,8 @@ INSERT INTO model.rate(membership_id, rate, discount, currency, basis, valid) SE
 		INNER JOIN project_rate_validity 
 			ON membership.properties->>'docid' = project_rate_validity.project_id 
 				AND membership.name = project_rate_validity.resource
+	WHERE people_project.project_id = _id
+
 ) converted
 ON CONFLICT(membership_id, basis)
 	DO UPDATE SET discount = EXCLUDED.discount
@@ -175,6 +183,7 @@ INSERT INTO model.task(project_id, name) SELECT * FROM (
 			taskname IS NOT NULL 
 			AND length(trim(taskname)) > 0
 			AND lower(taskname) != 'Deposit'
+			AND project_id = _id
 		GROUP BY project_id, taskname
 	) 
 	SELECT 
@@ -197,8 +206,11 @@ WITH incoming_timesheet AS (
 				ON incoming.project.id = people_project.project_id 
 				AND people_project.resource = entry.resource
 		-- some entries are for accounting purposes
-		WHERE start_datetime IS NOT NULL AND stop_datetime IS NOT NULL 
-			AND (stop_datetime - start_datetime) < INTERVAL '14 hours'
+		WHERE 
+			project.id = _id AND
+			start_datetime IS NOT NULL AND 
+			stop_datetime IS NOT NULL AND 
+			(stop_datetime - start_datetime) < INTERVAL '14 hours'
 )
 INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime) 
 	SELECT 
@@ -214,6 +226,7 @@ INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
 		INNER JOIN model.task
 			ON task.project_id = model.project.id
 			AND task.name = taskname
+	WHERE model.project.properties->>'docid' = _id
 ON CONFLICT(membership_id, start_datetime, stop_datetime)
 	DO NOTHING
 RETURNING *
@@ -221,16 +234,21 @@ RETURNING *
 $convert_incoming_to_model$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model.convert_incoming_to_model_trigger() RETURNS trigger AS
-$$
+$convert_incoming_to_model_trigger$
 BEGIN
-	PERFORM model.convert_incoming_to_model();
+	
+	PERFORM  * FROM api.warnings WHERE id = NEW.id;
+	IF FOUND THEN
+		RETURN NEW;
+	END IF;
+	PERFORM model.convert_incoming_to_model(NEW.id);
 	RETURN NEW;
 END;
-$$ LANGUAGE PLPGSQL;
+$convert_incoming_to_model_trigger$ LANGUAGE PLPGSQL;
 
 DROP TRIGGER IF EXISTS model_update ON incoming.snapshot;
 
 CREATE TRIGGER model_update
     AFTER INSERT OR UPDATE ON incoming.snapshot
-    FOR EACH STATEMENT
+    FOR EACH ROW
     EXECUTE PROCEDURE model.convert_incoming_to_model_trigger();
