@@ -1,0 +1,28 @@
+{
+    "id": "1234",
+    "doc": {
+        "apptype": "Spreadsheet",
+        "category": "Timesheet",
+        "name": "Pure test data",
+        "timezone": "Asia/Shanghai",
+        "sheets": {
+            "Timesheet": {
+                "data": [
+                    {
+                        "month": "2017-06",
+                        "date": "2017-06-08",
+                        "hourlyrate": "¥700.00",
+                        "start": "15:00",
+                        "stop": "16:00",
+                        "hours": "1:00:00",
+                        "total": "-¥700.00",
+                        "resource": "Ricky",
+                        "taskname": "Setup",
+                        "activity": "https://docs.google.com/document/d/1FLue-J9WRWUauCOVbL92U7l29i7Z1Bz7VSf4sGcjkRI/edit#"
+                    }
+                ]
+            }
+        }
+    },
+    "apikey": "f98dbe87-5749-47c6-8e39-47ae7ff401ac"
+}
