@@ -55,7 +55,7 @@ BEGIN
 	      UPDATE SET doc = EXCLUDED.doc, ts = now() WHERE snapshot.id = EXCLUDED.id;
 	RETURN QUERY SELECT * FROM api.warnings WHERE id = $1;
 	IF NOT FOUND THEN
-		RETURN QUERY SELECT $1::text AS id, doc::jsonb, table_name, error 
+		RETURN QUERY SELECT $1::text AS id, doc, table_name, error 
 			FROM incoming.warnings 
 			WHERE doc->>'project_id' = $1;
 	END IF;

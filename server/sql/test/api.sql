@@ -3,11 +3,14 @@ $test_api_snapshot_warnings$
 BEGIN
 	RETURN QUERY SELECT results_eq($$
 		SELECT *
-			FROM api.snapshot('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}');
+			FROM api.snapshot('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}')
+			ORDER BY error;
 		$$, 
 		$$ VALUES
 			('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}'::jsonb, 'incoming.snapshot', 'apptype should be present in doc'), 
-			('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}'::jsonb, 'incoming.snapshot', 'category should be present in doc') 
+			('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}'::jsonb, 'incoming.snapshot', 'category should be present in doc'), 
+			('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}'::jsonb, 'incoming.snapshot', 'name should be present in doc'), 
+			('8344d193-f3ef-4e30-b9e9-e6b2641db5a8', '{}'::jsonb, 'incoming.snapshot', 'timezone should be present in doc') 
 		$$
 	);
 END;
@@ -20,7 +23,7 @@ BEGIN
 		SELECT *
 			FROM api.snapshot(
 				'8344d193-f3ef-4e30-b9e9-e6b2641db5a8', 
-				'{"apptype": "Spreadsheet", "category": "Timesheet"}
+				'{"apptype": "Spreadsheet", "category": "Timesheet", "name": "a document has no name", "timezone": "Asia/Shanghai"}
 			');
 		$$
 	);
