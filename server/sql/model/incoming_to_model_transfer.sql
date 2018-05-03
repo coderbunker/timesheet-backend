@@ -25,7 +25,7 @@ BEGIN
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION model.bootstrap(_source_id uuid, _target_id uuid, _amount NUMERIC, _currency TEXT, _recorded TIMESTAMPTZ) RETURNS SETOF model.ledger AS
+CREATE OR REPLACE FUNCTION model.customer_to_account_deposit(_source_id uuid, _target_id uuid, _amount NUMERIC, _currency TEXT, _recorded TIMESTAMPTZ) RETURNS SETOF model.ledger AS
 $bootstrap$
 BEGIN
 	PERFORM * 
@@ -51,17 +51,27 @@ $bootstrap$ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION model.import_transfer() RETURNS SETOF model.ledger AS
 $import_transfer$
 SELECT * FROM (
-	SELECT model.bootstrap(customer_id, account_id, amount, model.symbol_to_currency(currency), transfer_datetime)
+	SELECT model.customer_to_account_deposit(customer_id, account_id, amount, model.symbol_to_currency(currency), transfer_datetime)
 		FROM incoming.transfer
 			INNER JOIN model.project ON (properties->>'docid' = project_id)
 			INNER JOIN model.account ON (account_id = account.id)
 ) AS b;
 $import_transfer$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model.create_transaction(_source_id uuid, _target_id uuid, _amount NUMERIC, _currency TEXT, _recorded TIMESTAMPTZ) RETURNS model.ledger AS
+CREATE OR REPLACE FUNCTION model.freelancer_payout(
+	_source_id uuid, 
+	_target_id uuid, 
+	_amount NUMERIC, 
+	_currency TEXT, 
+	_recorded TIMESTAMPTZ
+) RETURNS SETOF model.ledger AS
 $create_transaction$
 DECLARE
 	ledger model.ledger;
+	host uuid;
+	vendor uuid;
+	deduction NUMERIC;
+	remaining NUMERIC;
 BEGIN
 	PERFORM * 
 		FROM model.ledger 
@@ -73,7 +83,7 @@ BEGIN
 			recorded = _recorded
 	;
 	IF FOUND THEN
-		RETURN NULL::model.ledger;
+		RETURN;
 	END IF;
 
 	PERFORM * FROM model.balance 
@@ -83,20 +93,37 @@ BEGIN
 		RAISE EXCEPTION 'Insufficient found in % for % % -> %', _source_id, _amount, _currency, _target_id;
 	END IF;
 
-	INSERT INTO model."ledger"(source_id, target_id, amount, currency, recorded)
-		VALUES(_source_id, '5acd2fb5-5546-4421-adb2-8fd4cbd618f2', _amount*0.1, _currency, _recorded) RETURNING * INTO ledger;
+	SELECT vendor_id INTO vendor FROM model.account WHERE id = _source_id;
 
-	INSERT INTO model."ledger"(source_id, target_id, amount, currency, recorded)
-		VALUES(_source_id, _target_id, _amount*0.9, _currency, _recorded) RETURNING * INTO ledger;
-	RETURN ledger;
-
+	remaining := _amount;
+	IF vendor IS NOT NULL THEN
+		deduction := _amount*0.1;
+		RETURN QUERY INSERT INTO model."ledger"(source_id, target_id, amount, currency, recorded)
+			VALUES(_source_id, vendor, deduction, _currency, _recorded) RETURNING *;
+		remaining := remaining - deduction;
+	END IF;
+	
+	SELECT host_id INTO host FROM model.account WHERE id = _source_id;
+	IF host IS NOT NULL THEN 
+		deduction := _amount*0.13;
+		RETURN QUERY INSERT INTO model."ledger"(source_id, target_id, amount, currency, recorded)
+			VALUES(_source_id, host, deduction, _currency, _recorded) RETURNING *;
+		remaining := remaining - deduction;
+	ELSE
+		RAISE NOTICE 'No host found';
+	END IF; 
+	
+	RETURN QUERY INSERT INTO model."ledger"(source_id, target_id, amount, currency, recorded)
+		VALUES(_source_id, _target_id, remaining, _currency, _recorded) RETURNING *;	
+	
+	RETURN;
 END;
 $create_transaction$ LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE FUNCTION model.process_payouts() RETURNS void AS
 $process_payouts$
 BEGIN
-	 PERFORM model.create_transaction(t.account_id, t.person_id, t.total, t.currency, t.recorded) FROM (
+	 PERFORM model.freelancer_payout(t.account_id, t.person_id, t.total, t.currency, t.recorded) FROM (
 		WITH person_entry AS (
 			SELECT 
 				EXTRACT(YEAR FROM stop_datetime)::INTEGER year_group, 

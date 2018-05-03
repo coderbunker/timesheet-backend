@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS model.account(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
 	customer_id uuid REFERENCES model.organization(id) ON DELETE CASCADE NOT NULL,
 	vendor_id uuid REFERENCES model.organization(id) ON DELETE CASCADE NOT NULL,
+	host_id uuid REFERENCES model.organization(id) ON DELETE CASCADE,
 	name TEXT UNIQUE,
 	properties JSONB DEFAULT '{}' NOT NULL
 );

@@ -31,10 +31,10 @@ $add_organization$
 	;
 $add_organization$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION model.add_account(customer uuid, vendor uuid, name_ text DEFAULT 'ACCOUNT_NAME') RETURNS model.account AS 
+CREATE OR REPLACE FUNCTION model.add_account(customer uuid, vendor uuid, name_ text DEFAULT 'ACCOUNT_NAME', host uuid DEFAULT NULL) RETURNS model.account AS 
 $add_account$
-	INSERT INTO model.account(customer_id, vendor_id, name)
-		VALUES(customer, vendor, name_)
+	INSERT INTO model.account(customer_id, vendor_id, name, host_id)
+		VALUES(customer, vendor, name_, host)
 		RETURNING *
 	;
 $add_account$ LANGUAGE SQL;
@@ -92,27 +92,3 @@ $update_user$
 		RETURNING *
 	;
 $update_user$ LANGUAGE SQL;
-
-
-CREATE OR REPLACE FUNCTION model.scenario1() RETURNS SETOF TEXT AS
-$scenario1$
-DECLARE
-	person model.person;
-	account model.account;
-	project model.project;
-	membership model.membership;
-	task model.task;
-	entry model.entry;
-	customer model.organization;
-	vendor model.organization;
-BEGIN
-	SELECT * FROM model.add_organization() INTO customer;
-	SELECT * FROM model.add_organization() INTO vendor;
-	SELECT * FROM model.add_person() INTO person;
-	SELECT * FROM model.add_account(customer.id, vendor.id) INTO account;
-	SELECT * FROM model.add_project(account.id) INTO project;
-	SELECT * FROM model.add_membership(project.id, person.id) INTO membership;
-	SELECT * FROM model.add_task(project.id) INTO task;
-	SELECT * FROM model.add_entry(membership.id, task.id) INTO entry;
-END;
-$scenario1$ LANGUAGE plpgsql;

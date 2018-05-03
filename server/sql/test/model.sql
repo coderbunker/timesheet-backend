@@ -6,32 +6,6 @@ $test_performance$
 	SELECT test.count_all_tables('model');
 $test_performance$ LANGUAGE sql;
 
-CREATE OR REPLACE FUNCTION test.test_model_scenario1() RETURNS SETOF TEXT AS
-$test_scenario1$
-DECLARE
-	person model.person;
-	account model.account;
-	project model.project;
-	membership model.membership;
-	task model.task;
-	entry model.entry;
-	customer model.organization;
-	vendor model.organization;
-BEGIN
-	SELECT * FROM model.add_organization('VENDOR') INTO vendor;
-	SELECT * FROM model.add_organization('CUSTOMER') INTO customer;
-	SELECT * FROM model.add_person() INTO person;
-	SELECT * FROM model.add_account(customer.id, vendor.id) INTO account;
-	SELECT * FROM model.add_project(account.id) INTO project;
-	SELECT * FROM model.add_membership(project.id, person.id) INTO membership;
-	SELECT * FROM model.add_task(project.id) INTO task;
-	SELECT * FROM model.add_entry(membership.id, task.id) INTO entry;
-	RETURN QUERY SELECT * FROM results_eq(
-		format($$ SELECT account_name, email FROM model.timesheet WHERE id = '%s'; $$, entry.id),
-		$$ VALUES ('ACCOUNT_NAME', 'ritchie.kernighan@coderbunker.com'::model.email); $$
-	);
-END;
-$test_scenario1$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION test.test_model_insert_timesheet() RETURNS SETOF TEXT AS
 $test_insert_timesheet$
@@ -46,8 +20,8 @@ DECLARE
 	vendor model.organization;
 	timesheet model.timesheet;
 BEGIN
-	SELECT * INTO customer FROM model.add_organization('Coderbunker Test');
-	SELECT * INTO vendor FROM model.add_organization('Coderbunker Test Customer');
+	SELECT * INTO customer FROM model.add_organization('Coderbunker Test Customer');
+	SELECT * INTO vendor FROM model.add_organization('Coderbunker Test Vendor');
 	SELECT * INTO account FROM model.add_account(customer.id, vendor.id, 'Coderbunker');
 	SELECT * INTO project FROM model.add_project(account.id, 'Coderbunker Internal');
 	SELECT * INTO person FROM model.add_person('Ritchie Kernighan');
@@ -294,7 +268,7 @@ DECLARE
 	project model.project;
 	account model.account;
 BEGIN
-	PERFORM model.scenario1();
+	PERFORM test.scenario1();
 	SELECT * INTO account FROM model.account LIMIT 1;
 	SELECT * INTO project FROM model.add_project(account.id, 'Lasercannon Project', 'doc1');
 	RETURN QUERY SELECT throws_like(format($$
