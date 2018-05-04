@@ -2,8 +2,8 @@ CREATE SCHEMA IF NOT EXISTS model;
 
 CREATE TABLE IF NOT EXISTS model.ledger(
 	id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-	source_id uuid REFERENCES audit.entity(id) ON DELETE CASCADE,
-	target_id uuid REFERENCES audit.entity(id) ON DELETE CASCADE NOT NULL,
+	source_id uuid REFERENCES model.entity(id) ON DELETE CASCADE,
+	target_id uuid REFERENCES model.entity(id) ON DELETE CASCADE NOT NULL,
 	amount NUMERIC NOT NULL,
 	currency CHAR(3) REFERENCES model.iso4217(code) NOT NULL,
 	recorded TIMESTAMPTZ DEFAULT NOW() NOT NULL,
@@ -19,19 +19,19 @@ CREATE TABLE IF NOT EXISTS model.ledger(
 --	credits NUMERIC;
 --BEGIN
 --	WITH outgoing AS (
---		SELECT source_id AS id, SUM(-amount) AS balance 
---			FROM model.ledger 
+--		SELECT source_id AS id, SUM(-amount) AS balance
+--			FROM model.ledger
 --			WHERE source_id IS NOT NULL
 --			GROUP BY source_id
 --	), incoming AS (
---		SELECT target_id AS id, 
---			SUM(amount) AS balance 
---			FROM model.ledger 
+--		SELECT target_id AS id,
+--			SUM(amount) AS balance
+--			FROM model.ledger
 --			GROUP BY target_id
 --	)
---	SELECT 
+--	SELECT
 --		SUM(outgoing.balance)+SUM(incoming.balance) INTO balance
---		FROM incoming 
+--		FROM incoming
 --			LEFT JOIN outgoing ON incoming.id = outgoing.id
 --	;
 --

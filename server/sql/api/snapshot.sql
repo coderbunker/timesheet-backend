@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS incoming.snapshot (
+CREATE TABLE IF NOT EXISTS api.snapshot (
 	id text NOT NULL,
 	doc jsonb NOT NULL,
 	ts timestamptz NOT NULL DEFAULT now(),
@@ -8,13 +8,13 @@ WITH (
 	OIDS=FALSE
 ) ;
 
-CREATE OR REPLACE VIEW incoming.snapshot_gsuite AS
-	SELECT 
-		doc->>'name' AS name, 
+CREATE OR REPLACE VIEW api.snapshot_gsuite AS
+	SELECT
+		doc->>'name' AS name,
 		doc->>'apptype' AS apptype,
 		doc->>'category' AS category,
 		ts AS last_update
-	FROM incoming.snapshot
+	FROM api.snapshot
 	ORDER BY ts DESC;
-	
+
 

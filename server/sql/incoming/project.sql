@@ -5,4 +5,4 @@ CREATE OR REPLACE VIEW incoming.project AS
 		doc->>'timezone' AS timezone,
 		ts AS last_update
 	FROM
-		incoming.snapshot;
+		api.snapshot;

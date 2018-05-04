@@ -31,7 +31,7 @@ $func$
 DECLARE
 	return_value NUMERIC;
 BEGIN
-	SELECT safe_cast(regexp_replace($1, '[^0-9\-\.]', '', 'g'), NULL::NUMERIC) INTO return_value;
+	SELECT utils.safe_cast(regexp_replace($1, '[^0-9\-\.]', '', 'g'), NULL::NUMERIC) INTO return_value;
 	RETURN return_value;
 END;
 $func$  LANGUAGE plpgsql IMMUTABLE;
@@ -52,8 +52,8 @@ CREATE OR REPLACE FUNCTION incoming.extract_percentage(text)
 $func$
 DECLARE
 	return_value NUMERIC;
-BEGIN 
-	SELECT safe_cast(((regexp_matches($1, '([0-9]+)%?'))[1]), NULL::NUMERIC)
+BEGIN
+	SELECT utils.safe_cast(((regexp_matches($1, '([0-9]+)%?'))[1]), NULL::NUMERIC)
 		INTO return_value;
 	IF return_value IS NOT NULL THEN
 		SELECT return_value / 100.0 INTO return_value;

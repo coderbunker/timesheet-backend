@@ -1,5 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS utils;
-
 -- https://gist.github.com/ryandotsmith/4602274
 DROP AGGREGATE IF EXISTS array_accum(anyarray);
 CREATE AGGREGATE array_accum (anyarray)

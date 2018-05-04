@@ -5,7 +5,7 @@
 		id,
 		doc->>'name' AS name
 	FROM
-		incoming.snapshot
+		api.snapshot
 	WHERE
 		doc->>'apptype' = 'Spreadsheet'
 		AND doc->>'category' = 'Leads & Opportunities'

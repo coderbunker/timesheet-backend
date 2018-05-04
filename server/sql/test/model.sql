@@ -1,5 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS test;
-
 CREATE OR REPLACE FUNCTION test.test_model_performance() RETURNS SETOF TEXT AS
 $test_performance$
 	SELECT model.add_person();
@@ -109,7 +107,7 @@ BEGIN
 			WHERE project_id = '%s';
 		$$, project_config.id)
 	);
- 
+
 	INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
 		VALUES(
 			project_config.membership_ids[1],

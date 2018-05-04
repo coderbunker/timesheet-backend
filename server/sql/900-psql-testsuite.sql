@@ -1,3 +1,4 @@
+\ir test/schema.sql
 \ir test/api.sql
 \ir test/test.utils.sql
 \ir test/scenario1.sql
