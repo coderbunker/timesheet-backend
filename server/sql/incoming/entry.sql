@@ -5,13 +5,12 @@ CREATE OR REPLACE VIEW incoming.raw_entry AS
 		id,
 		doc->>'name' AS name
 	FROM
-		incoming.snapshot
-	WHERE 
-		doc->>'apptype' = 'Spreadsheet' 
+		api.snapshot
+	WHERE
+		doc->>'apptype' = 'Spreadsheet'
 		AND doc->>'category' = 'Timesheet'
-
 	;
-					
+
 CREATE OR REPLACE VIEW incoming.entry AS
 	SELECT
 		DATE + START AS start_datetime,
@@ -40,7 +39,7 @@ CREATE OR REPLACE VIEW incoming.entry AS
 				(length(ELEMENT->>'resource') > 0 OR length(ELEMENT->>'name') > 0) AND
 				length(ELEMENT->>'date') > 0
 		) AS converted
-	WHERE start IS NOT NULL AND stop IS NOT NULL  
+	WHERE start IS NOT NULL AND stop IS NOT NULL
 	AND start <> stop
 	ORDER BY start_datetime
 	;

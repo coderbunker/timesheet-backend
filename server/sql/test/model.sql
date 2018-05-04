@@ -1,90 +1,9 @@
-CREATE SCHEMA IF NOT EXISTS test;
-
 CREATE OR REPLACE FUNCTION test.test_model_performance() RETURNS SETOF TEXT AS
 $test_performance$
 	SELECT model.add_person();
 	SELECT test.count_all_tables('model');
 $test_performance$ LANGUAGE sql;
 
-CREATE OR REPLACE FUNCTION test.test_model_insert_entity() RETURNS SETOF TEXT AS
-$test_insert_entity$
-DECLARE
-	person model.person;
-BEGIN
-	SELECT * FROM model.add_person() INTO person;
-	RETURN QUERY SELECT results_eq(
-		format($$
-			SELECT schema_name, table_name, userid
-			FROM audit.entity
-			WHERE id = '%s' AND created IS NOT NULL AND updated is NULL
-		$$, person.id),
-		$$ VALUES ('model', 'person', CURRENT_USER::text) $$
-	);
-END;
-$test_insert_entity$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION test.test_model_update_entity() RETURNS SETOF TEXT AS
-$test_update_entity$
-DECLARE
-	person model.person;
-BEGIN
-	PERFORM model.add_person();
-	SELECT * FROM model.update_user() INTO person;
-	RETURN QUERY SELECT results_eq(
-		format($query$
-			SELECT schema_name, table_name, userid
-			FROM audit.entity
-			WHERE id = '%s' AND updated is NOT NULL;
-		$query$, person.id),
-		$expected$ VALUES ('model', 'person', CURRENT_USER::text) $expected$
-	);
-END;
-$test_update_entity$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION test.test_model_delete_entity() RETURNS SETOF TEXT AS
-$test_delete_entity$
-DECLARE
-	person model.person;
-BEGIN
-	PERFORM model.add_person();
-	SELECT * FROM model.update_user() INTO person;
-	DELETE FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com';
-	RETURN QUERY SELECT results_eq(
-		format($$
-			SELECT schema_name, table_name, userid
-			FROM audit.entity
-			WHERE id = '%s' AND updated is NOT NULL AND deleted IS NOT NULL
-		$$, person.id),
-		$$ VALUES ('model', 'person', CURRENT_USER::text) $$
-	);
-END;
-$test_delete_entity$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION test.test_model_scenario1() RETURNS SETOF TEXT AS
-$test_scenario1$
-DECLARE
-	person model.person;
-	account model.account;
-	project model.project;
-	membership model.membership;
-	task model.task;
-	entry model.entry;
-	organization model.organization;
-BEGIN
-	SELECT * FROM model.add_organization() INTO organization;
-	SELECT * FROM model.add_person() INTO person;
-	SELECT * FROM model.add_account(organization.id) INTO account;
-	SELECT * FROM model.add_project(account.id) INTO project;
-	SELECT * FROM model.add_membership(project.id, person.id) INTO membership;
-	SELECT * FROM model.add_task(project.id) INTO task;
-	SELECT * FROM model.add_entry(membership.id, task.id) INTO entry;
-	RETURN QUERY SELECT * FROM results_eq(
-		format($$ SELECT account_name, email FROM model.timesheet WHERE id = '%s'; $$, entry.id),
-		$$ VALUES ('ACCOUNT_NAME', 'ritchie.kernighan@coderbunker.com'::email); $$
-	);
-END;
-$test_scenario1$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION test.test_model_insert_timesheet() RETURNS SETOF TEXT AS
 $test_insert_timesheet$
@@ -95,30 +14,32 @@ DECLARE
 	membership model.membership;
 	task model.task;
 	entry model.entry;
-	organization model.organization;
+	customer model.organization;
+	vendor model.organization;
 	timesheet model.timesheet;
 BEGIN
-	SELECT * INTO organization FROM model.add_organization('Coderbunker Test');
-	SELECT * INTO account FROM model.add_account(organization.id, 'Coderbunker');
+	SELECT * INTO customer FROM model.add_organization('Coderbunker Test Customer');
+	SELECT * INTO vendor FROM model.add_organization('Coderbunker Test Vendor');
+	SELECT * INTO account FROM model.add_account(customer.id, vendor.id, 'Coderbunker');
 	SELECT * INTO project FROM model.add_project(account.id, 'Coderbunker Internal');
 	SELECT * INTO person FROM model.add_person('Ritchie Kernighan');
 	SELECT * INTO membership FROM model.add_membership(project.id, person.id);
 	SELECT * INTO task FROM model.add_task(project.id, 'Planning');
 
 	SELECT * INTO timesheet FROM model.add_entry(
-		'Coderbunker Internal',
-		'ritchie.kernighan@coderbunker.com',
-		NOW() - '1 HOUR'::INTERVAL,
-		NOW(),
-		'Planning',
-		$$ {"activity": "ACTIVITY", "reference": "REFERENCE"} $$
-		);
+		'Coderbunker Internal'::TEXT,
+		'ritchie.kernighan@coderbunker.com'::TEXT,
+		(NOW() - '1 HOUR'::INTERVAL)::timestamptz,
+		NOW()::timestamptz,
+		'Planning'::TEXT,
+		($$ {"activity": "ACTIVITY", "reference": "REFERENCE"} $$)::jsonb
+	);
 
 	RETURN query SELECT * FROM results_eq(
 		format($$
 			SELECT account_name, email, properties->>'activity' FROM model.timesheet WHERE id = '%s';
 		$$, timesheet.id),
-		$$ VALUES ('Coderbunker', 'ritchie.kernighan@coderbunker.com'::email, 'ACTIVITY') $$
+		$$ VALUES ('Coderbunker', 'ritchie.kernighan@coderbunker.com'::model.email, 'ACTIVITY') $$
 	);
 END;
 $test_insert_timesheet$ LANGUAGE plpgsql;
@@ -163,7 +84,7 @@ BEGIN
 
 	RETURN query SELECT * FROM results_eq(
 		format($$
-			SELECT project_name, organization_name, account_name
+			SELECT project_name, vendor_name, account_name
 			FROM model.project_config
 			WHERE project_config.id = '%s';
 		$$, project_config.id),
@@ -205,33 +126,6 @@ BEGIN
 END;
 $test_entry_update_updates_result$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION test.test_model_ledger() RETURNS SETOF TEXT AS
-$test_ledger$
-	SELECT * FROM model.add_team();
-	INSERT INTO model.ledger(source_id, destination_id, amount)
-		VALUES 	('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com'), 10),
-				('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'stephen.wozniak@coderbunker.com'), -10);
-	SELECT results_eq(
-		$$
-		SELECT sum(amount) FROM model.ledger;
-		$$,
-		$$ VALUES (0::NUMERIC); $$
-	);
-$test_ledger$ LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION test.test_model_ledger_fail() RETURNS SETOF TEXT AS
-$test_ledger_fail$
-	SELECT throws_like(
-		$$
-		SELECT * FROM model.add_team();
-			INSERT INTO model.ledger(source_id, destination_id, amount)
-				VALUES ('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'ritchie.kernighan@coderbunker.com'), 10);
-			INSERT INTO model.ledger(entity_id, amount)
-				VALUES ('46207d44-ddf3-4ecf-8c01-d88d56d56181', (SELECT id FROM model.person WHERE email = 'stephen.wozniak@coderbunker.com'), -9);
-		$$,
-		'%balance of amount does not match, sum is 10%'
-	);
-$test_ledger_fail$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION test.test_model_add_team() RETURNS SETOF TEXT AS
 $crap$
@@ -245,7 +139,7 @@ $crap$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION test.test_model_bad_email() RETURNS SETOF TEXT AS
 $test_bad_email$
-	SELECT * FROM throws_ok(
+	SELECT * FROM throws_like(
 		$$
 		INSERT INTO model.person(name, email, properties)
 			VALUES(
@@ -254,7 +148,7 @@ $test_bad_email$
 				'{"default_rate": 700, "default_currency": "RMB"}'::JSONB
 				)
 		$$,
-		'value for domain email violates check constraint "email_check"'
+		'value for domain model.email violates check constraint "email_check"'
 	);
 $test_bad_email$ LANGUAGE SQL;
 
@@ -365,3 +259,20 @@ BEGIN
 	);
 END;
 $test_cannot_add_entry_in_the_future$ LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION test.test_model_cannot_add_project_with_duplicate_docid() RETURNS SETOF TEXT AS
+$test_model_cannot_add_project_with_duplicate_docid$
+DECLARE
+	project model.project;
+	account model.account;
+BEGIN
+	PERFORM test.scenario1();
+	SELECT * INTO account FROM model.account LIMIT 1;
+	SELECT * INTO project FROM model.add_project(account.id, 'Lasercannon Project', 'doc1');
+	RETURN QUERY SELECT throws_like(format($$
+		SELECT * INTO project FROM model.add_project('%s', 'LasercannonProject', 'doc1');
+		$$, account.id),
+		'duplicate key value violates unique constraint "unique_docid_per_project_idx"'
+	);
+END;
+$test_model_cannot_add_project_with_duplicate_docid$ LANGUAGE PLPGSQL;

@@ -1,72 +1,77 @@
-CREATE OR REPLACE FUNCTION model.convert_incoming_to_model() RETURNS SETOF model.entry AS
+CREATE OR REPLACE FUNCTION model.convert_incoming_to_model(_id TEXT) RETURNS SETOF model.entry AS
 $convert_incoming_to_model$
 INSERT INTO model.person(name, email, properties) SELECT * FROM (
 	WITH properties AS (
-		SELECT 
+		SELECT
 			people.fullname AS name,
-			safe_cast(incoming.profile.email, null::email) AS email,
+			utils.safe_cast(incoming.profile.email, null::model.email) AS email,
 			ARRAY[
-				'wechat', 
-				'github', 
-				'status', 
+				'wechat',
+				'github',
+				'status',
 				'default_rate',
 				'default_currency',
 				'nicknames',
 				'altnames'
-			] AS names, 
+			] AS names,
 			array[
-				to_jsonb(wechat), 
-				to_jsonb((regexp_match(COALESCE(people.github, profile.github), '(\w*)$'))[1]), 
-				to_jsonb(status), 
-				to_jsonb((regexp_matches(COALESCE(rate, '250'), '[0-9]*\.?[0-9]'))[1]::NUMERIC), 
+				to_jsonb(wechat),
+				to_jsonb((regexp_match(COALESCE(people.github, profile.github), '(\w*)$'))[1]),
+				to_jsonb(status),
+				to_jsonb((regexp_matches(COALESCE(rate, '250'), '[0-9]*\.?[0-9]'))[1]::NUMERIC),
 				to_jsonb((regexp_matches(COALESCE(rate, 'RMB'), '(RMB|USD|SGD|EUR)'))[1]),
 				to_jsonb(nicknames),
 				to_jsonb(people.altnames)
 			] AS values
-		FROM incoming.people 
-			FULL OUTER join incoming.profile 
+		FROM incoming.people
+			FULL OUTER join incoming.profile
 			ON people.email = profile.email
 	)
 	SELECT name, email, jsonb_object_agg(pname, pvalue) AS properties
-		FROM properties 
-			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue) 
+		FROM properties
+			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue)
 			ON TRUE
 		WHERE pvalue IS NOT null
 		GROUP BY name, email
 ) converted
-ON CONFLICT(email) 
+ON CONFLICT(email)
 	DO UPDATE SET properties = EXCLUDED.properties
 	WHERE person.email = EXCLUDED.email
 	AND person.properties != EXCLUDED.properties
 ;
 
-WITH organization AS (
-	SELECT id AS organization_id FROM model.organization WHERE name = 'Coderbunker Shanghai'
-),  properties AS (
-		SELECT 
-			client AS name,
+WITH vendor AS (
+	SELECT id
+		FROM model.organization WHERE name = 'Coderbunker Shanghai'
+), customer AS (
+	SELECT id, name
+		FROM model.organization
+), properties AS (
+		SELECT
+			client AS customer_name,
 			ARRAY[
-				'status', 
-				'summary', 
+				'status',
+				'summary',
 				'docid',
 				'legal_name'
-			] AS names, 
+			] AS names,
 			array[
-				to_jsonb(status), 
-				to_jsonb(summary), 
-				to_jsonb(project_id), 
+				to_jsonb(status),
+				to_jsonb(summary),
+				to_jsonb(project_id),
 				to_jsonb(legal_name)
 			] AS values
-		FROM incoming.account 
+		FROM incoming.account
+		WHERE project_id = _id
 	)
-INSERT INTO model.account(name, organization_id, properties)  
-	SELECT name, organization.organization_id, jsonb_object_agg(pname, pvalue) AS properties
-		FROM organization, properties 
-			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue) 
+INSERT INTO model.account(name, customer_id, vendor_id, properties)
+	SELECT customer_name, customer.id, vendor.id, jsonb_object_agg(pname, pvalue) AS properties
+		FROM vendor, customer, properties
+			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue)
 			ON TRUE
-		WHERE pvalue IS NOT null
-		GROUP BY name, organization.organization_id
-ON CONFLICT(name) 
+		WHERE pvalue IS NOT NULL AND customer.name = customer_name
+		GROUP BY customer_name, customer.id, vendor.id
+ON CONFLICT(name)
 	DO UPDATE SET properties = EXCLUDED.properties
 	WHERE account.name = EXCLUDED.name
 	AND account.properties != EXCLUDED.properties
@@ -74,27 +79,28 @@ ON CONFLICT(name)
 
 INSERT INTO model.project(name, properties, account_id) SELECT * FROM (
 	WITH properties AS (
-		SELECT 
-			id AS docid, 
+		SELECT
+			id AS docid,
 			name AS project_name,
 			ARRAY[
-				'docid', 
+				'docid',
 				'last_update'
-			] AS names, 
+			] AS names,
 			array[
-				to_jsonb(id), 
+				to_jsonb(id),
 				to_jsonb(last_update)
 			] AS values
-		FROM incoming.project 
+		FROM incoming.project
+			WHERE id = _id
 	)
 	SELECT project_name AS name, jsonb_object_agg(pname, pvalue) AS properties, account.id AS account_id
-		FROM properties 
+		FROM properties
 			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue) ON TRUE
 			LEFT JOIN model.account ON account.properties->>'docid' = docid
 		WHERE pvalue IS NOT NULL AND account.properties IS NOT null
 		GROUP BY project_name, account.id
 ) converted
-ON CONFLICT(name) 
+ON CONFLICT(name)
 	DO UPDATE SET properties = EXCLUDED.properties
 	WHERE project.properties->>'docid' = EXCLUDED.properties->>'docid'
 	AND project.properties != EXCLUDED.properties
@@ -102,30 +108,33 @@ ON CONFLICT(name)
 
 INSERT INTO model.membership(project_id, person_id, name, properties) SELECT * FROM (
 	WITH properties AS (
-		SELECT 
+		SELECT
 			resource,
 			person.id AS person_id,
 			project.id AS project_id,
 			ARRAY[
 				'email',
 				'docid'
-			] AS names, 
+			] AS names,
 			array[
-				to_jsonb(person.email), 
+				to_jsonb(person.email),
 				to_jsonb(people_project.project_id)
 			] AS values
 		FROM incoming.people_project
 			LEFT JOIN model.person ON people_project.email = person.email
 			LEFT JOIN model.project ON people_project.project_id = project.properties->>'docid'
-		WHERE project.id IS NOT NULL AND person.id IS NOT NULL
+		WHERE
+			project.id IS NOT NULL AND
+			person.id IS NOT NULL AND
+			people_project.project_id = _id
 	)
 	SELECT project_id, person_id, resource AS name, jsonb_object_agg(pname, pvalue) AS properties
-		FROM properties 
+		FROM properties
 			LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue) ON TRUE
-		WHERE pvalue IS NOT NULL 
+		WHERE pvalue IS NOT NULL
 		GROUP BY project_id, person_id, resource
 ) converted
-ON CONFLICT(project_id, name) 
+ON CONFLICT(project_id, name)
 	DO NOTHING
 ;
 
@@ -134,50 +143,54 @@ INSERT INTO model.rate(membership_id, rate, discount, currency, basis, valid) SE
 		-- TODO: need to manage validity period
 		SELECT project_id, resource, min(COALESCE(start_datetime, now())) AS start_datetime
 			FROM incoming.entry
+			WHERE project_id = _id
 			GROUP BY project_id, resource
 			HAVING min(start_datetime) IS NOT NULL
 	)
-	SELECT 
-		membership.id AS membership_id, 
+	SELECT
+		membership.id AS membership_id,
 		project_rate AS rate,
 		COALESCE(people_project.project_rate_discount, 0.0)::NUMERIC AS discount,
 		'RMB' AS currency, -- TODO: get it from default_currency
-		'hourly' AS basis, 
+		'hourly' AS basis,
 		start_datetime AS valid
-	FROM model.membership 
+	FROM model.membership
 		-- TODO: warn on missing entries
-		INNER JOIN incoming.people_project 
-			ON membership.properties->>'docid' = people_project.project_id 
+		INNER JOIN incoming.people_project
+			ON membership.properties->>'docid' = people_project.project_id
 				AND membership.name = people_project.resource
-		INNER JOIN project_rate_validity 
-			ON membership.properties->>'docid' = project_rate_validity.project_id 
+		INNER JOIN project_rate_validity
+			ON membership.properties->>'docid' = project_rate_validity.project_id
 				AND membership.name = project_rate_validity.resource
+	WHERE people_project.project_id = _id
+
 ) converted
 ON CONFLICT(membership_id, basis)
 	DO UPDATE SET discount = EXCLUDED.discount
-	WHERE rate.membership_id = EXCLUDED.membership_id 
+	WHERE rate.membership_id = EXCLUDED.membership_id
 		AND rate.basis = EXCLUDED.basis
 		AND rate.discount != EXCLUDED.discount
 ;
 
 INSERT INTO model.task(project_id, name) SELECT * FROM (
 	WITH tasks AS (
-		SELECT 
+		SELECT
 			DISTINCT(project_id, taskname),
-			project_id, 
+			project_id,
 			taskname
-		FROM incoming.entry 
-		WHERE 
-			taskname IS NOT NULL 
+		FROM incoming.entry
+		WHERE
+			taskname IS NOT NULL
 			AND length(trim(taskname)) > 0
 			AND lower(taskname) != 'Deposit'
+			AND project_id = _id
 		GROUP BY project_id, taskname
-	) 
-	SELECT 
-		model.project.id AS project_id, 
-		taskname AS name 
-	FROM tasks 
-		INNER JOIN model.project 
+	)
+	SELECT
+		model.project.id AS project_id,
+		taskname AS name
+	FROM tasks
+		INNER JOIN model.project
 			ON tasks.project_id = model.project.properties->>'docid'
 ) converted
 ON CONFLICT(project_id, name)
@@ -187,29 +200,33 @@ ON CONFLICT(project_id, name)
 WITH incoming_timesheet AS (
 	SELECT entry.*
 		FROM incoming.entry_union AS entry
-			INNER JOIN incoming.project 
+			INNER JOIN incoming.project
 				ON project.id = entry.project_id
-			INNER JOIN incoming.people_project 
-				ON incoming.project.id = people_project.project_id 
+			INNER JOIN incoming.people_project
+				ON incoming.project.id = people_project.project_id
 				AND people_project.resource = entry.resource
 		-- some entries are for accounting purposes
-		WHERE start_datetime IS NOT NULL AND stop_datetime IS NOT NULL 
-			AND (stop_datetime - start_datetime) < INTERVAL '14 hours'
+		WHERE
+			project.id = _id AND
+			start_datetime IS NOT NULL AND
+			stop_datetime IS NOT NULL AND
+			(stop_datetime - start_datetime) < INTERVAL '14 hours'
 )
-INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime) 
-	SELECT 
-		membership.id AS membership_id, 
-		task.id AS task_id, 
-		start_datetime, 
-		stop_datetime 
+INSERT INTO model.entry(membership_id, task_id, start_datetime, stop_datetime)
+	SELECT
+		membership.id AS membership_id,
+		task.id AS task_id,
+		start_datetime,
+		stop_datetime
 	FROM incoming_timesheet
 		INNER JOIN model.project
 			ON model.project.properties->>'docid' =  incoming_timesheet.project_id
-		INNER JOIN model.membership 
+		INNER JOIN model.membership
 			ON incoming_timesheet.resource = membership.name AND membership.project_id = model.project.id
 		INNER JOIN model.task
 			ON task.project_id = model.project.id
 			AND task.name = taskname
+	WHERE model.project.properties->>'docid' = _id
 ON CONFLICT(membership_id, start_datetime, stop_datetime)
 	DO NOTHING
 RETURNING *
@@ -217,16 +234,21 @@ RETURNING *
 $convert_incoming_to_model$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model.convert_incoming_to_model_trigger() RETURNS trigger AS
-$$
+$convert_incoming_to_model_trigger$
 BEGIN
-	PERFORM model.convert_incoming_to_model();
+
+	PERFORM  * FROM api.warnings WHERE id = NEW.id;
+	IF FOUND THEN
+		RETURN NEW;
+	END IF;
+	PERFORM model.convert_incoming_to_model(NEW.id);
 	RETURN NEW;
 END;
-$$ LANGUAGE PLPGSQL;
+$convert_incoming_to_model_trigger$ LANGUAGE PLPGSQL;
 
-DROP TRIGGER IF EXISTS model_update ON incoming.snapshot;
+DROP TRIGGER IF EXISTS model_update ON api.snapshot;
 
 CREATE TRIGGER model_update
-    AFTER INSERT OR UPDATE ON incoming.snapshot
-    FOR EACH STATEMENT
+    AFTER INSERT OR UPDATE ON api.snapshot
+    FOR EACH ROW
     EXECUTE PROCEDURE model.convert_incoming_to_model_trigger();

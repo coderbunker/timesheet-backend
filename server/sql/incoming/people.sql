@@ -2,7 +2,7 @@ CREATE OR REPLACE VIEW incoming.raw_people AS
 	SELECT
 		jsonb_array_elements((doc#>'{sheets, Balance, data}')::jsonb) AS doc,
 		id AS project_id
-	FROM incoming.snapshot
+	FROM api.snapshot
 	;
 
 CREATE OR REPLACE VIEW incoming.people_project AS
@@ -38,13 +38,13 @@ CREATE OR REPLACE VIEW incoming.people AS
 			WHERE nickname_to_email.email = profile.email
 		) AS t ON TRUE
 	;
-	
+
 CREATE OR REPLACE VIEW incoming.people_project_calendar AS
-	SELECT 
+	SELECT
 		resource,
 		email,
 		project_id,
 		(regexp_match(calendar, '.*src=([[a-z0-9\.]*)'))[1] || '@group.calendar.google.com'  AS calendar_id
-	FROM incoming.people_project 
+	FROM incoming.people_project
 	WHERE calendar IS NOT NULL
 	;

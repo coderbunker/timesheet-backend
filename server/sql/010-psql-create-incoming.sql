@@ -1,15 +1,8 @@
 -- schema
 \ir incoming/schema.sql
 
--- reusable function logic
-\ir safe_cast.sql
-\ir utils.sql
-\ir business-logic.sql
+-- conversion specific
 \ir incoming/conversion.sql
-
--- snapshot api and store
-\ir api.snapshot.sql
-\ir incoming/snapshot.sql
 
 -- derived entities
 \ir incoming/account.sql
@@ -17,6 +10,8 @@
 \ir incoming/profile.sql
 \ir incoming/entry.sql
 \ir incoming/people.sql
+\ir incoming/transfer.sql
+\ir incoming/waveapps.sql
 
 -- with calendar inputs
 \ir incoming/entry_calendar.sql
@@ -25,3 +20,5 @@
 -- reports
 \ir incoming/warnings.sql
 
+-- import facilities
+\ir incoming/update_from_server.sql

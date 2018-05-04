@@ -1,4 +1,7 @@
 \ir 005-psql-create-extensions.sql
+\ir 007-psql-create-utils.sql
+\ir 008-psql-create-api.sql
+\ir 010-psql-create-incoming.sql
 \ir 010-psql-create-incoming.sql
 \ir 020-psql-create-model.sql
 \ir 022-psql-create-model-functions.sql
