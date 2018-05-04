@@ -1,3 +1,3 @@
 
 -- postgraphql interface
-\ir postgraphql.sql
+\ir postgraphql/postgraphql.sql

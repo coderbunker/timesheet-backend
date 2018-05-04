@@ -17,12 +17,21 @@ CREATE OR REPLACE VIEW incoming.people_project AS
 	FROM incoming.raw_people
 	;
 
-DROP MATERIALIZED VIEW IF EXISTS incoming.nickname_to_email CASCADE;
-CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
-	SELECT resource, email
-	FROM incoming.people_project
-	WHERE resource IS NOT NULL
-	GROUP BY resource, email;
+DO $$
+	BEGIN
+		PERFORM * FROM pg_catalog.pg_matviews WHERE matviewname = 'nickname_to_email' AND schemaname = 'incoming';
+		IF NOT FOUND THEN
+			CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
+				SELECT resource, email
+				FROM incoming.people_project
+				WHERE resource IS NOT NULL
+				GROUP BY resource, email;
+			CREATE UNIQUE INDEX nickname_to_email_index ON incoming.nickname_to_email(resource, email);
+		ELSE
+			REFRESH MATERIALIZED VIEW CONCURRENTLY incoming.nickname_to_email;
+		END IF;
+	END;
+$$ LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE VIEW incoming.people AS
 	SELECT
