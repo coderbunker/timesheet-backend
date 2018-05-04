@@ -15,12 +15,19 @@ npm install
 node app.js
 ```
 
-restore schema of DB
+create schema of DB
 
 ```bash
-sudo su postgres
 createdb timesheet
-psql timesheet -f sql/PSQL.sql
+./setup.sh timesheet
+```
+
+this will also run the test suite.
+
+## run test suite on changes
+
+```bash
+./watch-test.sh timesheet
 ```
 
 ## Apache hook
