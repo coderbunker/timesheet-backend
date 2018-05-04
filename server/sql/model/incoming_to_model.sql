@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION model.convert_incoming_to_model(_id TEXT) RETURNS SETOF model.entry AS
-$convert_incoming_to_model$
+CREATE OR REPLACE FUNCTION model.convert_organization(_id TEXT) RETURNS SETOF model.organization AS
+$convert_organization$
 	INSERT INTO model.organization(name, properties) 
 		SELECT * FROM (
 			WITH properties AS (
@@ -22,8 +22,12 @@ $convert_incoming_to_model$
 		) converted
 	ON CONFLICT(name)
 		DO UPDATE SET properties = EXCLUDED.properties WHERE organization.properties != EXCLUDED.properties
-		;
-	
+	RETURNING *
+	;
+$convert_organization$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_person(_id TEXT) RETURNS SETOF model.person AS
+$convert_person$
 	INSERT INTO model.person(name, email, properties) SELECT * FROM (
 		WITH properties AS (
 			SELECT
@@ -55,15 +59,19 @@ $convert_incoming_to_model$
 			FROM properties
 				LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue)
 				ON TRUE
-			WHERE pvalue IS NOT null
+			WHERE pvalue IS NOT NULL AND email IS NOT NULL
 			GROUP BY name, email
 	) converted
 	ON CONFLICT(email)
 		DO UPDATE SET properties = EXCLUDED.properties
 		WHERE person.email = EXCLUDED.email
 		AND person.properties != EXCLUDED.properties
+	RETURNING *
 	;
-	
+$convert_person$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_account(_id TEXT) RETURNS SETOF model.account AS
+$convert_account$
 	WITH vendor AS (
 		SELECT id
 			FROM model.organization WHERE name = 'Coderbunker Shanghai'
@@ -99,8 +107,12 @@ $convert_incoming_to_model$
 		DO UPDATE SET properties = EXCLUDED.properties
 		WHERE account.name = EXCLUDED.name
 		AND account.properties != EXCLUDED.properties
+	RETURNING *
 	;
-	
+$convert_account$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_project(_id TEXT) RETURNS SETOF model.project AS
+$convert_project$
 	INSERT INTO model.project(name, properties, account_id) SELECT * FROM (
 		WITH properties AS (
 			SELECT
@@ -128,8 +140,12 @@ $convert_incoming_to_model$
 		DO UPDATE SET properties = EXCLUDED.properties
 		WHERE project.properties->>'docid' = EXCLUDED.properties->>'docid'
 		AND project.properties != EXCLUDED.properties
+	RETURNING *
 	;
-	
+$convert_project$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_membership(_id TEXT) RETURNS SETOF model.membership AS
+$convert_membership$
 	INSERT INTO model.membership(project_id, person_id, name, properties) SELECT * FROM (
 		WITH properties AS (
 			SELECT
@@ -160,8 +176,12 @@ $convert_incoming_to_model$
 	) converted
 	ON CONFLICT(project_id, name)
 		DO NOTHING
+	RETURNING *
 	;
-	
+$convert_membership$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_rate(_id TEXT) RETURNS SETOF model.rate AS
+$convert_rate$
 	INSERT INTO model.rate(membership_id, rate, discount, currency, basis, valid) SELECT * FROM (
 		WITH project_rate_validity AS (
 			-- TODO: need to manage validity period
@@ -194,8 +214,12 @@ $convert_incoming_to_model$
 		WHERE rate.membership_id = EXCLUDED.membership_id
 			AND rate.basis = EXCLUDED.basis
 			AND rate.discount != EXCLUDED.discount
+	RETURNING *
 	;
-	
+$convert_rate$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_task(_id TEXT) RETURNS SETOF model.task AS
+$convert_task$
 	INSERT INTO model.task(project_id, name) SELECT * FROM (
 		WITH tasks AS (
 			SELECT
@@ -219,8 +243,13 @@ $convert_incoming_to_model$
 	) converted
 	ON CONFLICT(project_id, name)
 		DO NOTHING
+	RETURNING *
 	;
 	
+$convert_task$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_entry(_id TEXT) RETURNS SETOF model.entry AS
+$convert_entry$
 	WITH incoming_timesheet AS (
 		SELECT entry.*
 			FROM incoming.entry_union AS entry
@@ -254,25 +283,18 @@ $convert_incoming_to_model$
 	ON CONFLICT(membership_id, start_datetime, stop_datetime)
 		DO NOTHING
 	RETURNING *
+	;
+$convert_entry$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION model.convert_incoming_to_model(_id TEXT) RETURNS SETOF uuid AS
+$convert_incoming_to_model$
+	SELECT id FROM model.convert_organization(_id);
+	SELECT id FROM model.convert_person(_id);
+	SELECT id FROM model.convert_account(_id);
+	SELECT id FROM model.convert_project(_id);
+	SELECT id FROM model.convert_membership(_id);
+	SELECT id FROM model.convert_rate(_id);
+	SELECT id FROM model.convert_task(_id);
+	SELECT id FROM model.convert_entry(_id);
 ;
 $convert_incoming_to_model$ LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION model.convert_incoming_to_model_trigger() RETURNS trigger AS
-$convert_incoming_to_model_trigger$
-BEGIN
-
-	PERFORM  * FROM api.warnings WHERE id = NEW.id;
-	IF FOUND THEN
-		RETURN NEW;
-	END IF;
-	PERFORM model.convert_incoming_to_model(NEW.id);
-	RETURN NEW;
-END;
-$convert_incoming_to_model_trigger$ LANGUAGE PLPGSQL;
-
-DROP TRIGGER IF EXISTS model_update ON api.snapshot;
-
-CREATE TRIGGER model_update
-    AFTER INSERT OR UPDATE ON api.snapshot
-    FOR EACH ROW
-    EXECUTE PROCEDURE model.convert_incoming_to_model_trigger();

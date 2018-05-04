@@ -3,16 +3,16 @@ CREATE SCHEMA IF NOT EXISTS report;
 CREATE OR REPLACE VIEW report.organization AS
 	WITH account_summary AS (
 		SELECT vendor_id, count(*) AS active_account
-			FROM model.account 
+			FROM model.account
 			WHERE
-				account.properties->>'status' = 'Ongoing' 
+				account.properties->>'status' = 'Ongoing'
 			GROUP BY account.vendor_id
 	)
-	SELECT 
-		*,  
+	SELECT
+		*,
 		round((total_hours/168)::NUMERIC) AS total_eng_months
 	FROM (
-		SELECT 
+		SELECT
 			vendor_name AS orgname,
 			min(start_datetime) AS since,
 			age(now(), min(start_datetime))::text AS activity,
@@ -22,9 +22,9 @@ CREATE OR REPLACE VIEW report.organization AS
 			extract(HOUR FROM sum(duration)) AS total_hours,
 			round(sum(total), 2) AS total_gross,
 			round(sum(total_discount), 2) AS total_investment
-		FROM model.timesheet, 
+		FROM model.timesheet,
 			LATERAL (
-				SELECT active_account 
+				SELECT active_account
 					FROM account_summary
 					WHERE account_summary.vendor_id = timesheet.vendor_id
 			) a
@@ -32,7 +32,7 @@ CREATE OR REPLACE VIEW report.organization AS
 	) t;
 
 CREATE OR REPLACE VIEW report.project AS
-	SELECT 
+	SELECT
 		project_id,
 		project_name,
 		customer_name,
@@ -52,9 +52,9 @@ CREATE OR REPLACE VIEW report.project AS
 	GROUP BY project_id, project_name, customer_name, vendor_name
 	ORDER BY total_gross DESC
 	;
-	
+
 CREATE OR REPLACE VIEW report.person AS
-	SELECT 
+	SELECT
 		person_id,
 		person_name,
 		count(*) entry_count,

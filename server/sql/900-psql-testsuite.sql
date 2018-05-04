@@ -1,3 +1,4 @@
+\ir 003-psql-create-extensions-localhost.sql
 \ir test/schema.sql
 \ir test/api.sql
 \ir test/test.utils.sql

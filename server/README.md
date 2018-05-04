@@ -96,7 +96,7 @@ Because Heroku requires the app to be in the root, we use subtree to push:
 git subtree push --prefix server heroku master
 ```
 
-Updating schema:
+Creating/updating schema on Heroku instance:
 
 ```bash
 psql -v "ON_ERROR_STOP=1" -b -1 -e -f sql/PSQL.sql `heroku pg:credentials:url | tail -1`
