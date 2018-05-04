@@ -20,7 +20,7 @@ restore schema of DB
 ```bash
 sudo su postgres
 createdb timesheet
-psql timesheet -f sql/timesheet.sql
+psql timesheet -f sql/PSQL.sql
 ```
 
 ## Apache hook
