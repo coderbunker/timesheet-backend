@@ -60,3 +60,32 @@ BEGIN
 	);
 END;
 $test_delete_entity$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION test.test_audit_get_name_get_type() RETURNS SETOF TEXT AS
+$test_audit_get_name_get_type$
+DECLARE
+	scenario1 test.scenario1_datatype;
+BEGIN
+	SELECT * FROM test.scenario1() INTO scenario1;
+	RETURN QUERY SELECT results_eq(format(
+		$$ SELECT audit.get_type('%s'), audit.get_name('%s'); $$, scenario1.person, scenario1.person),
+		$$ VALUES ('person', 'freelancer') $$
+	);
+	RETURN QUERY SELECT results_eq(format(
+		$$ SELECT audit.get_type('%s'), audit.get_name('%s'); $$, scenario1.customer, scenario1.customer),
+		$$ VALUES ('organization', 'customer') $$
+	);
+	RETURN QUERY SELECT results_eq(format(
+		$$ SELECT audit.get_type('%s'), audit.get_name('%s'); $$, scenario1.host, scenario1.host),
+		$$ VALUES ('organization', 'host') $$
+	);
+	RETURN QUERY SELECT results_eq(format(
+		$$ SELECT audit.get_type('%s'), audit.get_name('%s'); $$, scenario1.vendor, scenario1.vendor),
+		$$ VALUES ('organization', 'vendor') $$
+	);
+	RETURN QUERY SELECT results_eq(format(
+		$$ SELECT audit.get_type('%s'), audit.get_name('%s'); $$, scenario1.account, scenario1.account),
+		$$ VALUES ('account', 'account') $$
+	);
+END;
+$test_audit_get_name_get_type$ LANGUAGE PLPGSQL;
