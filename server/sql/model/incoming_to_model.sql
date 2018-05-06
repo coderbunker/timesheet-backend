@@ -75,6 +75,9 @@ $convert_account$
 	WITH vendor AS (
 		SELECT id
 			FROM model.organization WHERE name = 'Coderbunker Shanghai'
+	), host AS (
+		SELECT id
+			FROM model.organization WHERE name = 'Agora Space'
 	), customer AS (
 		SELECT id, name
 			FROM model.organization
@@ -96,8 +99,8 @@ $convert_account$
 			FROM incoming.account
 			WHERE project_id = _id
 		)
-	INSERT INTO model.account(name, customer_id, vendor_id, properties)
-		SELECT customer_name, customer.id, vendor.id, jsonb_object_agg(pname, pvalue) AS properties
+	INSERT INTO model.account(name, customer_id, vendor_id, host_id, properties)
+		SELECT customer_name, customer.id, vendor.id, host.id, jsonb_object_agg(pname, pvalue) AS properties
 			FROM vendor, customer, properties
 				LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue)
 				ON TRUE
@@ -106,7 +109,7 @@ $convert_account$
 	ON CONFLICT(name)
 		DO UPDATE SET properties = EXCLUDED.properties
 		WHERE account.name = EXCLUDED.name
-		AND account.properties != EXCLUDED.properties
+			AND account.properties != EXCLUDED.properties
 	RETURNING *
 	;
 $convert_account$ LANGUAGE SQL;

@@ -3,6 +3,7 @@
 \ir model/email.sql
 \ir model/audit.sql
 \ir model/model.sql
+\ir model/symbol_to_currency.sql
 \ir model/ledger.sql
 \ir model/balance.sql
 
