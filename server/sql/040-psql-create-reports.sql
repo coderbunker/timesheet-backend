@@ -1,5 +1,8 @@
 \ir report/schema.sql
 
+-- base dependencies
+\ir report/member_activity.sql
+
 -- entities report
 \ir report/organization.sql
 \ir report/person.sql
