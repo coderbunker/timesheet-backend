@@ -1,7 +1,20 @@
 CREATE OR REPLACE FUNCTION postgraphql.refresh_report() RETURNS trigger AS
 $refresh_report$
 BEGIN
-	REFRESH MATERIALIZED VIEW CONCURRENTLY postgraphql.organization;
+	PERFORM * 
+		FROM pg_catalog.pg_matviews 
+		WHERE matviewname = 'organization' AND 
+			schemaname = 'postgraphql';
+	IF FOUND THEN
+		REFRESH MATERIALIZED VIEW CONCURRENTLY postgraphql.organization;
+	END IF;
+	PERFORM * 
+		FROM pg_catalog.pg_matviews 
+		WHERE matviewname = 'trailing_12m_gross' AND 
+			schemaname = 'postgraphql';
+	IF FOUND THEN
+		REFRESH MATERIALIZED VIEW CONCURRENTLY postgraphql.trailing_12m_gross;
+	END IF;
 	RETURN NEW;
 END;
 $refresh_report$ LANGUAGE PLPGSQL;
