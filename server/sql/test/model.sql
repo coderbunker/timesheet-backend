@@ -164,25 +164,6 @@ $test_email_case_insensitive$
 	);
 $test_email_case_insensitive$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION test.test_model_views_tables_performance() RETURNS SETOF TEXT AS
-$test_email_case_insensitive$
-BEGIN
-	RETURN QUERY SELECT performs_ok(
-		format('SELECT * FROM "%s"."%s";', schemaname, objectname),
-		1000,
-		format('check that %s.%s is fast enough (less than 1s)', schemaname, objectname)
-		) FROM (
-			SELECT schemaname, tablename AS objectname
-				FROM pg_catalog.pg_tables
-				WHERE schemaname = 'model' OR schemaname = 'report'
-			UNION ALL
-				SELECT schemaname, viewname AS objectname
-					FROM pg_catalog.pg_views
-					WHERE schemaname = 'model' OR schemaname = 'report'
-		) t;
-END;
-$test_email_case_insensitive$ LANGUAGE PLPGSQL;
-
 CREATE OR REPLACE FUNCTION test.test_model_cannot_add_negative_duration() RETURNS SETOF TEXT AS
 $test_email_case_insensitive$
 DECLARE
