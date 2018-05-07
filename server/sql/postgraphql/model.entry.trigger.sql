@@ -10,10 +10,10 @@ BEGIN
 	END IF;
 	PERFORM * 
 		FROM pg_catalog.pg_matviews 
-		WHERE matviewname = 'trailing_12m_gross' AND 
+		WHERE matviewname = 'monthly_gross' AND 
 			schemaname = 'postgraphql';
 	IF FOUND THEN
-		REFRESH MATERIALIZED VIEW CONCURRENTLY postgraphql.trailing_12m_gross;
+		REFRESH MATERIALIZED VIEW CONCURRENTLY postgraphql.monthly_gross;
 	END IF;
 	RETURN NEW;
 END;

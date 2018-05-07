@@ -11,7 +11,7 @@
 -- derived reports
 \ir report/missing_receivable_deposit.sql
 \ir report/time_tracking_matrix.sql
-\ir report/trailing_12m_gross.sql
+\ir report/monthly_gross.sql
 
 -- warnings
 \ir report/warnings.sql
