@@ -96,13 +96,27 @@ Because Heroku requires the app to be in the root, we use subtree to push:
 git subtree push --prefix server heroku master
 ```
 
+Creating/updating schema on Heroku instance:
+
+```bash
+psql -v "ON_ERROR_STOP=1" -b -1 -e -f sql/PSQL.sql `heroku pg:credentials:url | tail -1`
+```
+
+Restarting the dyno (to load changes to the database for example)
+
+```bash
+heroku restart -a coderbunker-timesheet
+```
+
+## data transfer to/from heroku
+
 Pushing the local database:
 
 ```bash
 heroku pg:push timesheet postgresql-rigid-65921 --app coderbunker-timesheet
 ```
 
-Puling the Heroku database locally and making a copy before changing the pulled version
+Pulling the Heroku database locally and making a copy before changing the pulled version
 (adjust date):
 
 ```bash
@@ -110,12 +124,6 @@ heroku pg:pull postgresql-rigid-65921 heroku-timesheet --app coderbunker-timeshe
 psql -c 'CREATE DATABASE "heroku-timesheet-20180416" TEMPLATE "heroku-timesheet";' postgres
 ```
 
-
-Restarting the dyno (to load changes to the database for example)
-
-```bash
-heroku restart -a coderbunker-timesheet
-```
 ## Manage Domain
 
 ### CNAME Setup for Heroku app

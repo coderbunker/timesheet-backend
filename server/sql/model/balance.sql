@@ -17,10 +17,10 @@ CREATE OR REPLACE VIEW model.balance AS
 		)
 		SELECT 
 			COALESCE(incoming.id, outgoing.id) AS id,
-			COALESCE(incoming.balance, 0) AS inflows,
-			COALESCE(outgoing.balance, 0) AS outflows,
+			round(COALESCE(incoming.balance, 0), 2) AS inflows,
+			round(COALESCE(outgoing.balance, 0), 2) AS outflows,
 			COALESCE(incoming.currency, outgoing.currency) AS currency,
-			COALESCE(outgoing.balance, 0) + incoming.balance AS account_balance,
+			round(COALESCE(outgoing.balance, 0) + incoming.balance, 2) AS account_balance,
 			audit.get_name(COALESCE(incoming.id, outgoing.id)) AS name
 			FROM incoming 
 				LEFT JOIN outgoing ON incoming.id = outgoing.id

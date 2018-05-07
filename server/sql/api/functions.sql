@@ -1,7 +1,3 @@
-
-
-
-
 CREATE OR REPLACE FUNCTION api.snapshot(text, json)
 RETURNS SETOF api.warnings AS
 $func$
@@ -11,11 +7,12 @@ BEGIN
 	    ON CONFLICT(id) DO
 	      UPDATE SET doc = EXCLUDED.doc, ts = now() WHERE snapshot.id = EXCLUDED.id;
 	RETURN QUERY SELECT * FROM api.warnings WHERE id = $1;
-	IF NOT FOUND THEN
-		RETURN QUERY SELECT $1::text AS id, doc, table_name, error
-			FROM incoming.warnings
-			WHERE doc->>'project_id' = $1;
-	END IF;
+-- TODO: this times out, need better performance out of retrieving warnings
+--	IF NOT FOUND THEN
+--		RETURN QUERY SELECT $1::text AS id, doc, table_name, error
+--			FROM incoming.warnings
+--			WHERE doc->>'project_id' = $1;
+--	END IF;
 END;
 $func$  LANGUAGE plpgsql;
 

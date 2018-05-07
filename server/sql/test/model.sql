@@ -20,7 +20,7 @@ DECLARE
 BEGIN
 	SELECT * INTO customer FROM model.add_organization('Coderbunker Test Customer');
 	SELECT * INTO vendor FROM model.add_organization('Coderbunker Test Vendor');
-	SELECT * INTO account FROM model.add_account(customer.id, vendor.id, 'Coderbunker');
+	SELECT * INTO account FROM model.add_account(customer.id, vendor.id, 'Coderbunker Test Account');
 	SELECT * INTO project FROM model.add_project(account.id, 'Coderbunker Internal');
 	SELECT * INTO person FROM model.add_person('Ritchie Kernighan');
 	SELECT * INTO membership FROM model.add_membership(project.id, person.id);
@@ -39,7 +39,7 @@ BEGIN
 		format($$
 			SELECT account_name, email, properties->>'activity' FROM model.timesheet WHERE id = '%s';
 		$$, timesheet.id),
-		$$ VALUES ('Coderbunker', 'ritchie.kernighan@coderbunker.com'::model.email, 'ACTIVITY') $$
+		$$ VALUES ('Coderbunker Test Account', 'ritchie.kernighan@coderbunker.com'::model.email, 'ACTIVITY') $$
 	);
 END;
 $test_insert_timesheet$ LANGUAGE plpgsql;

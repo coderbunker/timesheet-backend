@@ -1,8 +1,8 @@
 -- Usage:
--- SELECT * FROM incoming.update_from_server(
+-- SELECT * FROM api.update_from_server(
 --	<OUTPUT FROM heroku pg:credentials:url>
 -- );
-CREATE OR REPLACE FUNCTION incoming.update_from_server(connection_url TEXT) RETURNS SETOF api.snapshot AS
+CREATE OR REPLACE FUNCTION api.update_from_server(connection_url TEXT) RETURNS SETOF api.snapshot AS
 $update_from_server$
 DECLARE
 	matches TEXT[];
@@ -13,11 +13,16 @@ DECLARE
 	password TEXT;
 	current_user TEXT;
 BEGIN
-	SELECT arr[1], arr[2], arr[3], arr[4], arr[5] INTO STRICT username, password, host, port, dbname FROM (
-		SELECT regexp_match(
-			connection_url,
-			'postgres:\/\/([a-zA-Z0-9]*):([a-zA-Z0-9]*)@([a-zA-Z0-9\-\.]*):(\d*)\/([a-zA-Z0-9]*)') AS arr
-	) t
+	SELECT 
+		arr[1], 
+		arr[2], 
+		arr[3], 
+		arr[4], 
+		arr[5] INTO STRICT username, password, host, port, dbname FROM (
+			SELECT regexp_match(
+				connection_url,
+				'postgres:\/\/([a-zA-Z0-9]*):([a-zA-Z0-9]*)@([a-zA-Z0-9\-\.]*):(\d*)\/([a-zA-Z0-9]*)') AS arr
+		) t
 	;
 
 	IF NOT FOUND THEN
@@ -38,18 +43,18 @@ BEGIN
 	        OPTIONS (user '%s', password '%s');
 	$$, current_user, username, password);
 
-	DROP FOREIGN TABLE IF EXISTS foreign_incoming_snapshot;
-	CREATE FOREIGN TABLE foreign_incoming_snapshot (
+	DROP FOREIGN TABLE IF EXISTS foreign_api_snapshot;
+	CREATE FOREIGN TABLE foreign_api_snapshot (
 		doc json NOT NULL,
 		ts timestamptz NOT NULL DEFAULT now(),
 		id text NOT NULL
 	)
 	SERVER foreign_server
-	OPTIONS (schema_name 'incoming', table_name 'snapshot');
+	OPTIONS (schema_name 'api', table_name 'snapshot');
 
 	RETURN QUERY INSERT INTO api.snapshot
-		SELECT remote.*
-			FROM foreign_incoming_snapshot remote
+		SELECT remote.id, remote.doc, remote.ts
+			FROM foreign_api_snapshot remote
 				LEFT JOIN api.snapshot ON (snapshot.id = remote.id)
 			WHERE snapshot.ts IS NULL OR (snapshot.ts < remote.ts)
 	ON CONFLICT(id)

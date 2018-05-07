@@ -1,5 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS test;
-
 CREATE OR REPLACE FUNCTION test.count_all_views(
 	schemaname TEXT
 ) RETURNS SETOF TEXT AS $$

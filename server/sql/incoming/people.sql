@@ -13,16 +13,25 @@ CREATE OR REPLACE VIEW incoming.people_project AS
 		incoming.extract_percentage(doc->>'ratediscount')  AS project_rate_discount,
 		incoming.extract_rate(doc->>'rate') AS project_rate,
 		incoming.extract_currency(doc->>'rate') AS currency,
-		NULLIF(trim(doc->>'calendar'), '') AS calendar
+		NULLIF(trim(doc->>'calendarid'), '') AS calendar
 	FROM incoming.raw_people
 	;
 
-DROP MATERIALIZED VIEW IF EXISTS incoming.nickname_to_email CASCADE;
-CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
-	SELECT resource, email
-	FROM incoming.people_project
-	WHERE resource IS NOT NULL
-	GROUP BY resource, email;
+DO $$
+	BEGIN
+		PERFORM * FROM pg_catalog.pg_matviews WHERE matviewname = 'nickname_to_email' AND schemaname = 'incoming';
+		IF NOT FOUND THEN
+			CREATE MATERIALIZED VIEW incoming.nickname_to_email AS
+				SELECT resource, email
+				FROM incoming.people_project
+				WHERE resource IS NOT NULL
+				GROUP BY resource, email;
+			CREATE UNIQUE INDEX nickname_to_email_index ON incoming.nickname_to_email(resource, email);
+		ELSE
+			REFRESH MATERIALIZED VIEW CONCURRENTLY incoming.nickname_to_email;
+		END IF;
+	END;
+$$ LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE VIEW incoming.people AS
 	SELECT
@@ -32,7 +41,7 @@ CREATE OR REPLACE VIEW incoming.people AS
 		altnames,
 		nicknames
 	FROM
-		incoming.profile LEFT JOIN LATERAL (
+		incoming.profile INNER JOIN LATERAL (
 			SELECT array_agg(resource) AS nicknames
 			FROM incoming.nickname_to_email
 			WHERE nickname_to_email.email = profile.email
@@ -44,7 +53,7 @@ CREATE OR REPLACE VIEW incoming.people_project_calendar AS
 		resource,
 		email,
 		project_id,
-		(regexp_match(calendar, '.*src=([[a-z0-9\.]*)'))[1] || '@group.calendar.google.com'  AS calendar_id
+		(regexp_match(calendar, '([[a-z0-9\.]*@group\.calendar\.google\.com)'))[1]  AS calendar_id
 	FROM incoming.people_project
 	WHERE calendar IS NOT NULL
 	;

@@ -1,51 +1,38 @@
 CREATE SCHEMA IF NOT EXISTS report;
 
-DROP VIEW IF EXISTS report.organization CASCADE;
 CREATE OR REPLACE VIEW report.organization AS
-	WITH person_summary AS (
-		SELECT 
-			COUNT(distinct(person_id)) AS count 
-		FROM model.membership
-	), project_summary AS (
-		SELECT 
-			COUNT(*) AS count
-		FROM model.project
-	), account_summary AS (
-		SELECT count(*) 
-			FROM model.account 
-			WHERE account.properties->>'status' = 'Ongoing'
-	), timesheet_summary AS (
-		SELECT 
-			min(start_datetime) AS since,
-			extract(HOUR FROM sum(duration)) AS total_hours,
-			sum(total) AS total_gross,
-			sum(total_discount) AS total_investment,
-			age(now(), min(start_datetime))::text AS activity
-		FROM model.timesheet
+	WITH account_summary AS (
+		SELECT vendor_id, count(*) AS active_account
+			FROM model.account
+			WHERE
+				account.properties->>'status' = 'Ongoing'
+			GROUP BY account.vendor_id
 	)
-	SELECT 
-		timesheet.vendor_name AS orgname,
-		timesheet_summary.since,
-		timesheet_summary.activity,
-		person_summary.count AS people_count,
-		project_summary.count AS project_count,
-		account_summary.count AS ongoing_project_count,
-		timesheet_summary.total_hours AS total_hours,
-		((timesheet_summary.total_hours)/168)::integer AS total_eng_months,	
-		timesheet_summary.total_gross,
-		timesheet_summary.total_investment
-	FROM 
-		model.timesheet, 
-		person_summary,
-		project_summary,
-		account_summary, 
-		timesheet_summary
-	LIMIT 1
-	;
+	SELECT
+		*,
+		round((total_hours/168)::NUMERIC) AS total_eng_months
+	FROM (
+		SELECT
+			vendor_name AS orgname,
+			min(start_datetime) AS since,
+			age(now(), min(start_datetime))::text AS activity,
+			count(DISTINCT(person_id)) AS people_count,
+			count(DISTINCT(project_id)) AS project_count,
+			active_account AS ongoing_project_count,
+			extract(HOUR FROM sum(duration)) AS total_hours,
+			round(sum(total), 2) AS total_gross,
+			round(sum(total_discount), 2) AS total_investment
+		FROM model.timesheet,
+			LATERAL (
+				SELECT active_account
+					FROM account_summary
+					WHERE account_summary.vendor_id = timesheet.vendor_id
+			) a
+		GROUP BY vendor_name, active_account
+	) t;
 
-DROP VIEW IF EXISTS report.project CASCADE;
 CREATE OR REPLACE VIEW report.project AS
-	SELECT 
+	SELECT
 		project_id,
 		project_name,
 		customer_name,
@@ -65,10 +52,9 @@ CREATE OR REPLACE VIEW report.project AS
 	GROUP BY project_id, project_name, customer_name, vendor_name
 	ORDER BY total_gross DESC
 	;
-	
-DROP VIEW IF EXISTS report.person CASCADE;
+
 CREATE OR REPLACE VIEW report.person AS
-	SELECT 
+	SELECT
 		person_id,
 		person_name,
 		count(*) entry_count,
@@ -86,9 +72,3 @@ CREATE OR REPLACE VIEW report.person AS
 	GROUP BY person_id, person_name
 	ORDER BY total_gross DESC
 	;
-	
---DROP VIEW IF EXISTS report.balance CASCADE;
---CREATE OR REPLACE VIEW report.balance AS
-	SELECT * 
-		FROM model.account 
-			INNER JOIN model.ledger ON (account.id = ledger.target_id);
