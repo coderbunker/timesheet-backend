@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION model.convert_organization(_id TEXT) RETURNS SETOF model.organization AS
 $convert_organization$
-	INSERT INTO model.organization(name, properties) 
+	INSERT INTO model.organization(name, properties)
 		SELECT * FROM (
 			WITH properties AS (
 				SELECT
@@ -101,11 +101,11 @@ $convert_account$
 		)
 	INSERT INTO model.account(name, customer_id, vendor_id, host_id, properties)
 		SELECT customer_name, customer.id, vendor.id, host.id, jsonb_object_agg(pname, pvalue) AS properties
-			FROM vendor, customer, properties
+			FROM vendor, customer, host, properties
 				LEFT JOIN LATERAL UNNEST(properties.names, properties.values) AS p(pname, pvalue)
 				ON TRUE
 			WHERE pvalue IS NOT NULL AND customer.name = customer_name
-			GROUP BY customer_name, customer.id, vendor.id
+			GROUP BY customer_name, customer.id, vendor.id, host.id
 	ON CONFLICT(name)
 		DO UPDATE SET properties = EXCLUDED.properties
 		WHERE account.name = EXCLUDED.name
@@ -210,7 +210,7 @@ $convert_rate$
 				ON membership.properties->>'docid' = project_rate_validity.project_id
 					AND membership.name = project_rate_validity.resource
 		WHERE people_project.project_id = _id AND project_rate IS NOT NULL
-	
+
 	) converted
 	ON CONFLICT(membership_id, basis)
 		DO UPDATE SET discount = EXCLUDED.discount
@@ -248,7 +248,7 @@ $convert_task$
 		DO NOTHING
 	RETURNING *
 	;
-	
+
 $convert_task$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION model.convert_entry(_id TEXT) RETURNS SETOF model.entry AS

@@ -10,3 +10,5 @@
 \ir 040-psql-create-reports.sql
 \ir 050-psql-create-postgraphql.sql
 -- \ir 900-psql-testsuite.sql
+
+\echo "Success. Please don't forget to run tests using watch-test.sh"

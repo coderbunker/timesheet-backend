@@ -127,5 +127,4 @@ BEGIN
 	RETURN ret;
 END;
 $get_name$ LANGUAGE plpgsql IMMUTABLE;
-
 -- SELECT a,b FROM audit.get_name('c17b4725-51c3-4f72-8b15-e14af04b656f'::uuid) AS (a text, b text)
