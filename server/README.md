@@ -15,6 +15,11 @@ npm install
 node app.js
 ```
 
+install PostgreSQL extensions:
+
+```bash
+pgxn install pgtap
+```
 create schema of DB
 
 ```bash
