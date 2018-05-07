@@ -23,20 +23,20 @@ DO $$
 	BEGIN
 		PERFORM * 
 			FROM pg_catalog.pg_matviews 
-			WHERE matviewname = 'trailing_12m_gross' AND 
+			WHERE matviewname = 'monthly_gross' AND 
 				schemaname = 'postgraphql';
 		IF NOT FOUND THEN
-			CREATE MATERIALIZED VIEW postgraphql.trailing_12m_gross AS
+			CREATE MATERIALIZED VIEW postgraphql.monthly_gross AS
 				SELECT
-					trailing_12m_gross.*,
+					monthly_gross.*,
 					now() AS last_refresh,
 					(SELECT max(last_update) FROM incoming.project) AS last_update
-				FROM report.trailing_12m_gross
-				ORDER BY trailing_12m_gross.entry_year, trailing_12m_gross.entry_month
+				FROM report.monthly_gross
+				ORDER BY monthly_gross.entry_year, monthly_gross.entry_month
 				;
-			CREATE UNIQUE INDEX postgraphql_trailing_12m_gross_index ON postgraphql.trailing_12m_gross(entry_year, entry_month, vendor_name, currency);
+			CREATE UNIQUE INDEX postgraphql_monthly_gross_index ON postgraphql.monthly_gross(entry_year, entry_month, vendor_name, currency);
 		ELSE
-			REFRESH MATERIALIZED VIEW CONCURRENTLY postgraphql.trailing_12m_gross;
+			REFRESH MATERIALIZED VIEW CONCURRENTLY postgraphql.monthly_gross;
 		END IF;
 	END;
 $$ LANGUAGE PLPGSQL;

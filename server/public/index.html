@@ -66,8 +66,8 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     query: `
-                        {
-                            allTrailing12MGrosses {
+                    {
+                        allMonthlyGrosses(orderBy: LABEL_ASC) {
                             nodes {
                                 entryYear
                                 entryMonth
@@ -77,16 +77,18 @@
                                 vendorName
                                 lastRefresh
                                 lastUpdate
+                                label
                             }
-                            }
-                        }`
+                        }
+                    }
+                    `
                     })
                 })
             .then(res => {
                 return res.json().then(o => {
                     console.log(o);
-                    const dataSource = o.data.allTrailing12MGrosses.nodes;
-                    const list = document.getElementById('trailing12m');
+                    const dataSource = o.data.allMonthlyGrosses.nodes;
+                    const list = document.getElementById('monthlyGrosses');
                     const max = dataSource.reduce(function(a, b) {
                         return {total: Math.max(parseFloat(a.total), parseFloat(b.total)) } ;
                     });
@@ -95,7 +97,7 @@
                         var div = document.createElement("div");
                         div.className = 'w3-container';
                         div.innerHTML = `<div class="w3-light-grey"><div class="w3-blue" style="width:${(parseFloat(n.total)/max.total)*100}%">${n.total}</div></div>`
-                        li.appendChild(document.createTextNode(n.entryMonthName));
+                        li.appendChild(document.createTextNode(`${n.entryMonthName} ${n.entryYear}`));
                         li.appendChild(div);
                         list.appendChild(li);
                     })
@@ -183,9 +185,8 @@
             <li> Data last updated
                 <span id="lastUpdate"></span>
             </li>
-            <li> Last 12 months
-                <ul id="trailing12m">
-
+            <li> Monthly Grosses
+                <ul id="monthlyGrosses">
                 </ul>
             </li>
         </ul>
