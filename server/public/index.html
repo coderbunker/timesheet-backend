@@ -1,6 +1,8 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <script>
         //require('isomorphic-fetch');
         function formatDate(f) {
@@ -17,32 +19,32 @@
                 query: `
                 {
                     allOrganizations {
-                    edges {
-                      node {
-                        orgname
-                        since
-                        activity
-                        peopleCount
-                        projectCount
-                        totalGross
-                        lastRefresh
-                        lastUpdate
-                        totalEngMonths
-                        ongoingProjectCount
-                      }
+                        nodes {
+                            orgname
+                            since
+                            activity
+                            peopleCount
+                            projectCount
+                            totalGross
+                            lastRefresh
+                            lastUpdate
+                            totalEngMonths
+                            ongoingProjectCount
+                            activePeopleCount
+                        }
                     }
-                  }
                 }
                 ` }),
         })
             .then(res => {
                 return res.json().then(o => {
                     console.log(o);
-                    Object.keys(o.data.allOrganizations.edges[0].node).map(k => {
+                    const dataSource = o.data.allOrganizations.nodes[0]
+                    Object.keys(dataSource).map(k => {
                         var holder;
                         try {
                             holder = document.getElementById(k)
-                            holder.innerText = o.data.allOrganizations.edges[0].node[k]
+                            holder.innerText = dataSource[k]
                         } catch (e) {
                             console.log('ignoring ' + k)
                             return;
@@ -57,6 +59,48 @@
                 });
             })
             .then(res => console.log(res.data))
+            .catch(e => console.log(e));
+
+            fetch('/graphql', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: `
+                        {
+                            allTrailing12MGrosses {
+                            nodes {
+                                entryYear
+                                entryMonth
+                                entryMonthName
+                                total
+                                currency
+                                vendorName
+                                lastRefresh
+                                lastUpdate
+                            }
+                            }
+                        }`
+                    })
+                })
+            .then(res => {
+                return res.json().then(o => {
+                    console.log(o);
+                    const dataSource = o.data.allTrailing12MGrosses.nodes;
+                    const list = document.getElementById('trailing12m');
+                    const max = dataSource.reduce(function(a, b) {
+                        return {total: Math.max(parseFloat(a.total), parseFloat(b.total)) } ;
+                    });
+                    dataSource.forEach(n => {
+                        var li = document.createElement("li");
+                        var div = document.createElement("div");
+                        div.className = 'w3-container';
+                        div.innerHTML = `<div class="w3-light-grey"><div class="w3-blue" style="width:${(parseFloat(n.total)/max.total)*100}%">${n.total}</div></div>`
+                        li.appendChild(document.createTextNode(n.entryMonthName));
+                        li.appendChild(div);
+                        list.appendChild(li);
+                    })
+                })
+            })
             .catch(e => console.log(e));
     </script>
     <style>
@@ -106,15 +150,18 @@
     </style>
 </head>
 
-<body>
+<body style="margin:25px;padding:25px">
     <div>
         <h2>
             <div id="orgname"></div>
         </h2>
         <ul>
-            <li>Freelancers with billable hours
+            <li>Freelancers with billable hours (all time)
                 <span id="peopleCount"></span>
             </li>
+            <li>Freelancers with billable hours (last 30 days)
+                    <span id="activePeopleCount"></span>
+                </li>
             <li> Total projects count with billable hours
                 <span id="projectCount"></span>
             </li>
@@ -135,6 +182,11 @@
             </li>
             <li> Data last updated
                 <span id="lastUpdate"></span>
+            </li>
+            <li> Last 12 months
+                <ul id="trailing12m">
+
+                </ul>
             </li>
         </ul>
     </div>
