@@ -1,5 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS test;
-
 CREATE OR REPLACE FUNCTION test.count_all_views(
 	schemaname TEXT
 ) RETURNS SETOF TEXT AS $$
@@ -15,6 +13,7 @@ BEGIN
 			FROM pg_catalog.pg_views
 			WHERE pg_views.schemaname = count_all_views.schemaname
 			AND pg_views.viewname NOT LIKE 'raw%'
+			AND pg_views.viewname NOT LIKE '%warnings%'
 	) AS t;
 END;
 $$ LANGUAGE plpgsql;

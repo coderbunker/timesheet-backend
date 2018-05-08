@@ -8,7 +8,8 @@ CREATE OR REPLACE FUNCTION model.add_project_config(
 $add_project_config$
 DECLARE
 	project model.project;
-	organization model.organization;
+	customer model.organization;
+	vendor model.organization;
 	account	model.account;
 	membership	model.membership;
 	person	model.person;
@@ -16,14 +17,20 @@ DECLARE
 	task TEXT;
     pc model.project_config;
 BEGIN
-	SELECT * FROM model.organization t WHERE t.name = organization_name INTO organization;
-	IF organization IS NULL THEN
-		INSERT INTO model.organization(name) VALUES(organization_name) RETURNING * INTO organization;
+	SELECT * FROM model.organization t WHERE t.name = organization_name INTO vendor;
+	IF vendor IS NULL THEN
+		INSERT INTO model.organization(name) VALUES(organization_name) RETURNING * INTO vendor;
+	END IF;
+
+	SELECT * FROM model.organization t WHERE t.name = account_name INTO customer;
+	IF customer IS NULL THEN
+		INSERT INTO model.organization(name) VALUES(account_name) RETURNING * INTO customer;
 	END IF;
 
 	SELECT * FROM model.account t WHERE t.name = account_name INTO account;
 	IF account IS NULL THEN
-		INSERT INTO model.account(name, organization_id) VALUES(account_name, organization.id)  RETURNING * INTO account;
+		INSERT INTO model.account(name, customer_id, vendor_id) 
+			VALUES(account_name, customer.id, vendor.id)  RETURNING * INTO account;
 	END IF;
 
 	SELECT * FROM model.project t WHERE t.name = project_name INTO project;

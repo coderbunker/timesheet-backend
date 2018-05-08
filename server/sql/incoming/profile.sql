@@ -2,7 +2,7 @@ CREATE OR REPLACE VIEW incoming.profile_raw AS
 	SELECT
 		jsonb_array_elements((doc#>'{data}')::jsonb) AS freelancer
 	FROM
-		incoming.snapshot
+		api.snapshot
 	WHERE doc->>'apptype' = 'Slides' AND doc->>'category' = 'Freelancers'
 	;
 
@@ -58,7 +58,7 @@ BEGIN
 	END IF;
 
 	IF NOT FOUND THEN
-		SELECT 
+		SELECT
 			email INTO return_email
 			FROM incoming.profile
 			WHERE fullname ILIKE '%' || $1 || '%'

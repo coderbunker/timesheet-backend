@@ -1,3 +1,5 @@
 
 -- postgraphql interface
-\ir postgraphql.sql
+\ir postgraphql/schema.sql
+\ir postgraphql/postgraphql.sql
+\ir postgraphql/model.entry.trigger.sql

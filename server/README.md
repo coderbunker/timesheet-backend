@@ -15,12 +15,24 @@ npm install
 node app.js
 ```
 
-restore schema of DB
+install PostgreSQL extensions:
 
 ```bash
-sudo su postgres
+pgxn install pgtap
+```
+create schema of DB
+
+```bash
 createdb timesheet
-psql timesheet -f sql/timesheet.sql
+./setup.sh timesheet
+```
+
+this will also run the test suite.
+
+## run test suite on changes
+
+```bash
+./watch-test.sh timesheet
 ```
 
 ## Apache hook
@@ -48,8 +60,29 @@ creates two routes:
 
 ## Testing
 
+Sample file:
+
+```JSON
+{
+  "id": "1234",
+  "doc": {
+    "apptype": "Spreadsheet",
+    "category": "Timesheet"
+   },
+  "apikey": "f98dbe87-5749-47c6-8e39-47ae7ff401ac"
+}
+```
+
+post to the API:
+
 ```bash
-curl -X POST http://localhost:3000/spreadsheet/snapshot/1234 -H "Content-Type: application/json" -d @coderbunker-intranet-timesheet.json
+curl --verbose -X POST "http://localhost:3000/gsuite/snapshot" -H "Content-Type: application/json" -d @samples/coderbunker-intranet-timesheet.json
+```
+
+should return:
+
+```JSON
+[{"snapshot_json":[]}]
 ```
 
 ## backing up database
@@ -68,13 +101,27 @@ Because Heroku requires the app to be in the root, we use subtree to push:
 git subtree push --prefix server heroku master
 ```
 
+Creating/updating schema on Heroku instance:
+
+```bash
+psql -v "ON_ERROR_STOP=1" -b -1 -e -f sql/PSQL.sql `heroku pg:credentials:url | tail -1`
+```
+
+Restarting the dyno (to load changes to the database for example)
+
+```bash
+heroku restart -a coderbunker-timesheet
+```
+
+## data transfer to/from heroku
+
 Pushing the local database:
 
 ```bash
 heroku pg:push timesheet postgresql-rigid-65921 --app coderbunker-timesheet
 ```
 
-Puling the Heroku database locally and making a copy before changing the pulled version
+Pulling the Heroku database locally and making a copy before changing the pulled version
 (adjust date):
 
 ```bash
@@ -82,12 +129,6 @@ heroku pg:pull postgresql-rigid-65921 heroku-timesheet --app coderbunker-timeshe
 psql -c 'CREATE DATABASE "heroku-timesheet-20180416" TEMPLATE "heroku-timesheet";' postgres
 ```
 
-
-Restarting the dyno (to load changes to the database for example)
-
-```bash
-heroku restart -a coderbunker-timesheet
-```
 ## Manage Domain
 
 ### CNAME Setup for Heroku app
