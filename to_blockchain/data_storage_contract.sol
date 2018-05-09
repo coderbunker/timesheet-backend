@@ -15,7 +15,6 @@ contract data_storage_contract {
         bytes32 id;  // project id hash
         bytes32 name; //project name
         //TODO: add list of freelancers 
-        address[] freelancers; //list of freelancers wallets
     }
     
     mapping (address => Project) projects; // bind project's address to Project type struct
@@ -25,7 +24,7 @@ contract data_storage_contract {
     address[] public freelancerAccs;
      
     function addProject(address _address, bytes32 _id, bytes32 _name) public { // TODO: add msg.sender
-        Project storage project = projects[_address];
+        var project = projects[_address];
         
         project.id = _id;
         project.name = _name;
@@ -37,7 +36,7 @@ contract data_storage_contract {
         return projectAccs;
     }
  
-    function getProject(address _address) view public returns(bytes32, bytes32){ // get data for a specific project
+    function getProject(address _address) view public returns(bytes32, bytes32){ // get data for a spiciefic project
         return (projects[_address].id, projects[_address].name);
     }
     
@@ -47,7 +46,7 @@ contract data_storage_contract {
                            address _projectAdress, 
                            uint32 _hoursSpent, 
                            uint32 _tasksCompleted) public{
-        Freelancer storage freelancer = freelancers[_address];
+        var freelancer = freelancers[_address];
         
         freelancer.id = _id;
         freelancer.name = _name;
@@ -66,10 +65,6 @@ contract data_storage_contract {
                 freelancers[_address].projectAdress, 
                 freelancers[_address].hoursSpent, 
                 freelancers[_address].tasksCompleted);
-    }
-    
-    function freelancerToProject(address _address) view public returns(address){
-        return freelancers[_address].projectAdress;
     }
 
     
