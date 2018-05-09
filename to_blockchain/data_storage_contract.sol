@@ -1,33 +1,72 @@
 pragma solidity ^0.4.23;
 
 contract data_storage_contract {
-
-    struct Freelancer_by_project {
-        uint32 id;
-        string name;
-        string project;
-        uint32 hours_spent;
-        uint32 rate;
-        string currency;
-    }
-
-    Freelancer_by_project[] public freelancers;
-
-    function push_freelancer_data(uint32 id, string name, string project, uint32 hours_spent, uint32 rate, string currency) public {
-        freelancers.push(Freelancer_by_project(id, name, project, hours_spent, rate, currency));
-    } 
     
-    function get_freelancers_number() public constant returns(uint) {
-        return freelancers.length;
+    struct Freelancer {
+        bytes32 id; //freelancer id hash
+        bytes32 name; //freelancer's name
+        address projectAdress; //project's ethereum address
+        uint32 hoursSpent; 
+        uint32 tasksCompleted; 
     }
 
-    function get_freelancer(uint index) public constant returns(uint32, string, string, uint32, uint32, string) {
-        return (freelancers[index].id, 
-                freelancers[index].name, 
-                freelancers[index].project, 
-                freelancers[index].hours_spent, 
-                freelancers[index].rate, 
-                freelancers[index].currency);
+    // struct for storing projects related information
+    struct Project {  
+        bytes32 id;  // project id hash
+        bytes32 name; //project name
+        //TODO: add list of freelancers 
     }
-   
+    
+    mapping (address => Project) projects; // bind project's address to Project type struct
+    address[] public projectAccs;
+    
+    mapping (address => Freelancer) freelancers; // bind freelancer's address to freelancer type struct
+    address[] public freelancerAccs;
+     
+    function addProject(address _address, bytes32 _id, bytes32 _name) public { // TODO: add msg.sender
+        var project = projects[_address];
+        
+        project.id = _id;
+        project.name = _name;
+        
+        projectAccs.push(_address) -1;
+    }
+
+    function getProjects() view public returns(address[]){ // get list of all project's wallets
+        return projectAccs;
+    }
+ 
+    function getProject(address _address) view public returns(bytes32, bytes32){ // get data for a spiciefic project
+        return (projects[_address].id, projects[_address].name);
+    }
+    
+    function addFreelancer(address _address, 
+                           bytes32 _id, 
+                           bytes32 _name, 
+                           address _projectAdress, 
+                           uint32 _hoursSpent, 
+                           uint32 _tasksCompleted) public{
+        var freelancer = freelancers[_address];
+        
+        freelancer.id = _id;
+        freelancer.name = _name;
+        freelancer.projectAdress = _projectAdress;
+        freelancer.hoursSpent = _hoursSpent;
+        freelancer.tasksCompleted = _tasksCompleted;
+    }
+    
+    function getFreelancers() view public returns(address[]){ // get list of all freelancer's wallets
+        return freelancerAccs;
+    }
+    
+    function getFreelancer(address _address) view public returns(bytes32, bytes32,address, uint32, uint32){ // get data for a spiciefic freelancer
+        return (freelancers[_address].id, 
+                freelancers[_address].name, 
+                freelancers[_address].projectAdress, 
+                freelancers[_address].hoursSpent, 
+                freelancers[_address].tasksCompleted);
+    }
+
+    
+    
 }
