@@ -13,7 +13,7 @@
 
 ## Connecting DBeaver to Heroku Postgres Database
 
-1. Open the <b> New Connection Wizard </b>
+1. On DBeaver, open the <b> New Connection Wizard </b>
 2. Select PostgreSQL as Connection Type and click Next
 3. Fill out the Host, Database, Port, User, and Password fields with the Credentials and click Next
 4. Go to SSL Tab, check Enable SSL, and set the SSL Factory to <b> org.postgresql.ssl.NonValidatingFactory </b>.
