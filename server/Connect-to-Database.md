@@ -22,4 +22,4 @@
 
 ## Reference
 
-http://thebar.cc/connecting-dbeaver-to-a-heroku-postgres-database/?nsukey=eUuvKrydSfqqpIchC17FTZsHuwjrK88%2FCYkPP5L0ER4RZUTwHvo%2BZAaV0JZmZ9PArHhyHtMzAmdL%2FbJXtuYDE2IaG2durzZABaETlJEbKPUKX6DlrJCg8p4A3oQemAReMNTXnbLEeZNp7IgzsCojM%2FAauqydrIfq%2BB6WNLB7zAO1gAClP6c1OnP1H0l0CmGv%2BpSmryw%2FkOK7uL14WM23eQ%3D%3D
+http://thebar.cc/connecting-dbeaver-to-a-heroku-postgres-database/?
