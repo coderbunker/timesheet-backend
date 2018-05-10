@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+    <script src="storage_abi.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Add Project</h1>
+
+ <!--      <h2 id="project"></h2>  -->
+
+        <label for="name" class="col-lg-2 control-label">Project's Ethereum address</label>
+        <input id="wallet" type="text"> 
+
+
+        <label for="name" class="col-lg-2 control-label">Project Name</label>
+        <input id="name" type="text">
+
+        <label for="name" class="col-lg-2 control-label">ID</label>
+        <input id="id" type="text">
+
+        <button id="button">Update Project</button>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+       // web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var data_storage_contract = web3.eth.contract(storageABI);
+
+        var data_storage = data_storage_contract.at('0xad1bd8707cb092d85c1b5b67515a0b5aec762a15');
+
+  
+/*  data_storage.getProject(function(error, result){
+
+            if(!error)
+                {
+                    $("#project").html('project name: '+result[0]+'<br><br> project id: '+result[1]+' ');
+                    console.log(result);
+                }
+            else
+                console.error(error);
+        }); */
+
+        $("#button").click(function() {
+            data_storage.addProject($("#wallet").val(), $("#id").val(), $("#name").val(), {from: web3.eth.accounts[1], gas:3000000});
+        });
+
+
+    </script>
+
+</body>
+</html>
+
