@@ -35,3 +35,5 @@ var data_storage = data_storage_contract.at("YOU SMART CONTRACT'S ADRESS");
 run index.html
 
 now you can store data in smart contract in the format : address, string, string
+
+run getProjects on Remix to see smart contracts of projects in the "database" 
