@@ -30,7 +30,7 @@ copy code from data_storage_contract.sol to http://remix.ethereum.org/ compile c
 change 
 
 ```
-var data_storage = data_storage_contract.at("YOU SMART CONTRACT'S ADRESS");
+var data_storage = data_storage_contract.at("YOU SMART CONTRACT'S ADDRESS");
 ```
 run index.html
 

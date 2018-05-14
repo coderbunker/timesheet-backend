@@ -5,9 +5,8 @@ contract data_storage_contract {
     struct Freelancer {
         string id; //freelancer id hash
         string name; //freelancer's name
-        address projectAdress; //project's ethereum address
-        uint32 hoursSpent; 
-        uint32 tasksCompleted; 
+        address projectAddress; //project's ethereum address
+        uint128 hoursSpent; 
     }
 
     // struct for storing projects related information
@@ -17,10 +16,10 @@ contract data_storage_contract {
     }
     
     mapping (address => Project) projects; // bind project's address to Project type struct
-    address[] public projectAccs;
+    address[] public projectAccounts;
     
     mapping (address => Freelancer) freelancers; // bind freelancer's address to freelancer type struct
-    address[] public freelancerAccs;
+    address[] public freelancerAccounts;
      
     function addProject(address _address, string _id, string _name) public { 
         Project storage project = projects[_address];
@@ -28,11 +27,11 @@ contract data_storage_contract {
         project.id = _id;
         project.name = _name;
         
-        projectAccs.push(_address) -1;
+        projectAccounts.push(_address) -1;
     }
 
     function getProjects() view public returns(address[]){ // get list of all project's wallets
-        return projectAccs;
+        return projectAccounts;
     }
  
     function getProject(address _address) view public returns(string, string){ // get data for a specific project
@@ -42,34 +41,35 @@ contract data_storage_contract {
     function addFreelancer(address _address, 
                            string _id, 
                            string _name, 
-                           address _projectAdress, 
-                           uint32 _hoursSpent, 
-                           uint32 _tasksCompleted) public{
+                           address _projectAddress, 
+                           uint128 _hoursSpent) public{
         Freelancer storage freelancer = freelancers[_address];
         
         freelancer.id = _id;
         freelancer.name = _name;
-        freelancer.projectAdress = _projectAdress;
+        freelancer.projectAddress = _projectAddress;
         freelancer.hoursSpent = _hoursSpent;
-        freelancer.tasksCompleted = _tasksCompleted;
     }
     
     function getFreelancers() view public returns(address[]){ // get list of all freelancer's wallets
-        return freelancerAccs;
+        return freelancerAccounts;
     }
     
-    function getFreelancer(address _address) view public returns(string, string, address, uint32, uint32){ // get data for a spiciefic freelancer
+    function getFreelancer(address _address) view public returns(string, string, address, uint128){ // get data for a specific freelancer
         return (freelancers[_address].id, 
                 freelancers[_address].name, 
-                freelancers[_address].projectAdress, 
-                freelancers[_address].hoursSpent, 
-                freelancers[_address].tasksCompleted);
+                freelancers[_address].projectAddress, 
+                freelancers[_address].hoursSpent);
     }
     
     function freelancerToProject(address _address) view public returns(address){
-        return freelancers[_address].projectAdress;
+        return freelancers[_address].projectAddress;
     }
 
     
     
 }
+
+
+
+
