@@ -17,17 +17,16 @@
 
         <h1>Add Project</h1>
 
- <!--      <h2 id="project"></h2>  -->
 
         <label for="name" class="col-lg-2 control-label">Project's Ethereum address</label>
-        <input id="wallet" type="text"> 
-
-
-        <label for="name" class="col-lg-2 control-label">Project Name</label>
-        <input id="name" type="text">
+        <input id="wallet" type="text">  <!-- project's wallet address input  -->
 
         <label for="name" class="col-lg-2 control-label">ID</label>
-        <input id="id" type="text">
+        <input id="id" type="text"> <!-- project's ID input  -->
+
+        <label for="name" class="col-lg-2 control-label">Project Name</label>
+        <input id="name" type="text"> <!-- project's name input  -->
+
 
         <button id="button">Update Project</button>
 
@@ -45,27 +44,15 @@
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         }
 
-       // web3.eth.defaultAccount = web3.eth.accounts[0];
 
         var data_storage_contract = web3.eth.contract(storageABI);
 
-        var data_storage = data_storage_contract.at('0xad1bd8707cb092d85c1b5b67515a0b5aec762a15');
+        var data_storage = data_storage_contract.at('0xad1bd8707cb092d85c1b5b67515a0b5aec762a15'); //storage smart contract's address on testnet, put address on your testnet in order  test the code
 
   
-/*  data_storage.getProject(function(error, result){
-
-            if(!error)
-                {
-                    $("#project").html('project name: '+result[0]+'<br><br> project id: '+result[1]+' ');
-                    console.log(result);
-                }
-            else
-                console.error(error);
-        }); */
-
         $("#button").click(function() {
             data_storage.addProject($("#wallet").val(), $("#id").val(), $("#name").val(), {from: web3.eth.accounts[1], gas:3000000});
-        });
+        }); //generate transaction to storage smart contract containing project's wallet, id and name from account number 1 on our testnet 
 
 
     </script>
