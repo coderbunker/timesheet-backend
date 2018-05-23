@@ -11,12 +11,12 @@ Google Spreadsheet > PostgreSQL Database > Aggregated View of Data > Ethereum > 
 
 This project is related to timesheet-dashboard-react.
 
-- **Transaction**
+**Transaction**
 - Payment via cryptocurrency
 
-- **Freelancers’ Profile/History**
+**Freelancers’ Profile/History**
 - Number of hours invested on each skill/technology/language
 - Type of freelancing projects involved
 
-- **Global File Sharing**
+**Global File Sharing**
 - Transfer of freelancers’ profile to another Coderbunker division
