@@ -1,9 +1,9 @@
 # timesheet-backend
-Timesheet Datawarehouse backend
+Timesheet data warehouse backend
 
 See server/README.md for setup
 
-# Timesheet Data Warehouse
+# timesheet data warehouse
 
 Timesheet data warehouse is the infrastructure and backbone of Coderbunker’s freelancing system. The idea is to streamline and automate the process that record freelancers’ working hours for a number of purposes listed below. Technologies involved: Google Spreadsheet, API, PostgreSQL, Ethereum, and etc. The general dataflow is described below:
 
