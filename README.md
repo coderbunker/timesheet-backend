@@ -9,8 +9,6 @@ Timesheet data warehouse is the infrastructure and backbone of Coderbunker’s f
 
 Google Spreadsheet > PostgreSQL Database > Aggregated View of Data > Ethereum > JSON > Local Database
 
-This project is related to timesheet-dashboard-react.
-
 **Transaction**
 - Payment via cryptocurrency
 
@@ -20,3 +18,5 @@ This project is related to timesheet-dashboard-react.
 
 **Global File Sharing**
 - Transfer of freelancers’ profile to another Coderbunker division
+
+This project is related to [timesheet-dashboard-react](https://github.com/coderbunker/timesheet-dashboard-react).
