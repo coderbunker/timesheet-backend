@@ -2,6 +2,13 @@
   "environments": {
     "test": {
       "env": {
+      },
+      "addons":[
+        "heroku-redis:hobby-dev"
+      ],
+      "scripts": {
+        "test-setup": "cd server; ./setup.sh",
+        "test": "cd server; ./test.sh"
       }
     }
   }
