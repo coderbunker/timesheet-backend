@@ -3,5 +3,5 @@ cd pgtap
 make
 #make installcheck
 make install
-cd ../server
+cd ..
 ./setup.sh $DATABASE_URL

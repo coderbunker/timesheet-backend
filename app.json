@@ -10,7 +10,7 @@
       ],
       "scripts": {
         "test-setup": "./heroku-test-setup.sh",
-        "test": "cd server; ./test.sh $DATABASE_URL"
+        "test": "./test.sh $DATABASE_URL"
       }
     }
   }
