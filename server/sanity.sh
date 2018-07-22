@@ -12,5 +12,6 @@ fi
 
 echo "Using $DBNAME"
 
-psql -f sql/utils/show_extensions.sql $DBNAME
+psql -f sql/utils/show_extensions.sql $DBNAME | cat
 
+exit $?

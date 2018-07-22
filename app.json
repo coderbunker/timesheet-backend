@@ -9,8 +9,8 @@
         }
       ],
       "scripts": {
-        "test-setup": "cd server; ./setup.sh $DATABASE_URL",
-        "test": "cd server; ./sanity.sh $DATABASE_URL"
+        "test-setup": "./heroku-test-setup.sh",
+        "test": "cd server; ./test.sh $DATABASE_URL"
       }
     }
   }

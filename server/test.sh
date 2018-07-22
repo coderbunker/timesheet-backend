@@ -8,4 +8,6 @@ if [[ $1 == postgres://* ]]; then
 else
 	DBNAME="postgres://localhost/$1"
 fi
-psql -f sql/900-psql-testsuite.sql $DBNAME
+
+# cat pipe is to keep output quiet
+psql -q -f sql/900-psql-testsuite.sql $DBNAME | cat
