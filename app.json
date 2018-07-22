@@ -3,12 +3,14 @@
     "test": {
       "env": {
       },
-      "addons":[
-        "heroku-redis:hobby-dev"
+      "buildpacks": [
+        {
+          "url": "https://github.com/heroku/heroku-buildpack-ci-postgresql"
+        }
       ],
       "scripts": {
-        "test-setup": "cd server; ./setup.sh",
-        "test": "cd server; ./test.sh"
+        "test-setup": "cd server; ./setup.sh $DATABASE_URL",
+        "test": "cd server; ./sanity.sh $DATABASE_URL"
       }
     }
   }
