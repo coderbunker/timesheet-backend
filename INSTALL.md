@@ -33,6 +33,7 @@ this will also run the test suite.
 ## run test suite on changes
 
 ```bash
+brew install fswatch
 ./watch-test.sh timesheet
 ```
 
