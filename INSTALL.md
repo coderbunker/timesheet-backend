@@ -18,6 +18,7 @@ node app.js
 install PostgreSQL extensions:
 
 ```bash
+pip install pgxnclient
 pgxn install pgtap
 ```
 create schema of DB
