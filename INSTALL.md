@@ -131,6 +131,12 @@ heroku pg:pull postgresql-rigid-65921 heroku-timesheet --app coderbunker-timeshe
 psql -c 'CREATE DATABASE "heroku-timesheet-20180416" TEMPLATE "heroku-timesheet";' postgres
 ```
 
+## Containerization
+
+- Build Image: `docker build -t timesheet-backend .`
+
+- Run Container: `docker run -p 3000:3000 -e DATABASE_URL=postgres://docker.for.mac.localhost/DATABASE_NAME timesheet-backend`
+
 ## Manage Domain
 
 ### CNAME Setup for Heroku app
