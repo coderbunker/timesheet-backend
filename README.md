@@ -1,7 +1,7 @@
 # timesheet-backend
 Timesheet data warehouse backend
 
-See [[INSTALL.md]] for setup
+See [INSTALL.md](./INSTALL.md) for setup
 
 # timesheet data warehouse
 
