@@ -32,11 +32,15 @@ data_path='./data'
 
 
 # use creds to create a client to interact with the Google Drive API
-scope = ['https://spreadsheets.google.com/feeds']
+scope = ['https://spreadsheets.google.com/feeds',
+    'https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name(python_path+'client_secret.json', scope)
+print(creds.__dict__)
 client = gspread.authorize(creds)
 
- 
+
+
+
 def load_data(client,googlesheet):
 
 	# Find a workbook by name and open the first sheet
@@ -44,7 +48,7 @@ def load_data(client,googlesheet):
 
 	sheet = client.open(googlesheet).sheet1
 	return sheet
- 
+
 def tranform_data(sheet,psql_col):
 
 	# Extract and print all of the values
@@ -56,14 +60,14 @@ def tranform_data(sheet,psql_col):
 	for i in columns:
 		if i.lower()=='hours':
 			hour_header=i
-		
+
 	data=[]
-	for i in list_of_hashed: 
+	for i in list_of_hashed:
 		if i[hour_header] != '':
-			data.append(i)		
+			data.append(i)
 
 	drive_col=list_of_hashed[0].keys()
-	
+
 	return data, drive_col
 
 
@@ -77,7 +81,7 @@ def define_columns(drive_col,psql_col):
 		for i in psql_col:
 			if(fuzz.ratio(k,i))>=60:
 				mapping[i]=k
-			
+
 
 	# Define the columns insertion order
 
@@ -104,18 +108,30 @@ def createse_csv(data_path, csv_name, insert_col, data, project_name):
 		print (datainsert)
 		f.writerow(datainsert)
 
-for i in load_info:
-	googlesheet= i[0]
-	csv_name=i[1]
-	project_name=i[2]
-	
-	sheet = load_data(client,googlesheet)
-	data, drive_col = tranform_data(sheet,psql_col)
-	insert_col = define_columns(drive_col,psql_col)
-	createse_csv(data_path, csv_name, insert_col, data, project_name)
+load_info=[
+["Coderbunker Internal Projects Timesheet","/internal_project.csv","Internal Projects"],
+["Atlas Project Timesheet","/atlas.csv" ,"Atlas"]]
 
 
+sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1g7ym65BZIBSDpKfFlw2H7xOthZz968H_zyeDpunAx40/edit?usp=drive_web&ouid=111131464091933148343')
+
+sheet = client.open_by_key('1g7ym65BZIBSDpKfFlw2H7xOthZz968H_zyeDpunAx40')
+
+timesheet =  sheet.worksheet('Timesheet')
 
 
+list_of_hashed = timesheet.get_all_records()
 
+columns=list_of_hashed[0].keys()
 
+print(list_of_hashed)
+print(columns)
+# for i in load_info:
+# 	googlesheet= i[0]
+# 	csv_name=i[1]
+# 	project_name=i[2]
+#
+# 	sheet = load_data(client,googlesheet)
+# 	data, drive_col = tranform_data(sheet,psql_col)
+# 	insert_col = define_columns(drive_col,psql_col)
+# 	createse_csv(data_path, csv_name, insert_col, data, project_name)
