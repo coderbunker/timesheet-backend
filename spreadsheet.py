@@ -1,18 +1,12 @@
-
-
 # FROM https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
-import json
-import csv
-import gspread
-import os
+import json, csv, gspread, os, string
 from oauth2client.service_account import ServiceAccountCredentials
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
+from fuzzywuzzy import fuzz, process
+from get_timesheet_url import get_timesheets
 
 # DEFINE LOAD DATA INFO
 
 load_info=[["YeDian (Night+, NightPlus) Project Timesheet","/yedian.csv","Yedian"],["Coderbunker Internal Projects Timesheet","/internal_project.csv","Internal Projects"],["Atlas Project Timesheet","/atlas.csv" ,"Atlas"]]
-
 
 
 # POSTGRESQL TABLE COLUMNS
@@ -35,103 +29,54 @@ data_path='./data'
 scope = ['https://spreadsheets.google.com/feeds',
     'https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name(python_path+'client_secret.json', scope)
-print(creds.__dict__)
+#print(creds.__dict__)
 client = gspread.authorize(creds)
 
 
 
 
-def load_data(client,googlesheet):
+#spreadsheet_list = get_timesheets()
 
-	# Find a workbook by name and open the first sheet
-	# Make sure you use the right name here.
+def get_sheet_per_id(spreadsheet_id):
+	sheet = client.open_by_key(spreadsheet_id)
 
-	sheet = client.open(googlesheet).sheet1
-	return sheet
+	try:
+		timesheet =  sheet.worksheet('Timesheet')
+		return timesheet#.get_all_records()
+	except:
+		print(sheet.worksheets())
 
-def tranform_data(sheet,psql_col):
+def get_all_spreadsheets():
+	#this function needs fixing
+	d=[]
+	for i in spreadsheet_list:
+		print(i['spreadsheet_name'], i['id'])
+		try:
+			list_of_hashed = get_sheet_per_id (i['id'])
+			columns=list_of_hashed[0].keys()
+			print(columns)
+			d.append({"name":i['spreadsheet_name'], 'data':list_of_hashed})
+		except:
+			continue
+		print()
 
-	# Extract and print all of the values
+sheet_id = '1z2fekRReG8ESBZe2mVegJmlRUT9-vtRIZIcT4i91Lls' # Time sheet teresa
+#sheet_id = '1HBEXWjjgd_dhHtnCo4vOuYmkWAdh8tkeUx4BqFuG-80' # Timesheet TEst Charles
 
-	list_of_hashed = sheet.get_all_records()
-
-	columns=list_of_hashed[0].keys()
-
-	for i in columns:
-		if i.lower()=='hours':
-			hour_header=i
-
-	data=[]
-	for i in list_of_hashed:
-		if i[hour_header] != '':
-			data.append(i)
-
-	drive_col=list_of_hashed[0].keys()
-
-	return data, drive_col
-
-
-def define_columns(drive_col,psql_col):
-
-	# CREATE GOOGLE DRIVE DATA MAPPING WITH PSQL USING FUZZY MATCHING (case and title columns slightly vary between projects, sometimes having a space in the end etc)
-	# https://marcobonzanini.com/2015/02/25/fuzzy-string-matching-in-python/
-	mapping={}
-
-	for k in drive_col:
-		for i in psql_col:
-			if(fuzz.ratio(k,i))>=60:
-				mapping[i]=k
+list_of_hashed = get_sheet_per_id (sheet_id)
 
 
-	# Define the columns insertion order
+def test_columns(sheet):
+	col_list = ['Month','Date','Hourly rate','Start','Stop','Hours','Total','Resource','Task name','Activity','Reference']
+	for x, y,z in zip(range(1, len(col_list)+1), string.ascii_uppercase, col_list):
+		cell_val = sheet.acell(y+str(1)).value
+		if not z==cell_val:
+			print({"cell_no":y+str(1),"required_value":z,"spreadsheet_value": cell_val})
 
-	insert_col=[]
-
-	for i in psql_col:
-		for j in mapping.keys():
-			if i==j:
-				insert_col.append(mapping[i])
-
-	return insert_col
-
-def createse_csv(data_path, csv_name, insert_col, data, project_name):
-
-	# Insert the data
-
-	f=open(data_path+csv_name, "w+")
-	f = csv.writer(f)
-	f.writerow(insert_col) # header
-	for row in data:
-		datainsert=[project_name]
-		for x in insert_col:
-			datainsert.append(row[x])
-		print (datainsert)
-		f.writerow(datainsert)
-
-load_info=[
-["Coderbunker Internal Projects Timesheet","/internal_project.csv","Internal Projects"],
-["Atlas Project Timesheet","/atlas.csv" ,"Atlas"]]
+test_columns(list_of_hashed)
 
 
-sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1g7ym65BZIBSDpKfFlw2H7xOthZz968H_zyeDpunAx40/edit?usp=drive_web&ouid=111131464091933148343')
-
-sheet = client.open_by_key('1g7ym65BZIBSDpKfFlw2H7xOthZz968H_zyeDpunAx40')
-
-timesheet =  sheet.worksheet('Timesheet')
-
-
-list_of_hashed = timesheet.get_all_records()
-
-columns=list_of_hashed[0].keys()
-
-print(list_of_hashed)
-print(columns)
-# for i in load_info:
-# 	googlesheet= i[0]
-# 	csv_name=i[1]
-# 	project_name=i[2]
-#
-# 	sheet = load_data(client,googlesheet)
-# 	data, drive_col = tranform_data(sheet,psql_col)
-# 	insert_col = define_columns(drive_col,psql_col)
-# 	createse_csv(data_path, csv_name, insert_col, data, project_name)
+#print(d)
+# import json
+# with open('data.json', 'w') as outfile:
+#     json.dump(list_of_hashed, outfile)

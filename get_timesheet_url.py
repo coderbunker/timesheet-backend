@@ -16,7 +16,9 @@ def get_timesheets():
 
     results = service.files().list(
         pageSize= 1000,
-        q="name contains 'Timesheet'",
+        q="name = 'Timesheet for testing 20181016'",
+#        q="name = 'Timesheet Test Charles'",
+#        q="name contains 'Timesheet'",
         fields="nextPageToken, files(id, name, parents, properties)").execute()
     items = results.get('files', [])
     if not items:
@@ -24,9 +26,9 @@ def get_timesheets():
     else:
         l=[]
         for item in items:
-            l.append({'spreasheet_name':item['name'], 'id': item['id']})
+            l.append({'spreadsheet_name':item['name'], 'id': item['id']})
     print(results)
     return l
-    
+
 if __name__ == '__main__':
     print(get_timesheets())
