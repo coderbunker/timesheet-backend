@@ -6,10 +6,7 @@ from oauth2client import file, client, tools
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly'
 
-def main():
-    """Shows basic usage of the Drive v3 API.
-    Prints the names and ids of the first 10 files the user has access to.
-    """
+def get_timesheets():
     store = file.Storage('token.json')
     creds = store.get()
     if not creds or creds.invalid:
@@ -17,39 +14,19 @@ def main():
         creds = tools.run_flow(flow, store)
     service = build('drive', 'v3', http=creds.authorize(Http()))
 
-    # Call the Drive v3 API
     results = service.files().list(
-        pageSize=10,
-        pageToken=None,
-        fields="nextPageToken, files(id, name)").execute()
+        pageSize= 1000,
+        q="name contains 'Timesheet'",
+        fields="nextPageToken, files(id, name, parents, properties)").execute()
     items = results.get('files', [])
-
-
-
     if not items:
         print('No files found.')
     else:
-        print('Files:')
+        l=[]
         for item in items:
-            print(u'{0} ({1})'.format(item['name'], item['id']))
-
-#    print(results['nextPageToken'])
-
-    results = service.files().list(
-        pageSize=10
-        , fields="nextPageToken, files(id, name)"
-        , pageToken=results['nextPageToken']).execute()
-    items = results.get('files', [])
-
-    print("NEXT PAGE")
-    if not items:
-        print('No files found.')
-    else:
-        print('Files:')
-        for item in items:
-            print(u'{0} ({1})'.format(item['name'], item['id']))
-
-
-
+            l.append({'spreasheet_name':item['name'], 'id': item['id']})
+    print(results)
+    return l
+    
 if __name__ == '__main__':
-    main()
+    print(get_timesheets())
