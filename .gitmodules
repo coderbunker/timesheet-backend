@@ -1,0 +1,3 @@
+[submodule "docker-scripts"]
+	path = docker-scripts
+	url = https://github.com/coderbunker/docker-scripts.git

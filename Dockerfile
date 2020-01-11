@@ -1,12 +1,18 @@
-FROM node:alpine as build-deps
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-
-FROM node:alpine
-
-WORKDIR /usr/src/app
-COPY --from=build-deps /usr/src/app/node_modules /usr/src/app/node_modules
+FROM overhandtech/alpine-node-build as build-deps
+WORKDIR /src
+COPY package.json .
+RUN apk add  postgresql-dev \
+	 && apk add make \
+	 && apk add perl-utils  \
+	 && apk add python3 \
+	 && apk add git
+RUN npm install 
+RUN  pip install pgxnclient
+RUN pgxn install pgtap
+RUN rm package.json
 COPY . .
 EXPOSE 3000
-CMD ["npm", "start"]
+RUN chmod +x docker-scripts/docker-entrypoint.sh
+RUN chmod +x docker-scripts/run-development.sh
+
+ENTRYPOINT ["docker-scripts/docker-entrypoint.sh"]
