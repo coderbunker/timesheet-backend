@@ -4,7 +4,8 @@
   "description": "First version of the timesheet backend",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+		"test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -17,12 +18,19 @@
   },
   "homepage": "https://github.com/coderbunker/timesheet-backend#readme",
   "dependencies": {
+    "base64url": "^3.0.0",
     "body-parser": "^1.18.2",
+    "buffer-equal-constant-time": "^1.0.1",
+    "cookie-parser": "^1.4.3",
     "dotenv": "^5.0.0",
     "express": "^4.16.2",
     "express-promise-router": "^3.0.1",
+    "find-free-port": "^2.0.0",
     "googleapis": "^26.0.1",
     "pg": "^7.4.1",
-    "postgraphile": "^4.0.0-beta.2"
+    "postgraphile": "^4.0.0-rc.3"
+  },
+  "devDependencies": {
+    "isomorphic-fetch": "^2.2.1"
   }
 }

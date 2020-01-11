@@ -1,6 +1,6 @@
 -- Usage:
 -- SELECT * FROM api.update_from_server(
---	<OUTPUT FROM heroku pg:credentials:url>
+--	<OUTPUT FROM `heroku config:get DATABASE_URL`s>
 -- );
 CREATE OR REPLACE FUNCTION api.update_from_server(connection_url TEXT) RETURNS SETOF api.snapshot AS
 $update_from_server$
@@ -13,11 +13,11 @@ DECLARE
 	password TEXT;
 	current_user TEXT;
 BEGIN
-	SELECT 
-		arr[1], 
-		arr[2], 
-		arr[3], 
-		arr[4], 
+	SELECT
+		arr[1],
+		arr[2],
+		arr[3],
+		arr[4],
 		arr[5] INTO STRICT username, password, host, port, dbname FROM (
 			SELECT regexp_match(
 				connection_url,

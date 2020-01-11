@@ -1,4 +1,4 @@
-# Integration with Google Spreadsheet
+# Running the system locally
 
 ## setup NodeJS latest LTS
 
@@ -12,7 +12,7 @@ nvm install --lts
 
 ```bash
 npm install
-node app.js
+npm start
 ```
 
 install PostgreSQL extensions:
@@ -21,6 +21,7 @@ install PostgreSQL extensions:
 pip install pgxnclient
 pgxn install pgtap
 ```
+
 create schema of DB
 
 ```bash
@@ -37,28 +38,9 @@ brew install fswatch
 ./watch-test.sh timesheet
 ```
 
-## Apache hook
+## Exposing local as a web service
 
-Apache config:
-
-```text
-<Location "/spreadsheet">
-  ProxyPass "http://localhost:3000/spreadsheet"
-</Location>
-```
-
-restart:
-
-```bash
-systemctl restart apache2
-```
-
-## Setup
-
-creates two routes:
-
-* /spreadsheet/snapshot/SPREADSHEET_ID
-* /spreadsheet/change/SPREADSHEET_ID
+Use http://ngrok.io
 
 ## Testing
 
@@ -71,7 +53,7 @@ Sample file:
     "apptype": "Spreadsheet",
     "category": "Timesheet"
    },
-  "apikey": "f98dbe87-5749-47c6-8e39-47ae7ff401ac"
+  "apikey": "STRING_CONFIGURED_IN_ENV"
 }
 ```
 

@@ -10,6 +10,7 @@
 \ir incoming/profile.sql
 \ir incoming/entry.sql
 \ir incoming/people.sql
+\ir incoming/group.sql
 \ir incoming/transfer.sql
 \ir incoming/waveapps.sql
 
